@@ -42,6 +42,10 @@ It builds an internal index of models that fit the filter, so interating over th
 
 BTW: it exposes VirtualCollection.buildFilterFromHash which you might find usefull.
 
+
+![](http://i.imgur.com/xhdOVjZ.png)
+Built at Teambox
+
 ### License
 The MIT License (MIT)
 
