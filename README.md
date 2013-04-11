@@ -14,7 +14,7 @@ The contructor takes two parameters, the first is the parent collection, the sec
     var virtual_collection = new Backbone.VirtualCollection(tasks_collection, function (task) {
       return task.get('user_id') == 13;
     });
-    // or
+    // or using a hash of attributes to match
     virtual_collection = new Backbone.VirtualCollection(tasks_collection, {user_id: 13});
 
     var view = new TaskListView({
@@ -43,7 +43,9 @@ BTW: it exposes VirtualCollection.buildFilterFromHash which you might find usefu
 
 ### License
 The MIT License (MIT)
+
 Copyright (c) 2013 Pedro  p3dro.sola@gmail.com
+
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
