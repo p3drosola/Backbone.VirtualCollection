@@ -10,9 +10,14 @@ For example, let's say you have a task collection, and want to show a list of ta
 We can instanciate a virtual collection, that only contains tasks that belong to Rupert (who has user_id 13).
 The contructor takes two parameters, the first is the parent collection, the second is a filter function that takes the model as argument. You can also just specify a hash of attributes to match.
 
+
+    var virtual_collection = new Backbone.VirtualColelction(tasks_collection, function (task) {
+      return task.get('user_id') == 13;
+    });
+    // or
     virtual_collection = new Backbone.VirtualCollection(tasks_collection, {user_id: 13});
 
-    view = new TaskListView({
+    var view = new TaskListView({
       collection: virtual_collection
     });
 
@@ -25,13 +30,13 @@ The marrionette collection view will only display the tasks that belong to Ruper
 ### How does it work?
 
 #### It's really light
-Basically, VirtualCollection just implements the methods used by a marrionete CollectionView to render a collection. It does not attempt to mimic all the behaviours of an actual collection. (`each`, `indexOf`, and events)
+Basically, VirtualCollection just implements the methods used by a marrionete CollectionView to render a collection. It does not attempt to mimic all the behaviours of an actual collection.
 
 #### DRY
 It does not store any data. We've used other solutions in the past, and duplicating data is just bad news. It just provides an `each` iterator.
 
 #### Fast
-It builds an internal index of models that fit the filter, so interating over them to re-render the view is fast.It does not iterate over the parent collection and re-evaluate the all the filters.
+It builds an internal index of models that fit the filter, so interating over them to re-render the view is fast. It does not iterate over the parent collection and re-evaluate the all the filters.
 
 
 BTW: it exposes VirtualCollection.buildFilterFromHash which you might find usefull.
