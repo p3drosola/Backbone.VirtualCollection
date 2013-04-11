@@ -10,20 +10,21 @@ For example, let's say you have a task collection, and want to show a list of ta
 We can instanciate a virtual collection, that only contains tasks that belong to Rupert (who has user_id 13).
 The contructor takes two parameters, the first is the parent collection, the second is a filter function that takes the model as argument. You can also just specify a hash of attributes to match.
 
+```js
+var virtual_collection = new Backbone.VirtualCollection(tasks_collection, function (task) {
+  return task.get('user_id') == 13;
+});
+// or using a hash of attributes to match
+virtual_collection = new Backbone.VirtualCollection(tasks_collection, {user_id: 13});
 
-    var virtual_collection = new Backbone.VirtualCollection(tasks_collection, function (task) {
-      return task.get('user_id') == 13;
-    });
-    // or using a hash of attributes to match
-    virtual_collection = new Backbone.VirtualCollection(tasks_collection, {user_id: 13});
+var view = new TaskListView({
+  collection: virtual_collection
+});
 
-    var view = new TaskListView({
-      collection: virtual_collection
-    });
-
-    // note: it's important to call
-    // this.collection.unbindIndexListeners();
-    // in the onClose of the view. It clears up the listeners used to update the virtual collection
+// note: it's important to call
+// this.collection.unbindIndexListeners();
+// in the onClose of the view. It clears up the listeners used to update the virtual collection
+```
 
 The marionette collection view will only display the tasks that belong to Rupert, and it will update automatically. In other words, when a task is created that belongs to Rupert it will appear, but not if it belongs to Bob.
 
