@@ -1,7 +1,7 @@
 (function () {
 
   /**
-   * Contructor for the virtual collection
+   * Constructor for the virtual collection
    * @param {Collection} collection
    * @param {Function|Object} filter function, or hash of properties to match
    */

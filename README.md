@@ -1,6 +1,6 @@
 ### Backbone.VirtualCollection
 
-Backbone.VirtualCollection allows you use Backbone.Marrionete CollectionViews and CompositeViews on a subset of
+Backbone.VirtualCollection allows you use Backbone.Marionette CollectionViews and CompositeViews on a subset of
 a backbone collection.
 
 ### Usage
@@ -25,12 +25,12 @@ The contructor takes two parameters, the first is the parent collection, the sec
     // this.collection.unbindIndexListeners();
     // in the onClose of the view. It clears up the listeners used to update the virtual collection
 
-The marrionette collection view will only display the tasks that belong to Rupert, and it will update automatically. In other words, when a task is created that belongs to Rupert it will appear, but not if it belongs to Bob.
+The marionette collection view will only display the tasks that belong to Rupert, and it will update automatically. In other words, when a task is created that belongs to Rupert it will appear, but not if it belongs to Bob.
 
 ### How does it work?
 
 #### It's really light
-Basically, VirtualCollection just implements the methods used by a marrionete CollectionView to render a collection. It does not attempt to mimic all the behaviours of an actual collection.
+Basically, VirtualCollection just implements the methods used by a marionette CollectionView to render a collection. It does not attempt to mimic all the behaviours of an actual collection.
 
 #### DRY
 It does not store any data. We've used other solutions in the past, and duplicating data is just bad news. It just provides an `each` iterator.
