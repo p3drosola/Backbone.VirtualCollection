@@ -11,7 +11,7 @@ We can instanciate a virtual collection, that only contains tasks that belong to
 The contructor takes two parameters, the first is the parent collection, the second is a filter function that takes the model as argument. You can also just specify a hash of attributes to match.
 
 
-    var virtual_collection = new Backbone.VirtualColelction(tasks_collection, function (task) {
+    var virtual_collection = new Backbone.VirtualCollection(tasks_collection, function (task) {
       return task.get('user_id') == 13;
     });
     // or
