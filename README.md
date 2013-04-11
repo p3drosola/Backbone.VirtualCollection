@@ -3,6 +3,8 @@
 Backbone.VirtualCollection allows you use Backbone.Marrionete CollectionViews and CompositeViews on a subset of
 a backbone collection.
 
+### Usage
+
 For example, let's say you have a task collection, and want to show a list of tasks that belong to a specific user.
 
 We can instanciate a virtual collection, that only contains tasks that belong to Rupert (who has user_id 13).
