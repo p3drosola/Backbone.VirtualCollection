@@ -44,6 +44,7 @@ BTW: it exposes VirtualCollection.buildFilterFromHash which you might find usefu
 
 
 ![](http://i.imgur.com/xhdOVjZ.png)
+
 Built at Teambox
 
 ### License
