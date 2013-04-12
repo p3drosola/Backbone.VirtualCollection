@@ -1,0 +1,2 @@
+spec:
+	mocha -R spec

@@ -10,7 +10,10 @@
     "url": "https://github.com/p3drosola/Backbone.VirtualCollection.git"
   },
   "dependencies": {
-    "backbone": "*"
+    "backbone": "*",
+    "underscore": "*",
+    "mocha": "*",
+    "sinon": "*"
   },
   "main": "./backbone.virtual-collection-0.0.1.js",
   "ender": "./backbone.virtual-collection-0.0.1.js"

@@ -1,5 +1,13 @@
 (function () {
 
+  var _ = this._
+      Backbone = this.Backbone;
+
+  if (!_ && (typeof require !== 'undefined')) {
+    _ = require('underscore');
+    Backbone = require('backbone');
+  }
+
   /**
    * Constructor for the virtual collection
    * @param {Collection} collection
@@ -11,7 +19,7 @@
 
     if (_.isFunction(filter)) {
       this.filter = filter;
-    } else if (_.isObject(filter)) {
+    } else if (filter.constructor === Object) {
       this.filter = VirtualCollection.buildFilterFromHash(filter);
     } else {
       throw new TypeError("[filter] argument must be a function or a hash of properties to match");
