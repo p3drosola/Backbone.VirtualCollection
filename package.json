@@ -16,5 +16,8 @@
     "sinon": "*"
   },
   "main": "./backbone.virtual-collection-0.0.1.js",
-  "ender": "./backbone.virtual-collection-0.0.1.js"
+  "ender": "./backbone.virtual-collection-0.0.1.js",
+  "scripts" : {
+    "test": "mocha -R spec"
+  }
 }

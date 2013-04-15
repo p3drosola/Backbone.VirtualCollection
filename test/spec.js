@@ -121,6 +121,4 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(JSON.stringify(vc.index), '[3,4,1]');
     });
   });
-
-
 });
