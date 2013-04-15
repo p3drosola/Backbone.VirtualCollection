@@ -1,4 +1,5 @@
 ### Backbone.VirtualCollection
+![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
 
 Backbone.VirtualCollection allows you use Backbone.Marionette CollectionViews and CompositeViews on a subset of
 a backbone collection.
