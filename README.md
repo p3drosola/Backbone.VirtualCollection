@@ -1,6 +1,6 @@
 ## Backbone.VirtualCollection
 
-![Built at Teambox](http://i.imgur.com/hqNPlHe.png)
+<a href="http://teambox.com"><img alt="Built at Teambox" src="http://i.imgur.com/hqNPlHe.png"/></a>
 
 ![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
 
