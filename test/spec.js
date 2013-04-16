@@ -6,7 +6,7 @@ var assert = require("assert"),
     Backbone = require("backbone"),
     VirtualCollection;
 
-require('../backbone.virtual-collection-0.0.1');
+require('../backbone.virtual-collection');
 VirtualCollection = Backbone.VirtualCollection;
 
 describe('Backbone.VirtualCollection', function () {
