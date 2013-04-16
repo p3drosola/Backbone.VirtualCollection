@@ -1,8 +1,8 @@
 (function () {
 
-  var _ = this._
-      Backbone = this.Backbone;
+  var _ = this._, Backbone = this.Backbone, vc;
 
+  // fix for the mocha specs
   if (!_ && (typeof require !== 'undefined')) {
     _ = require('underscore');
     Backbone = require('backbone');
@@ -48,13 +48,13 @@
    */
   VirtualCollection.buildFilterFromHash = function (hash) {
     return function (model) {
-      return !Boolean(_(hash).detect(function (val, key) {
-        return model.get(key) !== val;
+      return !Boolean(_(Object.keys(hash)).detect(function (key) {
+        return model.get(key) !== hash[key];
       }));
     };
   };
 
-  var vc = VirtualCollection.prototype;
+  vc = VirtualCollection.prototype;
 
   /**
    * Iterates the callback over the elements in the virtual collection

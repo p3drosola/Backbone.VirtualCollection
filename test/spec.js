@@ -29,6 +29,14 @@ describe('Backbone.VirtualCollection', function () {
       var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: 'ale'});
       assert.equal(false, filter(new Backbone.Model({foo: 'bar'})));
     });
+    it('should a build a filter that finds null values', function () {
+      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: null});
+      assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
+    });
+    it('should a build a filter that finds undefined values', function () {
+      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: undefined});
+      assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
+    });
   });
 
   describe('#constructor', function () {
