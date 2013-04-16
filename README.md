@@ -1,5 +1,9 @@
-### Backbone.VirtualCollection
+## Backbone.VirtualCollection
+
+![Built at Teambox](http://i.imgur.com/hqNPlHe.png)
+
 ![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
+
 
 Backbone.VirtualCollection allows you use Backbone.Marionette CollectionViews and CompositeViews on a subset of
 a backbone collection.
@@ -32,21 +36,22 @@ The marionette collection view will only display the tasks that belong to Rupert
 ### How does it work?
 
 #### It's really light
-Basically, VirtualCollection just implements the methods used by a marionette CollectionView to render a collection. It does not attempt to mimic all the behaviours of an actual collection.
+VirtualCollection **only** implements the methods used by a Marionette CollectionView to render a collection. It does not attempt to mimic all the behaviours of an actual collection. This keeps the overhead down.
 
-#### DRY
-It does not store any data. We've used other solutions in the past, and duplicating data is just bad news. It just provides an `each` iterator.
+#### It's DRY
+VirtualCollection does not store, or duplicate any data. We've used other solutions in the past, and duplicating data is just plain bad news.
 
-#### Fast
-It builds an internal index of models that fit the filter, so interating over them to re-render the view is fast. It does not iterate over the parent collection and re-evaluate the all the filters.
-
-
-BTW: it exposes VirtualCollection.buildFilterFromHash which you might find usefull.
+#### It's Fast
+VirtualCollection builds an internal index of model ids that pass the filter. That way interating with the `each` interator is fast.  It doesn't have to go through the whole parent collection and re-evaluate the all the filters.
 
 
-![](http://i.imgur.com/xhdOVjZ.png)
+> By the way, `VirtualCollection.buildFilterFromHash` is the function that turns a object into a filter function.You might find it usefull.
 
-Built at Teambox
+Happy hacking!
+
+
+
+
 
 ### License
 The MIT License (MIT)
