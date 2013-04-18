@@ -1,7 +1,7 @@
 {
   "name": "backbone-virtual-collection",
   "description": "Use Backbone.Marionette CollectionViews on a subset of a Backbone collection",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "keywords": [
     "backbone",
     "marrionette",
