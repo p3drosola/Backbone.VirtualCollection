@@ -55,7 +55,7 @@ VirtualCollection **only** implements the methods used by a Marionette Collectio
 VirtualCollection does not store, or duplicate any data. We've used other solutions in the past, and duplicating data is just plain bad news.
 
 #### It's Fast
-VirtualCollection builds an internal index of model ids that pass the filter. That way interating with the `each` interator is fast.  It doesn't have to go through the whole parent collection and re-evaluate the all the filters.
+VirtualCollection builds an internal index of model ids that pass the filter. That way iterating with the `each` interator is fast.  It doesn't have to go through the whole parent collection and re-evaluate the all the filters.
 
 
 > By the way, `VirtualCollection.buildFilterFromHash` is the function that turns a object into a filter function.You might find it usefull.
