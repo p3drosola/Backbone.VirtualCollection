@@ -33,6 +33,19 @@ var view = new TaskListView({
 
 The marionette collection view will only display the tasks that belong to Rupert, and it will update automatically. In other words, when a task is created that belongs to Rupert it will appear, but not if it belongs to Bob.
 
+#### Sorting
+Be default, the virtual collection will have the same sorting order as the parent collection. However, a comparator can be specified to change this. The comparator behaves like a Backbone comparator. In other words, you can specify a function or the name of an attribute to sort by.
+```js
+var virtual_collection = new Backbone.VirtualCollection(tasks_collection, {user_id: 13}, { comparator: 'name'});
+// tasks in the virtual_collection will be sorted by name
+```
+You can also change the sorting order on the fly.
+```js
+virtual_collection.comparator = 'created_at';
+virtual_collection.sort(); // triggers sort event
+// virtual_collection is now sorted by date, but the parent collection has not changed
+```
+
 ### How does it work?
 
 #### It's really light
