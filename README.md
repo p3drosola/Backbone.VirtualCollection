@@ -27,7 +27,7 @@ var view = new TaskListView({
 });
 
 // note: it's important to call
-// this.collection.unbindIndexListeners();
+this.collection.unbindIndexListeners();
 // in the onClose of the view. It clears up the listeners used to update the virtual collection
 ```
 
