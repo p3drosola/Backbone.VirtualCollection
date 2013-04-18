@@ -129,4 +129,33 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(JSON.stringify(vc.index), '[3,4,1]');
     });
   });
+
+  describe('#comparator', function () {
+    it('should sort the index on instanciation', function () {
+      var vc, collection = new Backbone.Collection([
+        {id: 1, name: 'ccc'},
+        {id: 2, name: 'aaa'},
+        {id: 3, name: 'bbb'}
+      ], {
+        comparator: 'id'
+      });
+
+      vc = new VirtualCollection(collection, {}, { comparator: 'name' });
+      assert.equal(JSON.stringify(vc.index), '[2,3,1]');
+    });
+    it('should keep the index sorted when adding items', function () {
+      var vc, collection = new Backbone.Collection([
+        {id: 1, name: 'ccc'},
+        {id: 3, name: 'bbb'}
+      ], {
+        comparator: 'id'
+      });
+
+      vc = new VirtualCollection(collection, {}, { comparator: 'name' });
+      assert.equal(JSON.stringify(vc.index), '[3,1]');
+
+      collection.add({id: 2, name: 'aaa'});
+      assert.equal(JSON.stringify(vc.index), '[2,3,1]');
+    });
+  });
 });

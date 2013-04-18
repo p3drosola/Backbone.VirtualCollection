@@ -13,8 +13,10 @@
    * @param {Collection} collection
    * @param {Function|Object} filter function, or hash of properties to match
    */
-  function VirtualCollection(collection, filter) {
+  function VirtualCollection(collection, filter, options) {
     this.collection = collection;
+    options = options || {};
+
     _.bindAll(this);
 
     if (_.isFunction(filter)) {
@@ -34,6 +36,11 @@
     }, this);
 
     this.length = this.index.length;
+
+    if (options.comparator) {
+      this.comparator = options.comparator;
+      this.sort({silent: true});
+    }
 
     this.listenTo(this.collection, 'add',    this._onAdd,    this);
     this.listenTo(this.collection, 'remove', this._onRemove, this);
@@ -87,6 +94,28 @@
    */
   vc.unbindIndexListeners = function () {
     this.stopListening();
+    return this;
+  };
+
+
+  vc.sort = function (options) {
+    if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
+    options || (options = {});
+
+    // Run sort based on type of `comparator`.
+    if (_.isString(this.comparator) || this.comparator.length === 1) {
+      this.index = _.sortBy(this.index, function (id) {
+        var model = this.collection.get(id);
+        return model.get(this.comparator);
+      }, this);
+    } else {
+      var cpm = _.bind(this.comparator, this);
+      this.index = _.sortBy(this.index, function (id) {
+        var model = this.collection.get(id);
+        return cpm(model);
+      }, this);
+    }
+    if (!options.silent) this.trigger('sort', this, options);
     return this;
   };
 
@@ -150,13 +179,20 @@
    */
   vc._indexAdd = function (model) {
     if (this.index.indexOf(model.id) === -1) {
-      var i, orig_index = this.collection.indexOf(model);
-      for (i = 0; i < this.length; i++) {
-        if (this.collection.indexOf(this.collection.get(this.index[i])) > orig_index) {
-          break;
+
+      if (!this.comparator) { // order inherit's from parent collection
+        var i, orig_index = this.collection.indexOf(model);
+        for (i = 0; i < this.length; i++) {
+          if (this.collection.indexOf(this.collection.get(this.index[i])) > orig_index) {
+            break;
+          }
         }
+        this.index.splice(i, 0, model.id);
+
+      } else { // the virtual collection has a custom order
+        this.index.push(model.id);
+        this.sort({silent: true});
       }
-      this.index.splice(i, 0, model.id);
       this.length = this.index.length;
     }
   };
