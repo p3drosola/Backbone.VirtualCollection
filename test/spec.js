@@ -9,6 +9,14 @@ var assert = require("assert"),
 require('../backbone.virtual-collection');
 VirtualCollection = Backbone.VirtualCollection;
 
+function cids(collection, ids_array) {
+  var cids_array = [];
+  _.each(ids_array, function (id) {
+    cids_array.push(collection.get(id).cid);
+  })
+  return cids_array;
+}
+
 describe('Backbone.VirtualCollection', function () {
 
   describe('buildFilterFromHash', function () {
@@ -81,8 +89,7 @@ describe('Backbone.VirtualCollection', function () {
         {id: 3, foo: 'bar'}
       ]);
       vc = new VirtualCollection(collection, {foo: 'bar'});
-      assert.equal(JSON.stringify(vc.index), '[1,3]');
-      assert.equal(vc.length, 2);
+      assert.equal(_.isEqual(vc.index, cids(collection, [1, 3])), true);
     });
   });
 
@@ -98,7 +105,7 @@ describe('Backbone.VirtualCollection', function () {
       vc.each(function (model) {
         result.push(model.id);
       });
-      assert.equal(JSON.stringify(result), '[1,3]');
+      assert.equal(_.isEqual(vc.index, cids(collection, [1, 3])), true);
     });
   });
 
@@ -126,7 +133,7 @@ describe('Backbone.VirtualCollection', function () {
       });
       vc = new VirtualCollection(collection, {ok: true});
       collection.add({id: 4, ok: true, foo: 'abc'});
-      assert.equal(JSON.stringify(vc.index), '[3,4,1]');
+      assert.equal(_.isEqual(vc.index, cids(collection, [3, 4, 1])), true);
     });
   });
 
@@ -141,7 +148,7 @@ describe('Backbone.VirtualCollection', function () {
       });
 
       vc = new VirtualCollection(collection, {}, { comparator: 'name' });
-      assert.equal(JSON.stringify(vc.index), '[2,3,1]');
+      assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
     });
     it('should accept comparator function', function () {
       var vc, collection = new Backbone.Collection([
@@ -155,7 +162,7 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {}, {
         comparator: function (item) { return item.get('name'); }
       });
-      assert.equal(JSON.stringify(vc.index), '[2,3,1]');
+      assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
     });
     it('should keep the index sorted when adding items', function () {
       var vc, collection = new Backbone.Collection([
@@ -166,10 +173,10 @@ describe('Backbone.VirtualCollection', function () {
       });
 
       vc = new VirtualCollection(collection, {}, { comparator: 'name' });
-      assert.equal(JSON.stringify(vc.index), '[3,1]');
+      assert.equal(_.isEqual(vc.index, cids(collection, [3, 1])), true);
 
       collection.add({id: 2, name: 'aaa'});
-      assert.equal(JSON.stringify(vc.index), '[2,3,1]');
+      assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
     });
   });
 });

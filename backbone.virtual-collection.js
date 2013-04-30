@@ -31,7 +31,7 @@
     this.index = [];
     this.collection.each(function (model) {
       if (this.filter(model)) {
-        this.index.push(model.id);
+        this.index.push(model.cid);
       }
     }, this);
 
@@ -85,7 +85,7 @@
    * @return {Number} index
    */
   vc.indexOf = function (model) {
-    return this.index.indexOf(model.id);
+    return this.index.indexOf(model.cid);
   };
 
   /**
@@ -141,7 +141,7 @@
    * @return {undefined}
    */
   vc._onRemove = function (model, collection, options) {
-    if (_(this.index).contains(model.id)) {
+    if (_(this.index).contains(model.cid)) {
       this._indexRemove(model);
       this.trigger('remove', model, this, options);
     }
@@ -178,7 +178,7 @@
    * @return {undefined}
    */
   vc._indexAdd = function (model) {
-    if (this.index.indexOf(model.id) === -1) {
+    if (this.index.indexOf(model.cid) === -1) {
 
       if (!this.comparator) { // order inherit's from parent collection
         var i, orig_index = this.collection.indexOf(model);
@@ -187,10 +187,10 @@
             break;
           }
         }
-        this.index.splice(i, 0, model.id);
+        this.index.splice(i, 0, model.cid);
 
       } else { // the virtual collection has a custom order
-        this.index.push(model.id);
+        this.index.push(model.cid);
         this.sort({silent: true});
       }
       this.length = this.index.length;
@@ -203,7 +203,7 @@
    * @return {undefined}
    */
   vc._indexRemove = function (model) {
-    var i = this.index.indexOf(model.id);
+    var i = this.index.indexOf(model.cid);
     if (i !== -1) {
       this.index.splice(i, 1);
       this.length = this.index.length;
