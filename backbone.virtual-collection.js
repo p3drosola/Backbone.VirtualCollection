@@ -89,16 +89,6 @@
     return this.index.indexOf(model.cid);
   };
 
-  /**
-   * Unbinds listeners used to update the vitual collection's index
-   * @return {[type]} [description]
-   */
-  vc.unbindIndexListeners = function () {
-    this.stopListening();
-    return this;
-  };
-
-
   vc.sort = function (options) {
     if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
     options  = options || {};
