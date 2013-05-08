@@ -26,9 +26,6 @@ var view = new TaskListView({
   collection: virtual_collection
 });
 
-// note: it's important to call
-this.collection.unbindIndexListeners();
-// in the onClose of the view. It clears up the listeners used to update the virtual collection
 ```
 
 The marionette collection view will only display the tasks that belong to Rupert, and it will update automatically. In other words, when a task is created that belongs to Rupert it will appear, but not if it belongs to Bob.
@@ -46,7 +43,21 @@ virtual_collection.sort(); // triggers sort event
 // virtual_collection is now sorted by date, but the parent collection has not changed
 ```
 
-### How does it work?
+#### Unbinding
+The virtual collection will keep listening to it's parent collection until you call `stopListening`.
+
+You can use the helper function `VirtualCollection.viewHelper` to create collections that have the same lifespan as a particular view.
+
+```js
+Backbone.View.prototype.createVirtualCollection = Backbone.VirtualCollection.viewHelper;
+
+// inside the view
+this.collection = this.createVirtualCollection(parent_collection, {foo: 'bar'});
+```
+
+Using the helper will take care of unbinding the virtual collection's listeners when the view is closed.
+
+### Philosophy
 
 #### It's really light
 VirtualCollection **only** implements the methods used by a Marionette CollectionView to render a collection. It does not attempt to mimic all the behaviours of an actual collection. This keeps the overhead down.
@@ -56,7 +67,6 @@ VirtualCollection does not store, or duplicate any data. We've used other soluti
 
 #### It's Fast
 VirtualCollection builds an internal index of model ids that pass the filter. That way iterating with the `each` interator is fast.  It doesn't have to go through the whole parent collection and re-evaluate the all the filters.
-
 
 > By the way, `VirtualCollection.buildFilterFromHash` is the function that turns a object into a filter function.You might find it usefull.
 
