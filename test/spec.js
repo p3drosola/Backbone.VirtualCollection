@@ -19,34 +19,6 @@ function cids(collection, ids_array) {
 
 describe('Backbone.VirtualCollection', function () {
 
-  describe('buildFilterFromHash', function () {
-
-    it('should build an filter that accepts one correct attribute', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar'});
-      assert.equal(true, filter(new Backbone.Model({foo: 'bar'})));
-    });
-    it('should build an filter that rejects one false attribute', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar'});
-      assert.equal(false, filter(new Backbone.Model({foo: 'car'})));
-    });
-    it('should build an filter that accepts multiple correct attributes', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: 'ale'});
-      assert.equal(true, filter(new Backbone.Model({foo: 'bar', ginger: 'ale'})));
-    });
-    it('should build an filter that rejects a missing attribute', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: 'ale'});
-      assert.equal(false, filter(new Backbone.Model({foo: 'bar'})));
-    });
-    it('should a build a filter that finds null values', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: null});
-      assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
-    });
-    it('should a build a filter that finds undefined values', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: undefined});
-      assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
-    });
-  });
-
   describe('#constructor', function () {
 
     it("should throw a type error if the filter is not a function or hash object", function () {
@@ -179,8 +151,8 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
     });
   });
-  describe('viewHelper', function () {
 
+  describe('viewHelper', function () {
     it('should apply arguments to the constructor correctly', function () {
       var collection = new Backbone.Collection([
         {id: 1, name: 'ccc', foo: 'bar'},
@@ -208,6 +180,33 @@ describe('Backbone.VirtualCollection', function () {
       view.trigger('close');
       assert.equal(vc.stopListening.callCount, 1);
     });
+  });
 
+  describe('buildFilterFromHash', function () {
+
+    it('should build an filter that accepts one correct attribute', function () {
+      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar'});
+      assert.equal(true, filter(new Backbone.Model({foo: 'bar'})));
+    });
+    it('should build an filter that rejects one false attribute', function () {
+      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar'});
+      assert.equal(false, filter(new Backbone.Model({foo: 'car'})));
+    });
+    it('should build an filter that accepts multiple correct attributes', function () {
+      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: 'ale'});
+      assert.equal(true, filter(new Backbone.Model({foo: 'bar', ginger: 'ale'})));
+    });
+    it('should build an filter that rejects a missing attribute', function () {
+      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: 'ale'});
+      assert.equal(false, filter(new Backbone.Model({foo: 'bar'})));
+    });
+    it('should a build a filter that finds null values', function () {
+      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: null});
+      assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
+    });
+    it('should a build a filter that finds undefined values', function () {
+      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: undefined});
+      assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
+    });
   });
 });
