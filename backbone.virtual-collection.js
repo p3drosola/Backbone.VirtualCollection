@@ -12,6 +12,7 @@
    * Constructor for the virtual collection
    * @param {Collection} collection
    * @param {Function|Object} filter function, or hash of properties to match
+   * @param {Object} options [comparator]
    */
   function VirtualCollection(collection, filter, options) {
     this.collection = collection;
@@ -208,6 +209,25 @@
       this.index.splice(i, 1);
       this.length = this.index.length;
     }
+  };
+
+  /**
+   * A helper to mix into views
+   * It will stop the virtual collection from listening to the parent collection when the view closes
+   * Usefull for virtual collections that have the same lifespan as a view
+   *
+   * parameters are the same as the constructor
+   *
+   * Eg:
+   *    Backbone.View.prototype.createVirtualCollection = Backbone.VirtualCollection.viewHelper;
+   *    var vc = view.createVirtualCollection(parent_colelction, {foo: 'bar'});
+   */
+  VirtualCollection.viewHelper = function (collection, filter, options) {
+    var virtual_collection = new VirtualCollection(collection, filter, options);
+    this.on('close', function () {
+      virtual_collection.stopListening();
+    });
+    return virtual_collection;
   };
 
   _.extend(vc, Backbone.Events);
