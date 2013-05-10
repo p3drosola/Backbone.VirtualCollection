@@ -202,22 +202,13 @@
   };
 
   /**
-   * A helper to mix into views
-   * It will stop the virtual collection from listening to the parent collection when the view closes
-   * Usefull for virtual collections that have the same lifespan as a view
-   *
-   * parameters are the same as the constructor
-   *
-   * Eg:
-   *    Backbone.View.prototype.createVirtualCollection = Backbone.VirtualCollection.viewHelper;
-   *    var vc = view.createVirtualCollection(parent_colelction, {foo: 'bar'});
+   * A utility function for unbiding listeners
+   * @param  {View} view (marionette view)
    */
-  VirtualCollection.viewHelper = function (collection, filter, options) {
-    var virtual_collection = new VirtualCollection(collection, filter, options);
-    this.on('close', function () {
-      virtual_collection.stopListening();
-    });
-    return virtual_collection;
+  vc.closeWith = function (view) {
+    view.on('close', function () {
+      this.stopListening();
+    }, this);
   };
 
   _.extend(vc, Backbone.Events);
