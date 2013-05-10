@@ -46,13 +46,12 @@ virtual_collection.sort(); // triggers sort event
 #### Unbinding
 The virtual collection will keep listening to it's parent collection until you call `stopListening`.
 
-You can use the helper function `VirtualCollection.viewHelper` to create collections that have the same lifespan as a particular view.
+You can use the helper function `virtual_collection.closeWith` to tell the collection to stopListening when a marionette view is closed.
 
 ```js
-Backbone.View.prototype.createVirtualCollection = Backbone.VirtualCollection.viewHelper;
-
-// inside the view
-this.collection = this.createVirtualCollection(parent_collection, {foo: 'bar'});
+var virtual_collection = new Backbone.VirtualCollection(collection, {foo: 'bar'});
+var view = new Marionette.CollectionView({collection: virtual_collection});
+virtual_collection.closeWith(view);
 ```
 
 Using the helper will take care of unbinding the virtual collection's listeners when the view is closed.

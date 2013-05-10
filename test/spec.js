@@ -152,21 +152,7 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
-  describe('viewHelper', function () {
-    it('should apply arguments to the constructor correctly', function () {
-      var collection = new Backbone.Collection([
-        {id: 1, name: 'ccc', foo: 'bar'},
-        {id: 2, name: 'bbb', foo: 'bar'},
-        {id: 3, name: 'aaa', foo: 'baz'}
-      ], { comparator: 'name' }),
-      view = _.extend({}, Backbone.Events),
-      vc = VirtualCollection.viewHelper.call(view, collection, {foo: 'bar'}, {comparator: 'name'});
-
-      assert.equal(vc.collection, collection);
-      assert.equal(vc.comparator, 'name');
-      assert.equal(vc.length, 2);
-    });
-
+  describe('closeWith', function () {
     it('should clear the collections listenters when the view is closed', function () {
       var collection = new Backbone.Collection([
         {id: 1, name: 'ccc'},
@@ -174,8 +160,8 @@ describe('Backbone.VirtualCollection', function () {
         {id: 3, name: 'aaa'}
       ]),
       view = _.extend({}, Backbone.Events),
-      vc = VirtualCollection.viewHelper.call(view, collection, {});
-
+      vc = new Backbone.VirtualCollection(collection, {});
+      vc.closeWith(view);
       sinon.spy(vc, 'stopListening');
       view.trigger('close');
       assert.equal(vc.stopListening.callCount, 1);
