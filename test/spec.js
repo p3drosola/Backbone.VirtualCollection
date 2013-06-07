@@ -1,10 +1,10 @@
 /*global it, describe, before, beforeEach*/
 
-var assert = require("assert"),
-    sinon = require('sinon'),
-    _ = require("underscore"),
-    Backbone = require("backbone"),
-    VirtualCollection;
+var assert = require("assert")
+  , sinon = require('sinon')
+  , _ = require("underscore")
+  , Backbone = require("backbone")
+  , VirtualCollection;
 
 require('../backbone.virtual-collection');
 VirtualCollection = Backbone.VirtualCollection;
@@ -13,7 +13,7 @@ function cids(collection, ids_array) {
   var cids_array = [];
   _.each(ids_array, function (id) {
     cids_array.push(collection.get(id).cid);
-  })
+  });
   return cids_array;
 }
 
@@ -25,23 +25,15 @@ describe('Backbone.VirtualCollection', function () {
       var collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
 
       assert.throws(function () {
-        var vc = new VirtualCollection(collection);
+        var vc = new VirtualCollection(collection, { filter: [1, 2, 3] });
       }, TypeError);
 
       assert.throws(function () {
-        var vc = new VirtualCollection(collection, [1, 2, 3]);
+        var vc = new VirtualCollection(collection, {filter: 1});
       }, TypeError);
 
       assert.throws(function () {
-        var vc = new VirtualCollection(collection, 1);
-      }, TypeError);
-
-      assert.throws(function () {
-        var vc = new VirtualCollection(collection, true);
-      }, TypeError);
-
-      assert.throws(function () {
-        var vc = new VirtualCollection(collection, null);
+        var vc = new VirtualCollection(collection, {filter: true});
       }, TypeError);
 
     });
@@ -60,7 +52,7 @@ describe('Backbone.VirtualCollection', function () {
         {id: 2, foo: 'baz'},
         {id: 3, foo: 'bar'}
       ]);
-      vc = new VirtualCollection(collection, {foo: 'bar'});
+      vc = new VirtualCollection(collection, {filter: {foo: 'bar'}});
       assert.equal(_.isEqual(vc.index, cids(collection, [1, 3])), true);
     });
   });
@@ -73,7 +65,7 @@ describe('Backbone.VirtualCollection', function () {
         {id: 2, foo: 'baz'},
         {id: 3, foo: 'bar'}
       ]);
-      vc = new VirtualCollection(collection, {foo: 'bar'});
+      vc = new VirtualCollection(collection, {filter: {foo: 'bar'}});
       vc.each(function (model) {
         result.push(model.id);
       });
@@ -89,7 +81,7 @@ describe('Backbone.VirtualCollection', function () {
         {id: 2, foo: 'baz'},
         {id: 3, foo: 'bar'}
       ]);
-      vc = new VirtualCollection(collection, {foo: 'bar'});
+      vc = new VirtualCollection(collection, {filter: {foo: 'bar'}});
       assert.equal(vc.indexOf(collection.at(2)), 1);
     });
   });
@@ -103,7 +95,7 @@ describe('Backbone.VirtualCollection', function () {
       ], {
         comparator: 'foo' // shortBy foo
       });
-      vc = new VirtualCollection(collection, {ok: true});
+      vc = new VirtualCollection(collection, {filter: {ok: true}});
       collection.add({id: 4, ok: true, foo: 'abc'});
       assert.equal(_.isEqual(vc.index, cids(collection, [3, 4, 1])), true);
     });
@@ -119,7 +111,7 @@ describe('Backbone.VirtualCollection', function () {
         comparator: 'id'
       });
 
-      vc = new VirtualCollection(collection, {}, { comparator: 'name' });
+      vc = new VirtualCollection(collection, { comparator: 'name' });
       assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
     });
     it('should accept comparator function', function () {
@@ -131,7 +123,7 @@ describe('Backbone.VirtualCollection', function () {
         comparator: 'id'
       });
 
-      vc = new VirtualCollection(collection, {}, {
+      vc = new VirtualCollection(collection, {
         comparator: function (item) { return item.get('name'); }
       });
       assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
@@ -144,7 +136,7 @@ describe('Backbone.VirtualCollection', function () {
         comparator: 'id'
       });
 
-      vc = new VirtualCollection(collection, {}, { comparator: 'name' });
+      vc = new VirtualCollection(collection, { comparator: 'name' });
       assert.equal(_.isEqual(vc.index, cids(collection, [3, 1])), true);
 
       collection.add({id: 2, name: 'aaa'});
