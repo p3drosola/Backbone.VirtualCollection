@@ -13,14 +13,18 @@ a backbone collection.
 For example, let's say you have a task collection, and want to show a list of tasks that belong to a specific user.
 
 We can instanciate a virtual collection, that only contains tasks that belong to Rupert (who has user_id 13).
-The contructor takes two parameters, the first is the parent collection, the second is a filter function that takes the model as argument. You can also just specify a hash of attributes to match.
+The contructor takes two parameters, the first is the parent collection, the second is a hash of options. On of this options is **filter** that can be a function that takes the model as argument or a hash of attributes to match.
 
 ```js
-var virtual_collection = new Backbone.VirtualCollection(tasks_collection, function (task) {
-  return task.get('user_id') == 13;
+var virtual_collection = new Backbone.VirtualCollection(tasks_collection, {
+	filter: function (task) {
+  		return task.get('user_id') == 13;
+	}
 });
 // or using a hash of attributes to match
-virtual_collection = new Backbone.VirtualCollection(tasks_collection, {user_id: 13});
+virtual_collection = new Backbone.VirtualCollection(tasks_collection, {
+	filter: {user_id: 13}
+});
 
 var view = new TaskListView({
   collection: virtual_collection
@@ -33,7 +37,10 @@ The marionette collection view will only display the tasks that belong to Rupert
 #### Sorting
 Be default, the virtual collection will have the same sorting order as the parent collection. However, a comparator can be specified to change this. The comparator behaves like a Backbone comparator. In other words, you can specify a function or the name of an attribute to sort by.
 ```js
-var virtual_collection = new Backbone.VirtualCollection(tasks_collection, {user_id: 13}, { comparator: 'name'});
+var virtual_collection = new Backbone.VirtualCollection(tasks_collection, {
+	filter: {user_id: 13},
+	comparator: 'name'
+});
 // tasks in the virtual_collection will be sorted by name
 ```
 You can also change the sorting order on the fly.
@@ -49,7 +56,7 @@ The virtual collection will keep listening to it's parent collection until you c
 You can use the helper function `virtual_collection.closeWith` to tell the collection to stopListening when a marionette view is closed.
 
 ```js
-var virtual_collection = new Backbone.VirtualCollection(collection, {foo: 'bar'});
+var virtual_collection = new Backbone.VirtualCollection(collection, {filter: {foo: 'bar'} });
 var view = new Marionette.CollectionView({collection: virtual_collection});
 virtual_collection.closeWith(view);
 ```

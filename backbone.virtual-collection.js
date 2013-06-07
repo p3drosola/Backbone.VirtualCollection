@@ -11,27 +11,32 @@
   /**
    * Constructor for the virtual collection
    * @param {Collection} collection
-   * @param {Function|Object} filter function, or hash of properties to match
-   * @param {Object} options [comparator]
+   * @param {Object} options [filter, comparator]
    */
-  function VirtualCollection(collection, filter, options) {
+  function VirtualCollection(collection, options) {
     this.collection = collection;
     options = options || {};
-
     _.bindAll(this);
 
-    if (_.isFunction(filter)) {
-      this.filter = filter;
-    } else if (filter.constructor === Object) {
-      this.filter = VirtualCollection.buildFilterFromHash(filter);
-    } else {
-      throw new TypeError("[filter] argument must be a function or a hash of properties to match");
+    // if filter undifined not use filter
+    if (options.filter) {
+      if (_.isFunction(options.filter)) {
+        this.filter = options.filter;
+      } else if (options.filter.constructor === Object) {
+        this.filter = VirtualCollection.buildFilterFromHash(options.filter);
+      } else {
+        throw new TypeError("[filter] argument must be a function or a hash of properties to match");
+      }
     }
 
     // build index
     this.index = [];
     this.collection.each(function (model) {
-      if (this.filter(model)) {
+      if (options.filter) {
+        if (this.filter(model)) {
+          this.index.push(model.cid);
+        }
+      } else {
         this.index.push(model.cid);
       }
     }, this);
@@ -90,7 +95,10 @@
   };
 
   vc.sort = function (options) {
-    if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
+    if (!this.comparator) {
+      throw new Error('Cannot sort a set without a comparator');
+    }
+
     options  = options || {};
 
     // Run sort based on type of `comparator`.
@@ -106,7 +114,11 @@
         return cpm(model);
       }, this);
     }
-    if (!options.silent) this.trigger('sort', this, options);
+
+    if (!options.silent) {
+      this.trigger('sort', this, options);
+    }
+
     return this;
   };
 
@@ -119,7 +131,12 @@
    * @return {undefined}
    */
   vc._onAdd = function (model, collection, options) {
-    if (this.filter(model)) {
+    if (options.filter) {
+      if (this.filter(model)) {
+        this._indexAdd(model);
+        this.trigger('add', model, this, options);
+      }
+    } else {
       this._indexAdd(model);
       this.trigger('add', model, this, options);
     }
@@ -145,11 +162,16 @@
    * @param {Object} object
    */
   vc._onChange = function (model, options) {
-    if (this.filter(model)) {
+    if (options.filter) {
+      if (this.filter(model)) {
+        this._indexAdd(model);
+        this.trigger('change', model, options);
+      } else {
+        this._indexRemove(model);
+      }
+    } else {
       this._indexAdd(model);
       this.trigger('change', model, options);
-    } else {
-      this._indexRemove(model);
     }
   };
 
