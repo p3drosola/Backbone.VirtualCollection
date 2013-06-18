@@ -61,7 +61,7 @@ describe('Backbone.VirtualCollection', function () {
         {id: 3, foo: 'bar'}
       ]);
       vc = new VirtualCollection(collection, {foo: 'bar'});
-      assert.equal(_.isEqual(vc.index, cids(collection, [1, 3])), true);
+      assert.deepEqual(vc.index, cids(collection, [1, 3]));
     });
   });
 
@@ -77,7 +77,7 @@ describe('Backbone.VirtualCollection', function () {
       vc.each(function (model) {
         result.push(model.id);
       });
-      assert.equal(_.isEqual(vc.index, cids(collection, [1, 3])), true);
+      assert.deepEqual(vc.index, cids(collection, [1, 3]));
     });
   });
 
@@ -105,7 +105,7 @@ describe('Backbone.VirtualCollection', function () {
       });
       vc = new VirtualCollection(collection, {ok: true});
       collection.add({id: 4, ok: true, foo: 'abc'});
-      assert.equal(_.isEqual(vc.index, cids(collection, [3, 4, 1])), true);
+      assert.deepEqual(vc.index, cids(collection, [3, 4, 1]));
     });
   });
 
@@ -120,7 +120,7 @@ describe('Backbone.VirtualCollection', function () {
       });
 
       vc = new VirtualCollection(collection, {}, { comparator: 'name' });
-      assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
+      assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
     });
     it('should accept comparator function', function () {
       var vc, collection = new Backbone.Collection([
@@ -134,7 +134,7 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {}, {
         comparator: function (item) { return item.get('name'); }
       });
-      assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
+      assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
     });
     it('should keep the index sorted when adding items', function () {
       var vc, collection = new Backbone.Collection([
@@ -145,11 +145,25 @@ describe('Backbone.VirtualCollection', function () {
       });
 
       vc = new VirtualCollection(collection, {}, { comparator: 'name' });
-      assert.equal(_.isEqual(vc.index, cids(collection, [3, 1])), true);
+      assert.deepEqual(vc.index, cids(collection, [3, 1]));
 
       collection.add({id: 2, name: 'aaa'});
-      assert.equal(_.isEqual(vc.index, cids(collection, [2, 3, 1])), true);
+      assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
     });
+
+    it('should update the index when reset is triggered on the parent collection', function () {
+      var collection = new Backbone.Collection([
+        {type: 'a'},
+        {type: 'a'},
+        {type: 'b'} ]),
+      vc = new VirtualCollection(collection, {type: 'b'});
+      collection.reset([
+        new Backbone.Model({type: 'b'}),
+        new Backbone.Model({type: 'b'}),
+        new Backbone.Model({type: 'b'})]);
+
+      assert.equal(vc.length, collection.length);
+    })
   });
 
   describe('closeWith', function () {

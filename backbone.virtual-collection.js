@@ -17,6 +17,7 @@
   function VirtualCollection(collection, filter, options) {
     this.collection = collection;
     options = options || {};
+    this.comparator = options.comparator;
 
     _.bindAll(this);
 
@@ -29,19 +30,7 @@
     }
 
     // build index
-    this.index = [];
-    this.collection.each(function (model) {
-      if (this.filter(model)) {
-        this.index.push(model.cid);
-      }
-    }, this);
-
-    this.length = this.index.length;
-
-    if (options.comparator) {
-      this.comparator = options.comparator;
-      this.sort({silent: true});
-    }
+    this._rebuildIndex();
 
     this.listenTo(this.collection, 'add',    this._onAdd,    this);
     this.listenTo(this.collection, 'remove', this._onRemove, this);
@@ -112,6 +101,19 @@
 
   // private
 
+  vc._rebuildIndex = function () {
+    this.index = [];
+    this.collection.each(function (model) {
+      if (this.filter(model)) {
+        this.index.push(model.cid);
+      }
+    }, this);
+    if (this.comparator) {
+      this.sort({silent: true});
+    }
+    this.length = this.index.length;
+  };
+
   /**
    * Handles the collection:add event
    * May update the virtual collection's index
@@ -159,6 +161,7 @@
    * @param {Object} object
    */
   vc._onReset = function (collection, options) {
+    this._rebuildIndex();
     this.trigger('reset', this, options);
   };
 
