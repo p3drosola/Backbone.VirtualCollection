@@ -72,7 +72,18 @@ VirtualCollection builds an internal index of model ids that pass the filter. Th
 Happy hacking!
 
 
+### Changelog
+```
+0.3.2  Fix reset event on parent collection
+0.3.1  Replace viewHelper with closeWith
+0.3.0  Fix undinbing of index listeners
 
+0.2.0  Use cid instead of ids
+
+0.1.1  Fixed issues with comparators specfied as a function
+0.1.0  Added support for comparators & sorting, seperate from the parent collection
+0.0.2  Fix buildFilterFromHash not detecting null values
+```
 
 
 ### License
