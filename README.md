@@ -74,6 +74,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.3.3  Fix sort comparator with two args. Add more iterator helper functions
 0.3.2  Fix reset event on parent collection
 0.3.1  Replace viewHelper with closeWith
 0.3.0  Fix undinbing of index listeners
