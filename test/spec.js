@@ -136,6 +136,21 @@ describe('Backbone.VirtualCollection', function () {
       });
       assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
     });
+    it('should accept a comparator function that compares two models', function () {
+      var vc, collection = new Backbone.Collection([
+        {id: 1, name: 'ccc'},
+        {id: 2, name: 'aaa'},
+        {id: 3, name: 'bbb'}
+      ], {
+        comparator: 'id'
+      });
+
+      vc = new VirtualCollection(collection, {}, {
+        // sort by string DESC
+        comparator: function (a, b) { return a.get('name') < b.get('name') ? 1 : -1; }
+      });
+      assert.deepEqual(vc.index, cids(collection, [1, 3, 2]));
+    });
     it('should keep the index sorted when adding items', function () {
       var vc, collection = new Backbone.Collection([
         {id: 1, name: 'ccc'},

@@ -79,22 +79,30 @@
   };
 
   vc.sort = function (options) {
+    var self = this;
     if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
-    options  = options || {};
+    options = options || {};
 
     // Run sort based on type of `comparator`.
     if (_.isString(this.comparator)) {
-      this.index = _.sortBy(this.index, function (id) {
-        var model = this.collection.get(id);
+      this.index = _.sortBy(this.index, function (cid) {
+        var model = this.collection.get(cid);
         return model.get(this.comparator);
       }, this);
-    } else if (_.isFunction(this.comparator)) {
-      var cpm = _.bind(this.comparator, this);
-      this.index = _.sortBy(this.index, function (id) {
-        var model = this.collection.get(id);
-        return cpm(model);
+    } else if(this.comparator.length === 1) {
+      this.index = _.sortBy(this.index, function (cid) {
+        var model = this.collection.get(cid);
+        return this.comparator.call(self, model);
       }, this);
+    } else {
+      this.index.sort(function (cid1, cid2) {
+        var model1 = self.collection.get(cid1),
+          model2 = self.collection.get(cid2);
+
+        return self.comparator.call(self, model1, model2);
+      });
     }
+
     if (!options.silent) this.trigger('sort', this, options);
     return this;
   };
