@@ -12,9 +12,11 @@
    * Constructor for the virtual collection
    * @param {Collection} collection
    * @param {Function|Object} filter function, or hash of properties to match
-   * @param {Object} options [comparator]
+   * @param {Object} options
+   *      @param {[Function|Object]} filter function, or hash of properties to match
+   *      @param {[Function|String]} comparator
    */
-  function VirtualCollection(collection, filter, options) {
+  function VirtualCollection(collection, options) {
     this.collection = collection;
     options = options || {};
     this.comparator = options.comparator;
@@ -23,12 +25,12 @@
      '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
      '_indexAdd', '_indexRemove');
 
-    if (_.isFunction(filter)) {
-      this.filter = filter;
-    } else if (filter.constructor === Object) {
-      this.filter = VirtualCollection.buildFilterFromHash(filter);
-    } else {
-      throw new TypeError("[filter] argument must be a function or a hash of properties to match");
+    if (!options.filter) {
+      this.filter = function () { return true; };
+    } else if (_.isFunction(options.filter)) {
+      this.filter = options.filter;
+    } else if (options.filter.constructor === Object) {
+      this.filter = VirtualCollection.buildFilterFromHash(options.filter);
     }
 
     // build index

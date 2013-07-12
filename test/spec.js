@@ -21,35 +21,10 @@ describe('Backbone.VirtualCollection', function () {
 
   describe('#constructor', function () {
 
-    it("should throw a type error if the filter is not a function or hash object", function () {
-      var collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
-
-      assert.throws(function () {
-        var vc = new VirtualCollection(collection);
-      }, TypeError);
-
-      assert.throws(function () {
-        var vc = new VirtualCollection(collection, [1, 2, 3]);
-      }, TypeError);
-
-      assert.throws(function () {
-        var vc = new VirtualCollection(collection, 1);
-      }, TypeError);
-
-      assert.throws(function () {
-        var vc = new VirtualCollection(collection, true);
-      }, TypeError);
-
-      assert.throws(function () {
-        var vc = new VirtualCollection(collection, null);
-      }, TypeError);
-
-    });
-
     it("should bind 4 listeners to it's collection", function () {
       var vc, calls, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       sinon.spy(collection, 'on');
-      vc = new VirtualCollection(collection, {});
+      vc = new VirtualCollection(collection);
       calls = JSON.stringify(_.map(collection.on.args, function (i) {return i[0]; }));
       assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset' ]));
     });
@@ -60,7 +35,9 @@ describe('Backbone.VirtualCollection', function () {
         {id: 2, foo: 'baz'},
         {id: 3, foo: 'bar'}
       ]);
-      vc = new VirtualCollection(collection, {foo: 'bar'});
+      vc = new VirtualCollection(collection, {
+        filter: {foo: 'bar'}
+      });
       assert.deepEqual(vc.index, cids(collection, [1, 3]));
     });
   });
@@ -73,7 +50,9 @@ describe('Backbone.VirtualCollection', function () {
         {id: 2, foo: 'baz'},
         {id: 3, foo: 'bar'}
       ]);
-      vc = new VirtualCollection(collection, {foo: 'bar'});
+      vc = new VirtualCollection(collection, {
+        filter: {foo: 'bar'}
+      });
       vc.each(function (model) {
         result.push(model.id);
       });
@@ -89,7 +68,9 @@ describe('Backbone.VirtualCollection', function () {
         {id: 2, foo: 'baz'},
         {id: 3, foo: 'bar'}
       ]);
-      vc = new VirtualCollection(collection, {foo: 'bar'});
+      vc = new VirtualCollection(collection, {
+        filter: {foo: 'bar'}
+      });
       assert.equal(vc.indexOf(collection.at(2)), 1);
     });
   });
@@ -103,7 +84,9 @@ describe('Backbone.VirtualCollection', function () {
       ], {
         comparator: 'foo' // shortBy foo
       });
-      vc = new VirtualCollection(collection, {ok: true});
+      vc = new VirtualCollection(collection, {
+        filter: {ok: true}
+      });
       collection.add({id: 4, ok: true, foo: 'abc'});
       assert.deepEqual(vc.index, cids(collection, [3, 4, 1]));
     });
@@ -119,7 +102,9 @@ describe('Backbone.VirtualCollection', function () {
         comparator: 'id'
       });
 
-      vc = new VirtualCollection(collection, {}, { comparator: 'name' });
+      vc = new VirtualCollection(collection, {
+        comparator: 'name'
+      });
       assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
     });
     it('should accept comparator function', function () {
@@ -131,7 +116,7 @@ describe('Backbone.VirtualCollection', function () {
         comparator: 'id'
       });
 
-      vc = new VirtualCollection(collection, {}, {
+      vc = new VirtualCollection(collection, {
         comparator: function (item) { return item.get('name'); }
       });
       assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
@@ -145,7 +130,7 @@ describe('Backbone.VirtualCollection', function () {
         comparator: 'id'
       });
 
-      vc = new VirtualCollection(collection, {}, {
+      vc = new VirtualCollection(collection, {
         // sort by string DESC
         comparator: function (a, b) { return a.get('name') < b.get('name') ? 1 : -1; }
       });
@@ -159,7 +144,7 @@ describe('Backbone.VirtualCollection', function () {
         comparator: 'id'
       });
 
-      vc = new VirtualCollection(collection, {}, { comparator: 'name' });
+      vc = new VirtualCollection(collection, { comparator: 'name' });
       assert.deepEqual(vc.index, cids(collection, [3, 1]));
 
       collection.add({id: 2, name: 'aaa'});
@@ -171,7 +156,9 @@ describe('Backbone.VirtualCollection', function () {
         {type: 'a'},
         {type: 'a'},
         {type: 'b'} ]),
-      vc = new VirtualCollection(collection, {type: 'b'});
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'b'}
+      });
       collection.reset([
         new Backbone.Model({type: 'b'}),
         new Backbone.Model({type: 'b'}),
@@ -189,7 +176,7 @@ describe('Backbone.VirtualCollection', function () {
         {id: 3, name: 'aaa'}
       ]),
       view = _.extend({}, Backbone.Events),
-      vc = new Backbone.VirtualCollection(collection, {});
+      vc = new Backbone.VirtualCollection(collection);
       vc.closeWith(view);
       sinon.spy(vc, 'stopListening');
       view.trigger('close');
@@ -203,7 +190,9 @@ describe('Backbone.VirtualCollection', function () {
         {type: 'a', name: 'hodor'},
         {type: 'a', name: 'khalesi'},
         {type: 'b'} ]),
-      vc = new VirtualCollection(collection, {type: 'a'}),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }),
       context = {foo: ' bar'};
       assert.deepEqual(vc.map(function (m) { return m.get('name') + this.foo; }, context), ['hodor bar', 'khalesi bar']);
     });
@@ -215,7 +204,9 @@ describe('Backbone.VirtualCollection', function () {
         {type: 'a', name: 'hodor'},
         {type: 'a', name: 'khalesi'},
         {type: 'b'} ]),
-      vc = new VirtualCollection(collection, {type: 'a'}),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }),
       context = {foo: ' bar'}
       collect = [];
 
@@ -229,7 +220,9 @@ describe('Backbone.VirtualCollection', function () {
       var collection = new Backbone.Collection([
         {type: 'a', id: 1},
         {type: 'b', id: 2}]),
-      vc = new VirtualCollection(collection, {type: 'a'});
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      });
 
       assert.equal(vc.get(1), collection.get(1));
       assert.equal(vc.get(2), undefined);
@@ -241,7 +234,9 @@ describe('Backbone.VirtualCollection', function () {
       var collection = new Backbone.Collection([
         {type: 'a', id: 1},
         {type: 'b', id: 2}]),
-      vc = new VirtualCollection(collection, {type: 'b'});
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'b'}
+      });
 
       assert.equal(vc.at(0), collection.get(2));
     });
