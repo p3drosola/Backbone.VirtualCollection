@@ -65,7 +65,7 @@
     if (context === undefined) {
       context = this;
     }
-    _.each(this._models(), callback, this);
+    _.each(this._models(), callback, context);
     return this;
   };
 
@@ -79,7 +79,7 @@
     if (context === undefined) {
       context = this;
     }
-    return _.map(this._models(), callback, this);
+    return _.map(this._models(), callback, context);
   };
 
   /**

@@ -203,8 +203,9 @@ describe('Backbone.VirtualCollection', function () {
         {type: 'a', name: 'hodor'},
         {type: 'a', name: 'khalesi'},
         {type: 'b'} ]),
-      vc = new VirtualCollection(collection, {type: 'a'});
-      assert.deepEqual(vc.map(function (m) { return m.get('name'); }), ['hodor', 'khalesi']);
+      vc = new VirtualCollection(collection, {type: 'a'}),
+      context = {foo: ' bar'};
+      assert.deepEqual(vc.map(function (m) { return m.get('name') + this.foo; }, context), ['hodor bar', 'khalesi bar']);
     });
   });
 
@@ -215,10 +216,11 @@ describe('Backbone.VirtualCollection', function () {
         {type: 'a', name: 'khalesi'},
         {type: 'b'} ]),
       vc = new VirtualCollection(collection, {type: 'a'}),
-      foo = [];
+      context = {foo: ' bar'}
+      collect = [];
 
-      vc.each(function (m) { foo.push(m.get('name')); });
-      assert.deepEqual(foo, ['hodor', 'khalesi']);
+      vc.each(function (m) { collect.push(m.get('name') + this.foo); }, context);
+      assert.deepEqual(collect, ['hodor bar', 'khalesi bar']);
     });
   });
 
