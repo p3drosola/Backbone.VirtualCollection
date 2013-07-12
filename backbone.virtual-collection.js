@@ -63,14 +63,46 @@
     if (context === undefined) {
       context = this;
     }
-    _.each(this.index, function (id) {
-      callback.call(context, this.collection.get(id));
-    }, this);
+    _.each(this._models(), callback, this);
     return this;
   };
 
   /**
-   * Returns the index of the model __in__ the virtual collection
+   * Map over elements of the virtul collection
+   * @param  {Function} callback
+   * @param  {[Object]}   context
+   * @return {Array}
+   */
+  vc.map = function (callback, context) {
+    if (context === undefined) {
+      context = this;
+    }
+    return _.map(this._models(), callback, this);
+  };
+
+  /**
+   * Returns a model if it belongs to the virtual collection
+   * @param  {String} id
+   * @return {Model}
+   */
+  vc.get = function (id) {
+    var model = this.collection.get(id);
+    if (model && this.filter(model)) {
+      return model;
+    }
+  };
+
+  /**
+   * Returns the model at the position in the index
+   * @param  {Number} index
+   * @return {Model}
+   */
+  vc.at = function (index) {
+    return this.collection.get(this.index[index]);
+  };
+
+  /**
+   * Returns the index of the model in the virtual collection
    * @param  {Model} model
    * @return {Number} index
    */
@@ -120,6 +152,16 @@
       this.sort({silent: true});
     }
     this.length = this.index.length;
+  };
+
+  /**
+   * Returns an array of models in the virtual collection
+   * @return {Array}
+   */
+  vc._models = function () {
+    return _.map(this.index, function (cid) {
+      return this.collection.get(cid);
+    }, this);
   };
 
   /**
