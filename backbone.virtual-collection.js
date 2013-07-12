@@ -19,7 +19,9 @@
     options = options || {};
     this.comparator = options.comparator;
 
-    _.bindAll(this);
+    _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
+     '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
+     '_indexAdd', '_indexRemove');
 
     if (_.isFunction(filter)) {
       this.filter = filter;
@@ -110,6 +112,13 @@
     return this.index.indexOf(model.cid);
   };
 
+  /**
+   * Sorts the models in the virtual collection
+   *
+   * You only need to trigger this manually if you change the comparator
+   * @param  {Object} options
+   * @return {VirtualCollection}
+   */
   vc.sort = function (options) {
     var self = this;
     if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
@@ -137,6 +146,16 @@
 
     if (!options.silent) this.trigger('sort', this, options);
     return this;
+  };
+
+  /**
+   * A utility function for unbiding listeners
+   * @param  {View} view (marionette view)
+   */
+  vc.closeWith = function (view) {
+    view.on('close', function () {
+      this.stopListening();
+    }, this);
   };
 
   // private
@@ -252,16 +271,6 @@
       this.index.splice(i, 1);
       this.length = this.index.length;
     }
-  };
-
-  /**
-   * A utility function for unbiding listeners
-   * @param  {View} view (marionette view)
-   */
-  vc.closeWith = function (view) {
-    view.on('close', function () {
-      this.stopListening();
-    }, this);
   };
 
   _.extend(vc, Backbone.Events);
