@@ -182,6 +182,54 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
+  describe('map', function () {
+    it('should map over the virtual collections model array', function () {
+      var collection = new Backbone.Collection([
+        {type: 'a', name: 'hodor'},
+        {type: 'a', name: 'khalesi'},
+        {type: 'b'} ]),
+      vc = new VirtualCollection(collection, {type: 'a'});
+      assert.deepEqual(vc.map(function (m) { return m.get('name'); }), ['hodor', 'khalesi']);
+    });
+  });
+
+  describe('each', function () {
+    it('should interate over the models', function () {
+      var collection = new Backbone.Collection([
+        {type: 'a', name: 'hodor'},
+        {type: 'a', name: 'khalesi'},
+        {type: 'b'} ]),
+      vc = new VirtualCollection(collection, {type: 'a'}),
+      foo = [];
+
+      vc.each(function (m) { foo.push(m.get('name')); });
+      assert.deepEqual(foo, ['hodor', 'khalesi']);
+    });
+  });
+
+  describe('get', function () {
+    it('should return the model if it belongs in the virtual collection', function () {
+      var collection = new Backbone.Collection([
+        {type: 'a', id: 1},
+        {type: 'b', id: 2}]),
+      vc = new VirtualCollection(collection, {type: 'a'});
+
+      assert.equal(vc.get(1), collection.get(1));
+      assert.equal(vc.get(2), undefined);
+    });
+  });
+
+  describe('at', function () {
+    it('should return the model at the specified index of the virtual collection', function () {
+      var collection = new Backbone.Collection([
+        {type: 'a', id: 1},
+        {type: 'b', id: 2}]),
+      vc = new VirtualCollection(collection, {type: 'b'});
+
+      assert.equal(vc.at(0), collection.get(2));
+    });
+  });
+
   describe('buildFilterFromHash', function () {
 
     it('should build an filter that accepts one correct attribute', function () {
