@@ -83,6 +83,8 @@ Happy hacking!
 
 ### Changelog
 ```
+0.4.0  Make filter part of options hash. This version breaks backwards compatibility. You'll have to update your code.
+
 0.3.3  Fix sort comparator with two args. Add more iterator helper functions
 0.3.2  Fix reset event on parent collection
 0.3.1  Replace viewHelper with closeWith
