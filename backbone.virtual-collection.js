@@ -223,6 +223,7 @@
       this.trigger('change', model, options);
     } else {
       this._indexRemove(model);
+      this.trigger('remove', model, this, options);
     }
   };
 
