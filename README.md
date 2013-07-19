@@ -83,6 +83,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.4.2  Improve importing with npm
 0.4.0  Make filter part of options hash. This version breaks backwards compatibility. You'll have to update your code.
 
 0.3.3  Fix sort comparator with two args. Add more iterator helper functions
