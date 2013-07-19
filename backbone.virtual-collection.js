@@ -2,12 +2,6 @@
 
   var _ = this._, Backbone = this.Backbone, vc;
 
-  // fix for the mocha specs
-  if (!_ && (typeof require !== 'undefined')) {
-    _ = require('underscore');
-    Backbone = require('backbone');
-  }
-
   /**
    * Constructor for the virtual collection
    * @param {Collection} collection
@@ -275,7 +269,17 @@
     }
   };
 
+  if (!_ && (typeof require !== 'undefined')) {
+    _ = require('underscore');
+  }
+  if (!Backbone && (typeof require !== 'undefined')) {
+    Backbone = require('backbone');
+  }
+  if (module && module.exports) {
+    module.exports = VirtualCollection;
+  }
   _.extend(vc, Backbone.Events);
+
   Backbone.VirtualCollection = VirtualCollection;
 
 }());
