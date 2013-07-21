@@ -269,4 +269,104 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
     });
   });
+  describe('events', function () {
+    it('should trigger reset when the parent collection is reset', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = false;
+
+      vc.on('reset', function () { called = true; });
+      collection.reset([{type: 'a'}, {type: 'a'}]);
+
+      assert(called);
+      assert.equal(vc.length, 2);
+    });
+    it('should trigger add when a matching model is added to the parent', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = false;
+
+      vc.on('add', function () { called = true; });
+      collection.add({type: 'a'});
+
+      assert(called);
+      assert.equal(vc.length, 2);
+    });
+    it('should not trigger add when a model (not matching) is added to the parent', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = false;
+
+      vc.on('add', function () { called = true; });
+      collection.add({type: 'b'});
+
+      assert(!called);
+      assert.equal(vc.length, 1);
+    });
+    it('should trigger remove when a matching model is removed from the parent', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = false;
+
+      vc.on('remove', function () { called = true; });
+      collection.remove(collection.at(0));
+
+      assert(called);
+      assert.equal(vc.length, 0);
+    });
+    it('should not trigger remove when a model (not matching) is removed from the parent', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = false;
+
+      vc.on('remove', function () { called = true; });
+      collection.remove(collection.at(1));
+
+      assert(!called);
+      assert.equal(vc.length, 1);
+    });
+
+    it('should trigger remove when a model no longer passes the filter', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = false;
+
+      vc.on('remove', function () { called = true; });
+      collection.at(0).set({type: 'b'});
+
+      assert(called);
+      assert(vc.length === 0);
+    });
+    it('should trigger add when a model is modified to pass the filter', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = false;
+
+      vc.on('add', function () { called = true; });
+      collection.at(1).set({type: 'a'});
+
+      assert(called);
+      assert(vc.length === 2);
+    });
+    it('should trigger change when a model that belongs to the VC is changed', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = false;
+
+      vc.on('change', function () { called = true; });
+      collection.at(0).set({foo: 'bar'});
+
+      assert(called);
+      assert(vc.length === 1);
+    });
+
+  });
 });

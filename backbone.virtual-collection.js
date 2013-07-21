@@ -212,11 +212,19 @@
    * @param {Object} object
    */
   vc._onChange = function (model, options) {
+    var already_here = _.contains(this.index, model.cid);
     if (this.filter(model)) {
-      this._indexAdd(model);
-      this.trigger('change', model, options);
+      if (already_here) {
+        this.trigger('change', model, this, options);
+      } else {
+        this._indexAdd(model);
+        this.trigger('add', model, this, options);
+      }
     } else {
-      this._indexRemove(model);
+      if (already_here) {
+        this._indexRemove(model);
+        this.trigger('remove', model, this, options);
+      }
     }
   };
 
