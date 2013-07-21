@@ -83,6 +83,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.5.3  Fix bug with onChange handler not proxing add and remove events correctly
 0.4.2  Improve importing with npm
 0.4.0  Make filter part of options hash. This version breaks backwards compatibility. You'll have to update your code.
 
