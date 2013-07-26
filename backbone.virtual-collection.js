@@ -1,6 +1,19 @@
-(function () {
+(function (global) {
+  'use strict';
 
-  var _ = this._, Backbone = this.Backbone, vc;
+  var _ = global._, Backbone = global.Backbone, vc, iterators;
+
+  if ((!_  || !Backbone) && (typeof require !== 'undefined')) {
+    _ = require('underscore');
+    Backbone = require('backbone');
+  }
+
+  iterators = ['forEach', 'each', 'map', 'collect', 'reduce', 'foldl',
+    'inject', 'reduceRight', 'foldr', 'find', 'detect', 'filter', 'select',
+    'reject', 'every', 'all', 'some', 'any', 'include', 'contains', 'invoke',
+    'max', 'min', 'toArray', 'size', 'first', 'head', 'take', 'initial', 'rest',
+    'tail', 'drop', 'last', 'without', 'indexOf', 'shuffle', 'lastIndexOf',
+    'isEmpty', 'chain'];
 
   /**
    * Constructor for the virtual collection
@@ -51,32 +64,15 @@
 
   vc = VirtualCollection.prototype;
 
-  /**
-   * Iterates the callback over the elements in the virtual collection
-   * @param  {Function} callback
-   * @param  {Object}   context, optional
-   * @return {Object}   virtual collection
-   */
-  vc.each = function (callback, context) {
-    if (context === undefined) {
-      context = this;
-    }
-    _.each(this._models(), callback, context);
-    return this;
-  };
 
-  /**
-   * Map over elements of the virtul collection
-   * @param  {Function} callback
-   * @param  {[Object]}   context
-   * @return {Array}
-   */
-  vc.map = function (callback, context) {
-    if (context === undefined) {
-      context = this;
-    }
-    return _.map(this._models(), callback, context);
-  };
+  // mix in Underscore method as proxies
+  _.each(interators, function(method) {
+    vc[method] = function() {
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift(this._models());
+      return _[method].apply(_, args);
+    };
+  });
 
   /**
    * Returns a model if it belongs to the virtual collection
@@ -290,4 +286,4 @@
 
   Backbone.VirtualCollection = VirtualCollection;
 
-}());
+}(this));
