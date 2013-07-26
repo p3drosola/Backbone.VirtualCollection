@@ -66,7 +66,7 @@
 
 
   // mix in Underscore method as proxies
-  _.each(interators, function(method) {
+  _.each(iterators, function(method) {
     vc[method] = function() {
       var args = Array.prototype.slice.call(arguments);
       args.unshift(this._models());
