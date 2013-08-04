@@ -279,7 +279,7 @@
   if (!Backbone && (typeof require !== 'undefined')) {
     Backbone = require('backbone');
   }
-  if (module && module.exports) {
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = VirtualCollection;
   }
   _.extend(vc, Backbone.Events);
