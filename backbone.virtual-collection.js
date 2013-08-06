@@ -70,8 +70,8 @@
 
 
   // mix in Underscore method as proxies
-  _.each(iterators, function(method) {
-    vc[method] = function() {
+  _.each(iterators, function (method) {
+    vc[method] = function () {
       var args = Array.prototype.slice.call(arguments);
       args.unshift(this._models());
       return _[method].apply(_, args);
@@ -126,7 +126,7 @@
         var model = this.collection.get(cid);
         return model.get(this.comparator);
       }, this);
-    } else if(this.comparator.length === 1) {
+    } else if (this.comparator.length === 1) {
       this.index = _.sortBy(this.index, function (cid) {
         var model = this.collection.get(cid);
         return this.comparator.call(self, model);
