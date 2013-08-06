@@ -40,6 +40,16 @@ describe('Backbone.VirtualCollection', function () {
       });
       assert.deepEqual(vc.index, cids(collection, [1, 3]));
     });
+
+    it("should accept a close_with option and bind close event", function () {
+      var vc, calls, collection, event_emitter;
+      collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
+      event_emitter = Backbone.Events;
+      sinon.spy(event_emitter, 'on');
+      vc = new VirtualCollection(collection, {close_with: event_emitter});
+      calls = JSON.stringify(_.map(event_emitter.on.args, function (i) {return i[0]; }));
+      assert.equal(calls, JSON.stringify([ 'close' ]));
+    });
   });
 
   describe('#each', function () {
