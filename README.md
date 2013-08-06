@@ -65,6 +65,15 @@ virtual_collection.closeWith(view);
 
 Using the helper will take care of unbinding the virtual collection's listeners when the view is closed.
 
+You also can pass a `close_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening events when the `close_with` event emitter emits a `close` event.
+
+```js
+var virtual_collection = new Backbone.VirtualCollection(collection, {
+  filter: {foo: 'bar'},
+  close_with: view
+});
+```
+
 ### Philosophy
 
 #### It's really light
