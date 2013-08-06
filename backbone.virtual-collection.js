@@ -47,6 +47,10 @@
     this.listenTo(this.collection, 'remove', this._onRemove, this);
     this.listenTo(this.collection, 'change', this._onChange, this);
     this.listenTo(this.collection, 'reset',  this._onReset,  this);
+
+    if (options.close_with) {
+      this.closeWith(options.close_with);
+    }
   }
 
   /**
