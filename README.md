@@ -92,6 +92,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.4.5  Add close_with option
 0.4.4  Add all collection Underscore interator proxies
 0.4.3  Fix bug with onChange handler not proxing add and remove events correctly
 0.4.2  Improve importing with npm
