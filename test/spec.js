@@ -252,6 +252,24 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
+  describe('toJSON', function() {
+    it('should return a JSON representation of the models of the virtual collection', function() {
+      var collection = new Backbone.Collection([
+        {age: 23, name: 'John'},
+        {age: 44, name: 'Papa'},
+        {age: 44, name: 'Terry'}
+      ]);
+      vc = new VirtualCollection(collection, {
+        filter: {age: 44}
+      });
+
+      assert.deepEqual(vc.toJSON(), [
+        {age: 44, name: 'Papa'},
+        {age: 44, name: 'Terry'}
+      ]);
+    });
+  });
+
   describe('buildFilterFromHash', function () {
 
     it('should build an filter that accepts one correct attribute', function () {
