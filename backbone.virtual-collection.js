@@ -109,6 +109,16 @@
   };
 
   /**
+   * Returns a JSON representation of all the models in the index
+   * @return {Array} JSON models
+   */
+  vc.toJSON = function() {
+    return _.map(this._models(), function(model) {
+      return model.toJSON();
+    });
+  };
+
+  /**
    * Sorts the models in the virtual collection
    *
    * You only need to trigger this manually if you change the comparator
