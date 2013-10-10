@@ -28,7 +28,7 @@
     options = options || {};
     this.comparator = options.comparator;
 
-    _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'updateFilter', 'closeWith',
+    _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
      '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
      '_indexAdd', '_indexRemove');
 
@@ -157,7 +157,7 @@
   /**
    * Change the filter and update collection
    *
-   * @param  {filter} filter
+   * @param  {Object} or {Function} filter
    * @return {VirtualCollection}
    */
 
@@ -172,7 +172,7 @@
 
     this._rebuildIndex();
 
-    this.trigger('reset', this);
+    this.trigger('filter', this, filter);
 
     return this;
   };
