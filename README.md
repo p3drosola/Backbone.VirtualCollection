@@ -92,6 +92,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.4.7  Add the updateFilter method (via @justinwinslow)
 0.4.6  Add toJSON method (via @gbedardsice)
 0.4.5  Add close_with option
 0.4.4  Add all collection Underscore interator proxies
