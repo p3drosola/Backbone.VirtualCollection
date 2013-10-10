@@ -270,30 +270,30 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
-  describe('buildFilterFromHash', function () {
+  describe('buildFilter', function () {
 
     it('should build an filter that accepts one correct attribute', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar'});
+      var filter = VirtualCollection.buildFilter({foo: 'bar'});
       assert.equal(true, filter(new Backbone.Model({foo: 'bar'})));
     });
     it('should build an filter that rejects one false attribute', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar'});
+      var filter = VirtualCollection.buildFilter({foo: 'bar'});
       assert.equal(false, filter(new Backbone.Model({foo: 'car'})));
     });
     it('should build an filter that accepts multiple correct attributes', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: 'ale'});
+      var filter = VirtualCollection.buildFilter({foo: 'bar', ginger: 'ale'});
       assert.equal(true, filter(new Backbone.Model({foo: 'bar', ginger: 'ale'})));
     });
     it('should build an filter that rejects a missing attribute', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: 'ale'});
+      var filter = VirtualCollection.buildFilter({foo: 'bar', ginger: 'ale'});
       assert.equal(false, filter(new Backbone.Model({foo: 'bar'})));
     });
     it('should a build a filter that finds null values', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: null});
+      var filter = VirtualCollection.buildFilter({foo: 'bar', ginger: null});
       assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
     });
     it('should a build a filter that finds undefined values', function () {
-      var filter = VirtualCollection.buildFilterFromHash({foo: 'bar', ginger: undefined});
+      var filter = VirtualCollection.buildFilter({foo: 'bar', ginger: undefined});
       assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
     });
   });
