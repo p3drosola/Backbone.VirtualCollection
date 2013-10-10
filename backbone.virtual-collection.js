@@ -28,7 +28,7 @@
     options = options || {};
     this.comparator = options.comparator;
 
-    _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
+    _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'updateFilter', 'closeWith',
      '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
      '_indexAdd', '_indexRemove');
 
@@ -171,6 +171,8 @@
     }
 
     this._rebuildIndex();
+
+    this.trigger('reset', this);
 
     return this;
   };
