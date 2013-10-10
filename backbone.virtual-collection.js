@@ -155,6 +155,27 @@
   };
 
   /**
+   * Change the filter and update collection
+   *
+   * @param  {filter} filter
+   * @return {VirtualCollection}
+   */
+
+  vc.updateFilter = function(filter){
+    if (!filter) {
+      this.filter = function () { return true; };
+    } else if (_.isFunction(filter)) {
+      this.filter = filter;
+    } else if (filter.constructor === Object) {
+      this.filter = VirtualCollection.buildFilterFromHash(filter);
+    }
+
+    this._rebuildIndex();
+
+    return this;
+  };
+
+  /**
    * A utility function for unbiding listeners
    * @param  {View} view (marionette view)
    */
