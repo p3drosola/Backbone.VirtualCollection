@@ -55,10 +55,13 @@
    */
   VirtualCollection.buildFilter = function (filter) {
     if (!filter) {
+      // If no filter is passed, all models should be added
       return function () { return true; };
     } else if (_.isFunction(filter)) {
+      // If filter is passed a function, just return it
       return filter;
     } else if (filter.constructor === Object) {
+      // If filter is a hash of attributes, return a function that checks each of them
       return function (model) {
         return !Boolean(_(Object.keys(filter)).detect(function (key) {
           return model.get(key) !== filter[key];
@@ -163,10 +166,13 @@
    */
 
   vc.updateFilter = function(filter){
+    // Reset the filter
     this.filter = VirtualCollection.buildFilter(filter);
 
+    // Update the models
     this._rebuildIndex();
 
+    // Trigger filter event
     this.trigger('filter', this, filter);
 
     return this;
