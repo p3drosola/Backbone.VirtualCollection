@@ -1,7 +1,7 @@
 (function (global) {
   'use strict';
 
-  var _ = global._, Backbone = global.Backbone, vc, iterators;
+  var _ = global._, Backbone = global.Backbone, vc, iterators, proxy;
 
   if ((!_  || !Backbone) && (typeof require !== 'undefined')) {
     _ = require('underscore');
@@ -14,6 +14,8 @@
     'max', 'min', 'toArray', 'size', 'first', 'head', 'take', 'initial', 'rest',
     'tail', 'drop', 'last', 'without', 'indexOf', 'shuffle', 'lastIndexOf',
     'isEmpty', 'chain'];
+
+  proxy = ['add', 'remove'];
 
   /**
    * Constructor for the virtual collection
@@ -79,6 +81,14 @@
       var args = Array.prototype.slice.call(arguments);
       args.unshift(this._models());
       return _[method].apply(_, args);
+    };
+  });
+
+  // proxy functions to parent
+  _.each(proxy, function (method) {
+    vc[method] = function () {
+      var args = Array.prototype.slice.call(arguments);
+      return this.collection[method].apply(this.collection, args);
     };
   });
 
@@ -192,8 +202,8 @@
 
   vc._rebuildIndex = function () {
     this.index = [];
-    this.collection.each(function (model) {
-      if (this.filter(model)) {
+    this.collection.each(function (model, index) {
+      if (this.filter(model, index)) {
         this.index.push(model.cid);
       }
     }, this);

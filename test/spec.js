@@ -270,6 +270,33 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
+  describe('add & remove', function () {
+    it('should proxy up to the parent', function () {
+      var collection = new Backbone.Collection([]);
+      vc = new VirtualCollection(collection, {});
+      vc.add({id: 2});
+      assert.equal(collection.length, 1);
+      vc.remove(collection.at(0));
+      assert.equal(collection.length, 0);
+    });
+  });
+
+  describe('filter function', function () {
+    it('should recieve the model and index as arguments', function () {
+      var i = 0,
+      collection = new Backbone.Collection([{id: 1}, {id: 2}]);
+
+      vc = new VirtualCollection(collection, {
+        filter: function (model, index) {
+          assert.equal(model.id, i + 1);
+          assert.equal(index, i);
+          i++;
+        }
+      });
+
+    });
+  });
+
   describe('buildFilter', function () {
 
     it('should build an filter that accepts one correct attribute', function () {
