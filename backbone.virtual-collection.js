@@ -35,7 +35,7 @@
      '_indexAdd', '_indexRemove');
 
     // set filter
-    this.filter = VirtualCollection.buildFilter(options.filter);
+    this.filterFunction = VirtualCollection.buildFilter(options.filter);
 
     // build index
     this._rebuildIndex();
@@ -99,7 +99,7 @@
    */
   vc.get = function (id) {
     var model = this.collection.get(id);
-    if (model && this.filter(model)) {
+    if (model && this.filterFunction(model)) {
       return model;
     }
   };
@@ -180,7 +180,7 @@
 
   vc.updateFilter = function(filter){
     // Reset the filter
-    this.filter = VirtualCollection.buildFilter(filter);
+    this.filterFunction = VirtualCollection.buildFilter(filter);
 
     // Update the models
     this._rebuildIndex();
@@ -206,7 +206,7 @@
   vc._rebuildIndex = function () {
     this.index = [];
     this.collection.each(function (model, index) {
-      if (this.filter(model, index)) {
+      if (this.filterFunction(model, index)) {
         this.index.push(model.cid);
       }
     }, this);
@@ -233,7 +233,7 @@
    * @return {undefined}
    */
   vc._onAdd = function (model, collection, options) {
-    if (this.filter(model)) {
+    if (this.filterFunction(model)) {
       this._indexAdd(model);
       this.trigger('add', model, this, options);
     }
@@ -260,7 +260,7 @@
    */
   vc._onChange = function (model, options) {
     var already_here = _.contains(this.index, model.cid);
-    if (this.filter(model)) {
+    if (this.filterFunction(model)) {
       if (already_here) {
         this.trigger('change', model, this, options);
       } else {
