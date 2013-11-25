@@ -92,6 +92,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.4.9  Added `where` and `findWhere`. Renamed internal filterFunction
 0.4.8  Add `add` and `remove` proxies. Add index argument to filter function.
 0.4.7  Add the updateFilter method (via @justinwinslow)
 0.4.6  Add toJSON method (via @gbedardsice)
