@@ -85,6 +85,30 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
+  describe('#where', function () {
+    it('finds all the models matching attributes', function () {
+      var vc, collection = new Backbone.Collection([
+        {id: 1, foo: 'bar'},
+        {id: 2, foo: 'baz'},
+        {id: 3, foo: 'bar'}
+      ]);
+      vc = new VirtualCollection(collection, {filter: {foo: 'bar'}});
+      assert.equal(vc.where({foo: 'bar'}).length, 2);
+    });
+  });
+
+  describe('#findWhere', function () {
+    it('finds the first model matching attributes', function () {
+      var vc, collection = new Backbone.Collection([
+        {id: 10, foo: 'bar'},
+        {id: 20, foo: 'baz'},
+        {id: 30, foo: 'bar'}
+      ]);
+      vc = new VirtualCollection(collection, {filter: {foo: 'bar'}});
+      assert.equal(vc.findWhere({foo: 'bar'}).id, 10);
+    });
+  });
+
   describe('#_addIndex', function () {
     it('should use comparators to insert the model at the right place in the index', function () {
       var vc, collection = new Backbone.Collection([
