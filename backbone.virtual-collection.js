@@ -113,6 +113,9 @@
     return this.collection.get(this.index[index]);
   };
 
+  vc.where = Backbone.Collection.prototype.where;
+  vc.findWhere = Backbone.Collection.prototype.findWhere;
+
   /**
    * Returns the index of the model in the virtual collection
    * @param  {Model} model
