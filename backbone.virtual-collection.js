@@ -79,7 +79,7 @@
   // hide all Backbone.Collection properties
   var property;
   for (property in Backbone.Collection.prototype) {
-      vc.property = undefined;
+      vc[property] = undefined;
   }
 
   // mix in Underscore method as proxies

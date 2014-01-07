@@ -28,9 +28,13 @@ describe('Backbone.VirtualCollection', function () {
     });
 
     it ("should hide Backbone.Collection methods", function () {
-        var vc, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
-        vc = new VirtualCollection(collection);
-        assert.ok(typeof vc.function === "undefined");
+        var bc = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
+        var vc = new VirtualCollection(bc);
+        var hidden = ["fetch", "sync"];
+        _.each(hidden, function(method) {
+            assert.ok(_.isFunction(bc[method]), "Backbone.Collection has function " + method);
+            assert.ok(typeof vc[method] === "undefined", "Backbone.VirtualCollection hides " + method);
+        });
     });
 
   });
