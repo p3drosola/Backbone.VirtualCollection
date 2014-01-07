@@ -19,6 +19,15 @@ function cids(collection, ids_array) {
 
 describe('Backbone.VirtualCollection', function () {
 
+  describe("class", function() {
+
+    it("instance should be an instance of Backbone.Collection", function () {
+      var vc, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
+      vc = new VirtualCollection(collection);
+      assert.ok(vc instanceof Backbone.Collection);
+    });
+  });
+
   describe('#constructor', function () {
 
     it("should bind 4 listeners to it's collection", function () {

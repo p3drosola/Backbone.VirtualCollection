@@ -25,36 +25,38 @@
    *      @param {[Function|Object]} filter function, or hash of properties to match
    *      @param {[Function|String]} comparator
    */
-  function VirtualCollection(collection, options) {
-    this.collection = collection;
-    options = options || {};
-    this.comparator = options.comparator;
+  var VirtualCollection = Backbone.Collection.extend({
+    constructor: function(collection, options) {
+      this.collection = collection;
+      options = options || {};
+      this.comparator = options.comparator;
 
-    _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
-     '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
-     '_indexAdd', '_indexRemove');
+      _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
+      '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
+      '_indexAdd', '_indexRemove');
 
-    // set filter
-    this.filterFunction = VirtualCollection.buildFilter(options.filter);
+      // set filter
+      this.filterFunction = VirtualCollection.buildFilter(options.filter);
 
-    // build index
-    this._rebuildIndex();
+      // build index
+      this._rebuildIndex();
 
-    this.listenTo(this.collection, 'add',    this._onAdd,    this);
-    this.listenTo(this.collection, 'remove', this._onRemove, this);
-    this.listenTo(this.collection, 'change', this._onChange, this);
-    this.listenTo(this.collection, 'reset',  this._onReset,  this);
+      this.listenTo(this.collection, 'add',    this._onAdd,    this);
+      this.listenTo(this.collection, 'remove', this._onRemove, this);
+      this.listenTo(this.collection, 'change', this._onChange, this);
+      this.listenTo(this.collection, 'reset',  this._onReset,  this);
 
-    if (options.close_with) {
-      this.closeWith(options.close_with);
-    }
-  }
+      if (options.close_with) {
+        this.closeWith(options.close_with);
+      }
+    },
+  });
 
   /**
-   * [static] Returns a function that returns true for models that meet the specified conditions
-   * @param  {Object} hash of model attributes or {Function} filter
-   * @return {Function} filtering function
-   */
+  * [static] Returns a function that returns true for models that meet the specified conditions
+  * @param  {Object} hash of model attributes or {Function} filter
+  * @return {Function} filtering function
+  */
   VirtualCollection.buildFilter = function (filter) {
     if (!filter) {
       // If no filter is passed, all models should be added
@@ -70,7 +72,7 @@
         }));
       };
     }
-  };
+  }
 
   vc = VirtualCollection.prototype;
 
