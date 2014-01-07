@@ -8,7 +8,9 @@
   "description": "Backbone.VirtualCollection allows you use Backbone.Marrionete CollectionViews and CompositeViews on a subset of a backbone collection.",
   "main": "backbone.virtual-collection.js",
   "keywords": [
-    "backbone"
+    "backbone",
+    "marionette",
+    "teambox"
   ],
   "dependencies": {
     "backbone": "*",
