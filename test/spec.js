@@ -26,6 +26,13 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection);
       assert.ok(vc instanceof Backbone.Collection);
     });
+
+    it ("should hide Backbone.Collection methods", function () {
+        var vc, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
+        vc = new VirtualCollection(collection);
+        assert.ok(typeof vc.function === "undefined");
+    });
+
   });
 
   describe('#constructor', function () {
