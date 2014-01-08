@@ -1,0 +1,31 @@
+{
+  "name": "Backbone.VirtualCollection",
+  "version": "0.4.9",
+  "homepage": "https://github.com/p3drosola/Backbone.VirtualCollection",
+  "authors": [
+    "Pedro Sola <p3dro.sola@gmail.com>"
+  ],
+  "description": "Backbone.VirtualCollection allows you use Backbone.Marrionete CollectionViews and CompositeViews on a subset of a backbone collection.",
+  "main": "backbone.virtual-collection.js",
+  "keywords": [
+    "backbone",
+    "marionette",
+    "teambox"
+  ],
+  "dependencies": {
+    "backbone": "*",
+    "underscore": "*"
+  },
+  "devDependencies": {
+    "mocha":"*",
+    "sinon":"*"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
