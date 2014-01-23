@@ -1,0 +1,23 @@
+{
+  "name": "Backbone.VirtualCollection",
+  "description": "Use Backbone.Marionette CollectionViews on a subset of a Backbone collection",
+  "version": "0.4.10",
+  "keywords": [
+    "backbone",
+    "marrionette",
+    "ender",
+    "teambox"
+  ],
+  "repo": "p3drosola/Backbone.VirtualCollection",
+  "authors": [
+    "Pedro Solá<p3dro.sola@gmail.com>"
+  ],
+  "dependencies": {
+    "jashkenas/backbone": "*",
+    "jashkenas/underscore": "*"
+  },
+  "main": "backbone.virtual-collection.js",
+  "scripts": [
+    "backbone.virtual-collection.js"
+  ]
+}
