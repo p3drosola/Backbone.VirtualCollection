@@ -74,6 +74,26 @@ var virtual_collection = new Backbone.VirtualCollection(collection, {
 });
 ```
 
+#### Update filter
+
+It's very common that you'd want to update the filter being used, and have the collection view update itself. `updateFilter` takes the same paramters as the original `filter` property (a hash, or a function) and regenerates the virtual collection, without loosing your view bindings.
+
+```js
+
+virtual_collection.updateFilter({
+  the_new: 'properties'
+, are: 'lovely'
+});
+
+// or
+
+virtual_collection.updateFilter(function (model) {
+  return model.foo() === 'bar';
+});
+
+```
+
+
 ### Philosophy
 
 #### It's really light
