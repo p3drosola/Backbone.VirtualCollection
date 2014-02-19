@@ -1,12 +1,22 @@
-(function (global) {
+(function(global, factory) {
+
+  // Set up lib appropriately for the environment. Start with AMD.
+  if (typeof define === 'function' && define.amd) {
+    define(['underscore', 'backbone'], factory);
+
+  // Next for Node.js or CommonJS.
+  } else if (typeof module !== 'undefined' && module.exports) {
+    module.exports = factory(require('underscore'), require('backbone'));
+
+  // Finally, use browser globals.
+  } else {
+    factory(global._, global.Backbone);
+  }
+
+}(this, function(_, Backbone) {
   'use strict';
 
-  var _ = global._, Backbone = global.Backbone, vc, iterators, proxy;
-
-  if ((!_  || !Backbone) && (typeof require !== 'undefined')) {
-    _ = require('underscore');
-    Backbone = require('backbone');
-  }
+  var vc, iterators, proxy;
 
   iterators = ['forEach', 'each', 'map', 'collect', 'reduce', 'foldl',
     'inject', 'reduceRight', 'foldr', 'find', 'detect', 'filter', 'select',
@@ -324,17 +334,9 @@
     }
   };
 
-  if (!_ && (typeof require !== 'undefined')) {
-    _ = require('underscore');
-  }
-  if (!Backbone && (typeof require !== 'undefined')) {
-    Backbone = require('backbone');
-  }
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = VirtualCollection;
-  }
   _.extend(vc, Backbone.Events);
 
   Backbone.VirtualCollection = VirtualCollection;
 
-}(this));
+  return VirtualCollection;
+}));
