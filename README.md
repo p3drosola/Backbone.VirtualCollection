@@ -5,8 +5,7 @@
 ![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
 
 
-Backbone.VirtualCollection allows you use Backbone.Marionette CollectionViews and CompositeViews on a subset of
-a backbone collection.
+Backbone.VirtualCollection allows you use display a subset of a backbone collection in a Backbone view that updates it real time. It workds great Marionette CollectionViews.
 
 ### Usage
 
@@ -96,14 +95,11 @@ virtual_collection.updateFilter(function (model) {
 
 ### Philosophy
 
-#### It's really light
-VirtualCollection **only** implements the methods used by a Marionette CollectionView to render a collection. It does not attempt to mimic all the behaviours of an actual collection. This keeps the overhead down.
-
-#### It's DRY
+#### No data duplication
 VirtualCollection does not store, or duplicate any data. We've used other solutions in the past, and duplicating data is just plain bad news.
 
 #### It's Fast
-VirtualCollection builds an internal index of model ids that pass the filter. That way iterating with the `each`, or `map` interator is fast.  It doesn't have to go through the whole parent collection and re-evaluate the all the filters.
+VirtualCollection maintains an internal index of models that pass the filter. That way using the accesors, and iteraters (`map`, `each`, etc) is fast. It doesn't have to go through the whole parent collection and re-evaluate the all the filters.
 
 > By the way, `VirtualCollection.buildFilterFromHash` is the function that turns a object into a filter function.You might find it usefull.
 
