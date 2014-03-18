@@ -42,7 +42,7 @@
 
     _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
      '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
-     '_indexAdd', '_indexRemove');
+     '_onFilter', '_indexAdd', '_indexRemove');
 
     // set filter
     this.filterFunction = VirtualCollection.buildFilter(options.filter);
@@ -54,6 +54,7 @@
     this.listenTo(this.collection, 'remove', this._onRemove, this);
     this.listenTo(this.collection, 'change', this._onChange, this);
     this.listenTo(this.collection, 'reset',  this._onReset,  this);
+    this.listenTo(this.collection, 'filter',  this._onFilter,  this);
 
     if (options.close_with) {
       this.closeWith(options.close_with);
@@ -291,6 +292,16 @@
    * @param {Object} object
    */
   vc._onReset = function (collection, options) {
+    this._rebuildIndex();
+    this.trigger('reset', this, options);
+  };
+  
+  /**
+   * Handles the collection:filter event
+   * @param {Collection} collection
+   * @param {Object} object
+   */
+  vc._onFilter = function (collection, options) {
     this._rebuildIndex();
     this.trigger('reset', this, options);
   };

@@ -21,12 +21,12 @@ describe('Backbone.VirtualCollection', function () {
 
   describe('#constructor', function () {
 
-    it("should bind 4 listeners to it's collection", function () {
+    it("should bind 5 listeners to it's collection", function () {
       var vc, calls, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       sinon.spy(collection, 'on');
       vc = new VirtualCollection(collection);
       calls = JSON.stringify(_.map(collection.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset' ]));
+      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset', 'filter' ]));
     });
 
     it('should build an index on instanciation', function () {
