@@ -446,6 +446,31 @@ describe('Backbone.VirtualCollection', function () {
       assert(called);
       assert(vc.length === 1);
     });
+    it('should trigger `filter` when updateFilter is called', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      filter = sinon.stub(),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      });
 
+      vc.on('filter', filter);
+      vc.updateFilter({type: 'b'});
+
+      assert(filter.called);
+      assert(vc.length === 1);
+    });
+    it('should trigger `reset` when updateFilter is called', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      reset = sinon.stub(),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      });
+
+      vc.on('reset', reset);
+      vc.updateFilter({type: 'b'});
+
+      assert(reset.called);
+      assert(vc.length === 1);
+    });
   });
 });
