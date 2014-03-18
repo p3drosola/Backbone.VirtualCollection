@@ -197,6 +197,9 @@
 
     // Trigger filter event
     this.trigger('filter', this, filter);
+    
+    // Trigger reset event
+    this.trigger('reset', this, filter);
 
     return this;
   };
