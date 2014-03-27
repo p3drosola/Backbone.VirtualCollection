@@ -42,7 +42,7 @@
 
     _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
      '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
-     '_indexAdd', '_indexRemove');
+     '_indexAdd', '_indexRemove', '_getFromIndex');
 
     // set filter
     this.filterFunction = VirtualCollection.buildFilter(options.filter);
@@ -109,9 +109,13 @@
    */
   vc.get = function (id) {
     var model = this.collection.get(id);
-    if (model && this.filterFunction(model)) {
+    if (model && _.contains(this.index, model.cid)) {
       return model;
     }
+  };
+
+  vc._getFromIndex = function (id) {
+    return this.collection.get(id);
   };
 
   /**
@@ -234,8 +238,9 @@
    * @return {Array}
    */
   vc._models = function () {
+    var getFn = this.collection instanceof VirtualCollection ? '_getFromIndex' : 'get';
     return _.map(this.index, function (cid) {
-      return this.collection.get(cid);
+      return this.collection[getFn](cid);
     }, this);
   };
 
