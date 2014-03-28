@@ -114,6 +114,13 @@
     }
   };
 
+  /**
+   * Returns a model from a collection without checking if
+   * it is contained in the index. Used when looping
+   * the index itself.
+   * @param {String} id
+   * @return {Model}
+   */
   vc._getFromIndex = function (id) {
     return this.collection.get(id);
   };
