@@ -260,7 +260,11 @@
    */
   vc._onRemove = function (model, collection, options) {
     if (_(this.index).contains(model.cid)) {
-      this._indexRemove(model);
+      var i = this._indexRemove(model);
+      if (options) {
+      	options.index = i;
+      }
+
       this.trigger('remove', model, this, options);
     }
   };
@@ -327,7 +331,7 @@
   /**
    * Removes a model from the virtual collection index
    * @param  {Model} model
-   * @return {undefined}
+   * @return {int} the index for the removed model or -1 if not found
    */
   vc._indexRemove = function (model) {
     var i = this.index.indexOf(model.cid);
@@ -335,6 +339,7 @@
       this.index.splice(i, 1);
       this.length = this.index.length;
     }
+    return i;
   };
 
   _.extend(vc, Backbone.Events);
