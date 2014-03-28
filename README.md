@@ -108,6 +108,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.4.12 Pass the correct index in options object on model removal
 0.4.11 Trigger `reset` in updateFilter (fixes issue with multilayer filtering)
 0.4.10 Added Bower support
 0.4.9  Added `where` and `findWhere`. Renamed internal filterFunction
