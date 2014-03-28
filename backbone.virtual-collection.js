@@ -42,7 +42,7 @@
 
     _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
      '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
-     '_indexAdd', '_indexRemove', '_getFromIndex');
+     '_indexAdd', '_indexRemove');
 
     // set filter
     this.filterFunction = VirtualCollection.buildFilter(options.filter);
@@ -104,25 +104,26 @@
 
   /**
    * Returns a model if it belongs to the virtual collection
-   * @param  {String} id
+   * @param  {String} id or cid
    * @return {Model}
    */
   vc.get = function (id) {
-    var model = this.collection.get(id);
+    var model = this._getParentCollection().get(id);
     if (model && _.contains(this.index, model.cid)) {
       return model;
     }
   };
 
   /**
-   * Returns a model from a collection without checking if
-   * it is contained in the index. Used when looping
-   * the index itself.
-   * @param {String} id
-   * @return {Model}
+   * Returns the parent non-virtual collection.
+   * @return {Collection}
    */
-  vc._getFromIndex = function (id) {
-    return this.collection.get(id);
+  vc._getParentCollection = function () {
+    if (this.collection instanceof VirtualCollection) {
+      return this.collection._getParentCollection();
+    } else {
+      return this.collection;
+    }
   };
 
   /**
@@ -245,9 +246,9 @@
    * @return {Array}
    */
   vc._models = function () {
-    var getFn = this.collection instanceof VirtualCollection ? '_getFromIndex' : 'get';
+    var parentCollection = this._getParentCollection();
     return _.map(this.index, function (cid) {
-      return this.collection[getFn](cid);
+      return parentCollection.get(cid);
     }, this);
   };
 
