@@ -109,6 +109,28 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
+  describe('#pluck', function () {
+    it('returns an array of ids', function () {
+      var vc, collection = new Backbone.Collection([
+        {id: 10, foo: 'bar'},
+        {id: 20, foo: 'baz'},
+        {id: 30, foo: 'bar'}
+      ]);
+      vc = new VirtualCollection(collection, {filter: {foo: 'bar'}});
+      assert.deepEqual(vc.pluck('id'), [10, 30]);
+    });
+
+    it('returns an array of field values', function () {
+      var vc, collection = new Backbone.Collection([
+        {id: 10, foo: 'bar'},
+        {id: 20, foo: 'baz'},
+        {id: 30, foo: 'bar'}
+      ]);
+      vc = new VirtualCollection(collection, {filter: {foo: 'bar'}});
+      assert.deepEqual(vc.pluck('foo'), ['bar', 'bar']);
+    });
+  });
+
   describe('#_addIndex', function () {
     it('should use comparators to insert the model at the right place in the index', function () {
       var vc, collection = new Backbone.Collection([
