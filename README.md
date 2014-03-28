@@ -5,7 +5,7 @@
 ![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
 
 
-Backbone.VirtualCollection allows you use display a subset of a backbone collection in a Backbone view that updates it real time. It workds great Marionette CollectionViews.
+Backbone.VirtualCollection allows you use display a subset of a backbone collection in a Backbone view that updates it real time. It works great with Marionette CollectionViews.
 
 ### Usage
 
