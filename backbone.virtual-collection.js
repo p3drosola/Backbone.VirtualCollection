@@ -262,10 +262,11 @@
     if (_(this.index).contains(model.cid)) {
       var i = this._indexRemove(model);
       if (options) {
-      	options.index = i;
+        var options_clone = _.clone(options);
+      	options_clone.index = i;
       }
 
-      this.trigger('remove', model, this, options);
+      this.trigger('remove', model, this, options_clone);
     }
   };
 
