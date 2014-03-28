@@ -472,5 +472,70 @@ describe('Backbone.VirtualCollection', function () {
       assert(reset.called);
       assert(vc.length === 1);
     });
+    it('should not call the filter function when looping the collection', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+          filterFunction;
+
+      filterFn = function (model) {
+        return model.get('type') === 'a';
+      };
+
+      vc = new VirtualCollection(collection, {
+        filter: filterFn
+      });
+
+      sinon.spy(vc, 'filterFunction');
+      sinon.spy(vc, 'get');
+      sinon.spy(vc, '_getFromIndex');
+
+      vc.each(function(model) {
+        //looping collection
+      });
+
+      assert(!vc.filterFunction.called);
+    });
+    it('should not call `get` when looping multiple level nested virtual collections', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+          filterFunction;
+
+      grandpa_vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      });
+
+      daddy_vc = new VirtualCollection(grandpa_vc, {
+        filter: {type: 'a'}
+      });
+
+      vc = new VirtualCollection(daddy_vc, {
+        filter: {type: 'a'}
+      });
+
+      sinon.spy(collection, 'get');
+
+      sinon.spy(vc, 'get');
+      sinon.spy(vc, '_getFromIndex');
+
+      sinon.spy(daddy_vc, 'get');
+      sinon.spy(daddy_vc, '_getFromIndex');
+
+      sinon.spy(grandpa_vc, 'get');
+      sinon.spy(grandpa_vc, '_getFromIndex');
+
+      vc.each(function(model) {
+        //looping collection
+      });
+
+      assert(!vc.get.called);
+      assert(!vc._getFromIndex.called);
+
+      assert(!daddy_vc.get.called);
+      assert(daddy_vc._getFromIndex.called);
+
+      assert(!grandpa_vc.get.called);
+      assert(grandpa_vc._getFromIndex.called);
+
+      assert(collection.get.called);
+    });
+
   });
 });
