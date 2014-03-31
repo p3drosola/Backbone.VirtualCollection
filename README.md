@@ -108,6 +108,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.4.13 Optimized `_models` and `get` to access parent collections which are indexed
 0.4.12 Pass the correct index in options object on model removal
 0.4.11 Trigger `reset` in updateFilter (fixes issue with multilayer filtering)
 0.4.10 Added Bower support
