@@ -1,4 +1,4 @@
-(function(global, factory) {
+(function (global, factory) {
 
   // Set up lib appropriately for the environment. Start with AMD.
   if (typeof define === 'function' && define.amd) {
@@ -13,7 +13,7 @@
     factory(global._, global.Backbone);
   }
 
-}(this, function(_, Backbone) {
+}(this, function (_, Backbone) {
   'use strict';
 
   var vc, iterators, proxy;
@@ -62,13 +62,16 @@
 
   /**
    * [static] Returns a function that returns true for models that meet the specified conditions
+   *
    * @param  {Object} hash of model attributes or {Function} filter
    * @return {Function} filtering function
    */
   VirtualCollection.buildFilter = function (filter) {
     if (!filter) {
       // If no filter is passed, all models should be added
-      return function () { return true; };
+      return function () {
+        return true;
+      };
     } else if (_.isFunction(filter)) {
       // If filter is passed a function, just return it
       return filter;
@@ -83,7 +86,6 @@
   };
 
   vc = VirtualCollection.prototype;
-
 
   // mix in Underscore method as proxies
   _.each(iterators, function (method) {
@@ -104,6 +106,7 @@
 
   /**
    * Returns a model if it belongs to the virtual collection
+   *
    * @param  {String} id or cid
    * @return {Model}
    */
@@ -116,6 +119,7 @@
 
   /**
    * Returns the parent non-virtual collection.
+   *
    * @return {Collection}
    */
   vc._getParentCollection = function () {
@@ -128,6 +132,7 @@
 
   /**
    * Returns the model at the position in the index
+   *
    * @param  {Number} index
    * @return {Model}
    */
@@ -140,6 +145,7 @@
 
   /**
    * Returns the index of the model in the virtual collection
+   *
    * @param  {Model} model
    * @return {Number} index
    */
@@ -149,10 +155,11 @@
 
   /**
    * Returns a JSON representation of all the models in the index
+   *
    * @return {Array} JSON models
    */
-  vc.toJSON = function() {
-    return _.map(this._models(), function(model) {
+  vc.toJSON = function () {
+    return _.map(this._models(), function (model) {
       return model.toJSON();
     });
   };
@@ -161,12 +168,17 @@
    * Sorts the models in the virtual collection
    *
    * You only need to trigger this manually if you change the comparator
+   *
    * @param  {Object} options
    * @return {VirtualCollection}
    */
   vc.sort = function (options) {
     var self = this;
-    if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
+
+    if (!this.comparator) {
+      throw new Error('Cannot sort a set without a comparator');
+    }
+
     options = options || {};
 
     // Run sort based on type of `comparator`.
@@ -189,7 +201,10 @@
       });
     }
 
-    if (!options.silent) this.trigger('sort', this, options);
+    if (!options.silent) {
+      this.trigger('sort', this, options);
+    }
+
     return this;
   };
 
@@ -200,7 +215,7 @@
    * @return {VirtualCollection}
    */
 
-  vc.updateFilter = function(filter){
+  vc.updateFilter = function (filter) {
     // Reset the filter
     this.filterFunction = VirtualCollection.buildFilter(filter);
 
@@ -209,7 +224,7 @@
 
     // Trigger filter event
     this.trigger('filter', this, filter);
-    
+
     // Trigger reset event
     this.trigger('reset', this, filter);
 
@@ -218,6 +233,7 @@
 
   /**
    * A utility function for unbiding listeners
+   *
    * @param  {View} view (marionette view)
    */
   vc.closeWith = function (view) {
@@ -230,23 +246,28 @@
 
   vc._rebuildIndex = function () {
     this.index = [];
+
     this.collection.each(function (model, index) {
       if (this.filterFunction(model, index)) {
         this.index.push(model.cid);
       }
     }, this);
+
     if (this.comparator) {
       this.sort({silent: true});
     }
+
     this.length = this.index.length;
   };
 
   /**
    * Returns an array of models in the virtual collection
+   *
    * @return {Array}
    */
   vc._models = function () {
     var parentCollection = this._getParentCollection();
+
     return _.map(this.index, function (cid) {
       return parentCollection.get(cid);
     }, this);
@@ -255,6 +276,7 @@
   /**
    * Handles the collection:add event
    * May update the virtual collection's index
+   *
    * @param  {Model} model
    * @return {undefined}
    */
@@ -268,15 +290,18 @@
   /**
    * Handles the collection:remove event
    * May update the virtual collection's index
+   *
    * @param  {Model} model
    * @return {undefined}
    */
   vc._onRemove = function (model, collection, options) {
     if (_(this.index).contains(model.cid)) {
-      var i = this._indexRemove(model);
+      var i = this._indexRemove(model)
+        , options_clone;
+
       if (options) {
-        var options_clone = _.clone(options);
-      	options_clone.index = i;
+        options_clone = _.clone(options);
+        options_clone.index = i;
       }
 
       this.trigger('remove', model, this, options_clone);
@@ -286,11 +311,13 @@
   /**
    * Handles the collection:change event
    * May update the virtual collection's index
+   *
    * @param {Model} model
    * @param {Object} object
    */
   vc._onChange = function (model, options) {
     var already_here = _.contains(this.index, model.cid);
+
     if (this.filterFunction(model)) {
       if (already_here) {
         this.trigger('change', model, this, options);
@@ -308,6 +335,7 @@
 
   /**
    * Handles the collection:reset event
+   *
    * @param {Collection} collection
    * @param {Object} object
    */
@@ -319,6 +347,7 @@
   /**
    * Adds a model to the virtual collection index
    * Inserting it in the correct order
+   *
    * @param  {Model} model
    * @return {undefined}
    */
@@ -344,15 +373,18 @@
 
   /**
    * Removes a model from the virtual collection index
+   *
    * @param  {Model} model
    * @return {int} the index for the removed model or -1 if not found
    */
   vc._indexRemove = function (model) {
     var i = this.index.indexOf(model.cid);
+
     if (i !== -1) {
       this.index.splice(i, 1);
       this.length = this.index.length;
     }
+
     return i;
   };
 
