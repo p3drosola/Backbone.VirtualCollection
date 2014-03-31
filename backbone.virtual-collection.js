@@ -23,7 +23,7 @@
     'reject', 'every', 'all', 'some', 'any', 'include', 'contains', 'invoke',
     'max', 'min', 'toArray', 'size', 'first', 'head', 'take', 'initial', 'rest',
     'tail', 'drop', 'last', 'without', 'indexOf', 'shuffle', 'lastIndexOf',
-    'isEmpty', 'chain'];
+    'isEmpty', 'chain', 'pluck'];
 
   proxy = ['add', 'remove'];
 
@@ -88,9 +88,9 @@
   // mix in Underscore method as proxies
   _.each(iterators, function (method) {
     vc[method] = function () {
-      var args = Array.prototype.slice.call(arguments);
-      args.unshift(this._models());
-      return _[method].apply(_, args);
+      var args = Array.prototype.slice.call(arguments)
+        , proxyCollection = { models: this._models() };
+      return Backbone.Collection.prototype[method].apply(proxyCollection, args);
     };
   });
 
