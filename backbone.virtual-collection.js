@@ -104,13 +104,25 @@
 
   /**
    * Returns a model if it belongs to the virtual collection
-   * @param  {String} id
+   * @param  {String} id or cid
    * @return {Model}
    */
   vc.get = function (id) {
-    var model = this.collection.get(id);
-    if (model && this.filterFunction(model)) {
+    var model = this._getParentCollection().get(id);
+    if (model && _.contains(this.index, model.cid)) {
       return model;
+    }
+  };
+
+  /**
+   * Returns the parent non-virtual collection.
+   * @return {Collection}
+   */
+  vc._getParentCollection = function () {
+    if (this.collection instanceof VirtualCollection) {
+      return this.collection._getParentCollection();
+    } else {
+      return this.collection;
     }
   };
 
@@ -234,8 +246,9 @@
    * @return {Array}
    */
   vc._models = function () {
+    var parentCollection = this._getParentCollection();
     return _.map(this.index, function (cid) {
-      return this.collection.get(cid);
+      return parentCollection.get(cid);
     }, this);
   };
 
