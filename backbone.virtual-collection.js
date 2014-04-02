@@ -389,6 +389,8 @@
   };
 
   _.extend(vc, Backbone.Events);
+  
+  VirtualCollection.extend = Backbone.Collection.extend;
 
   Backbone.VirtualCollection = VirtualCollection;
 
