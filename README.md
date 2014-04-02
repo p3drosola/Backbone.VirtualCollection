@@ -135,9 +135,10 @@ Happy hacking!
 0.0.2  Fix buildFilterFromHash not detecting null values
 ```
 
-### Contribution Process
-- open PR
-- discuss/edit/merge
+### Pull requests are welcome, naturally
+
+### Contribution management procress for project admins
+- discuss/edit/merge PR's
 - `npm version patch`
 - update changelog in README.md
 - update version number in component.json, bower.json
