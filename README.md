@@ -108,6 +108,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.4.14 Added Backbone.extend (via @enov)
 0.4.13 Optimized `_models` and `get` to access parent collections which are indexed
 0.4.12 Pass the correct index in options object on model removal
 0.4.11 Trigger `reset` in updateFilter (fixes issue with multilayer filtering)
@@ -134,6 +135,13 @@ Happy hacking!
 0.0.2  Fix buildFilterFromHash not detecting null values
 ```
 
+### Contribution Process
+- open PR
+- discuss/edit/merge
+- `npm version patch`
+- update changelog in README.md
+- update version number in component.json, bower.json
+- `git push && git push --tags`
 
 ### License
 The MIT License (MIT)
