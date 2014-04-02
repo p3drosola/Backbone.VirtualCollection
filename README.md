@@ -137,6 +137,8 @@ Happy hacking!
 
 ### Pull requests are welcome, naturally
 
+![](http://i.imgur.com/Ikzywtp.gif)
+
 ### Contribution management procress for project admins
 - discuss/edit/merge PR's
 - `npm version patch`
