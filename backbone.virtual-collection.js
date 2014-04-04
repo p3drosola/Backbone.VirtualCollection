@@ -1,24 +1,39 @@
-VirtualCollection = Backbone.Collection.extend({
+
+// internal data structure is compatible with
+// Backbone.Collection ...
+// mind = blown
+
+var VirtualCollection = Backbone.Collection.extend({
 
   constructor: function (collection, options) {
-    this.collection = collection;
     options = options || {};
-    if (options.comparator) {
-      this.comparator = options.comparator;
-    }
-    if (!this.model) {
-      this.model = collection.model;
-    }
+    this.collection = collection;
+
+    if (options.comparator) this.comparator = options.comparator;
+    if (options.close_with) this.closeWith(options.close_with);
+    if (!this.model) this.model = collection.model;
+
     this.accepts = VirtualCollection.buildFilterFromObject(options.filter);
     this._rebuildIndex();
-    // this.listenTo(this.collection, 'add', this._onAdd);
+    this.initialize.apply(this, arguments);
+
+    this.listenTo(this.collection, 'add', this._onAdd);
+  },
+
+  // marionette specific
+  closeWith: function (view) {
+    view.on('close', function () {
+      this.stopListening();
+    }, this);
   },
 
   _rebuildIndex: function () {
-    this.models = [];
+    this._reset();
     this.collection.each(function (model) {
       if (this.accepts(model)) {
         this.models.push(model);
+        this._byId[model.cid] = model;
+        if (model.id) this._byId[model.id] = model;
       }
     }, this);
   },
@@ -30,8 +45,25 @@ VirtualCollection = Backbone.Collection.extend({
     }
   },
 
-  _.indexAdd: function (model) {
+  _indexAdd: function (model) {
+    var i;
+    if (this.get(model)) return;
+    if (this.comparator || model === this.collection.last()) {
+      i = this.length; // custom sort, or append
+    } else {
+      var orig_index = this.collection.indexOf(model);
+      for (i = 0; i < this.length; i++) {
+        if (this.collection.indexOf(this.collection.get(this.index[i])) > orig_index) {
+          break;
+        }
+      }
+    }
 
+    this.models.splice(i, 0, model);
+    this._byId[model.cid] = model;
+    if (model.id) this._byId[model.id] = model;
+
+    if (this.comparator) this.sort({silent: true});
   }
 
 }, { // static props
@@ -49,6 +81,14 @@ VirtualCollection = Backbone.Collection.extend({
       }
     }
   }
+});
+
+
+// add the methods to the prototype so they can be overwritten if need be
+_.each(['add', 'remove', 'set', 'reset', 'push', 'pop', 'unshift', 'shift', 'slice', 'sync', 'fetch'], function (method_name) {
+  VirtualCollection.prototype[method_name] = function () {
+    this.collection[method_name].apply(this.collection, _.toArray(arguments));
+  };
 });
 
 _.extend(VirtualCollection.prototype, Backbone.Events);
