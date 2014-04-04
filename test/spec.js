@@ -4,10 +4,7 @@ var assert = require("assert"),
     sinon = require('sinon'),
     _ = require("underscore"),
     Backbone = require("backbone"),
-    VirtualCollection;
-
-require('../backbone.virtual-collection');
-VirtualCollection = Backbone.VirtualCollection;
+    VirtualCollection = require('backbone.virtual-collection');
 
 function cids(collection, ids_array) {
   var cids_array = [];
