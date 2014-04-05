@@ -3,6 +3,8 @@
 // Backbone.Collection ...
 // mind = blown
 
+// TODO: sort  & comparator
+
 var VirtualCollection = Backbone.Collection.extend({
 
   constructor: function (collection, options) {
@@ -13,11 +15,14 @@ var VirtualCollection = Backbone.Collection.extend({
     if (options.close_with) this.closeWith(options.close_with);
     if (!this.model) this.model = collection.model;
 
-    this.accepts = VirtualCollection.buildFilterFromObject(options.filter);
+    this.accepts = VirtualCollection.buildFilter(options.filter);
     this._rebuildIndex();
     this.initialize.apply(this, arguments);
 
     this.listenTo(this.collection, 'add', this._onAdd);
+    this.listenTo(this.collection, 'remove', this._onRemove);
+    this.listenTo(this.collection, 'change', this._onChange);
+    this.listenTo(this.collection, 'reset',  this._onReset);
   },
 
   // marionette specific
@@ -26,6 +31,14 @@ var VirtualCollection = Backbone.Collection.extend({
       this.stopListening();
     }, this);
   },
+
+  updateFilter: function (filter) {
+    this.accepts = VirtualCollection.buildFilter(filter);
+    this._rebuildIndex();
+    this.trigger('filter', this, filter);
+    this.trigger('reset', this, filter);
+    return this;
+  }
 
   _rebuildIndex: function () {
     this._reset();
@@ -36,6 +49,7 @@ var VirtualCollection = Backbone.Collection.extend({
         if (model.id) this._byId[model.id] = model;
       }
     }, this);
+    this.length = this.models.length;
   },
 
   _onAdd: function (model, collection, options) {
@@ -44,6 +58,41 @@ var VirtualCollection = Backbone.Collection.extend({
       this.trigger('add', model, this, options);
     }
   },
+
+  _onRemove: function (model, collection, options) {
+    if (!this.get(model)) return;
+
+    var i = this._indexRemove(model)
+    , options_clone = _.clone(options);
+    options_clone.index = i;
+
+    this.trigger('remove', model, this, options_clone);
+  },
+
+  _onChange: function (model, options) {
+    var already_here = this.get(model);
+
+    if (this.accepts(model)) {
+      if (already_here) {
+        this.trigger('change', model, this, options);
+      } else {
+        this._indexAdd(model);
+        this.trigger('add', model, this, options);
+      }
+    } else {
+      if (already_here) {
+        var i = this._indexRemove(model)
+        , options_clone = _.clone(options);
+        options_clone.index = i;
+        this.trigger('remove', model, this, options_clone);
+      }
+    }
+  },
+
+  _onReset: function (collection, options) {
+    this._rebuildIndex();
+    this.trigger('reset', this, options);
+  }
 
   _indexAdd: function (model) {
     var i;
@@ -62,13 +111,23 @@ var VirtualCollection = Backbone.Collection.extend({
     this.models.splice(i, 0, model);
     this._byId[model.cid] = model;
     if (model.id) this._byId[model.id] = model;
+    this.length = this.models.length;
 
     if (this.comparator) this.sort({silent: true});
+  },
+
+  _indexRemove: function (model) {
+    var i = this.indexOf(model);
+    if (i !== -1) {
+      this.models.splice(i, 1);
+      this.length = this.models.length;
+    }
+    return i;
   }
 
 }, { // static props
 
-  buildFilterFromObject: function (options) {
+  buildFilter: function (options) {
     if (!options) {
       return function () { return true; };
     } else if (_.isFunction(options)) {
