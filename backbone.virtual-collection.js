@@ -27,9 +27,7 @@ var VirtualCollection = Backbone.Collection.extend({
 
   // marionette specific
   closeWith: function (view) {
-    view.on('close', function () {
-      this.stopListening();
-    }, this);
+    view.on('close', _.bind(this.stopListening, this));
   },
 
   updateFilter: function (filter) {
@@ -38,12 +36,12 @@ var VirtualCollection = Backbone.Collection.extend({
     this.trigger('filter', this, filter);
     this.trigger('reset', this, filter);
     return this;
-  }
+  },
 
   _rebuildIndex: function () {
     this._reset();
-    this.collection.each(function (model) {
-      if (this.accepts(model)) {
+    this.collection.each(function (model, i) {
+      if (this.accepts(model, i)) {
         this.models.push(model);
         this._byId[model.cid] = model;
         if (model.id) this._byId[model.id] = model;
@@ -53,7 +51,7 @@ var VirtualCollection = Backbone.Collection.extend({
   },
 
   _onAdd: function (model, collection, options) {
-    if (this.accepts(model)) {
+    if (this.accepts(model, options.index)) {
       this._indexAdd(model);
       this.trigger('add', model, this, options);
     }
@@ -72,7 +70,7 @@ var VirtualCollection = Backbone.Collection.extend({
   _onChange: function (model, options) {
     var already_here = this.get(model);
 
-    if (this.accepts(model)) {
+    if (this.accepts(model, options.index)) {
       if (already_here) {
         this.trigger('change', model, this, options);
       } else {
@@ -92,7 +90,7 @@ var VirtualCollection = Backbone.Collection.extend({
   _onReset: function (collection, options) {
     this._rebuildIndex();
     this.trigger('reset', this, options);
-  }
+  },
 
   _indexAdd: function (model) {
     var i;
@@ -129,15 +127,17 @@ var VirtualCollection = Backbone.Collection.extend({
 
   buildFilter: function (options) {
     if (!options) {
-      return function () { return true; };
+      return function () {
+        return true;
+      };
     } else if (_.isFunction(options)) {
       return options;
-    } else {
+    } else if (options.constructor === Object) {
       return function (model) {
-        return !_.detect(options, function (val, key) {
-          return model.get(key) !== val;
-        });
-      }
+        return !Boolean(_(Object.keys(options)).detect(function (key) {
+          return model.get(key) !== options[key];
+        }));
+      };
     }
   }
 });

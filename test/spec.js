@@ -3,8 +3,9 @@
 var assert = require("assert"),
     sinon = require('sinon'),
     _ = require("underscore"),
-    Backbone = require("backbone"),
-    VirtualCollection = require('backbone.virtual-collection');
+    Backbone = require("backbone");
+
+eval(require('fs').readFileSync('backbone.virtual-collection.js', 'utf8'));
 
 function cids(collection, ids_array) {
   var cids_array = [];
@@ -35,7 +36,7 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {
         filter: {foo: 'bar'}
       });
-      assert.deepEqual(vc.index, cids(collection, [1, 3]));
+      assert.equal(vc.models.length, 2);
     });
 
     it("should accept a close_with option and bind close event", function () {
@@ -77,9 +78,9 @@ describe('Backbone.VirtualCollection', function () {
         filter: {foo: 'bar'}
       });
       vc.each(function (model) {
-        result.push(model.id);
+        result.push(model);
       });
-      assert.deepEqual(vc.index, cids(collection, [1, 3]));
+      assert.deepEqual(result, vc.models);
     });
   });
 
@@ -245,9 +246,10 @@ describe('Backbone.VirtualCollection', function () {
         {id: 3, name: 'aaa'}
       ]),
       view = _.extend({}, Backbone.Events),
-      vc = new Backbone.VirtualCollection(collection);
-      vc.closeWith(view);
+      vc = new VirtualCollection(collection);
+
       sinon.spy(vc, 'stopListening');
+      vc.closeWith(view);
       view.trigger('close');
       assert.equal(vc.stopListening.callCount, 1);
     });
@@ -519,13 +521,13 @@ describe('Backbone.VirtualCollection', function () {
         filter: filterFn
       });
 
-      sinon.spy(vc, 'filterFunction');
+      sinon.spy(vc, 'accepts');
 
       vc.each(function(model) {
         //looping collection
       });
 
-      assert(!vc.filterFunction.called);
+      assert(!vc.accepts.called);
     });
     it('should not call `get` when looping multiple level nested virtual collections', function () {
       var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
@@ -555,7 +557,7 @@ describe('Backbone.VirtualCollection', function () {
       assert(!vc.get.called);
       assert(!daddy_vc.get.called);
       assert(!grandpa_vc.get.called);
-      assert(collection.get.called);
+      assert(!collection.get.called);
     });
 
   });
