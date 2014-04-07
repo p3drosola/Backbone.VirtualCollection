@@ -52,6 +52,22 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
+  describe('#model', function () {
+
+    it("should inherit the parent collection type model", function () {
+      var vc, collection, Library;
+
+      Library = Backbone.Collection.extend({
+        model: Backbone.Model
+      });
+
+      collection = new Library([{foo: 'bar'}, {foo: 'baz'}]);
+      vc = new VirtualCollection(collection);
+      assert.equal(vc.model, collection.model);
+    });
+
+  });
+
   describe('#each', function () {
 
     it('should iterate over the index in order', function () {

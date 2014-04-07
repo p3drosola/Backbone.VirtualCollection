@@ -39,6 +39,7 @@
     this.collection = collection;
     options = options || {};
     this.comparator = options.comparator;
+    this.model = collection.model;
 
     _.bindAll(this, 'each', 'map', 'get', 'at', 'indexOf', 'sort', 'closeWith',
      '_rebuildIndex', '_models', '_onAdd', '_onRemove', '_onChange', '_onReset',
@@ -389,6 +390,8 @@
   };
 
   _.extend(vc, Backbone.Events);
+  
+  VirtualCollection.extend = Backbone.Collection.extend;
 
   Backbone.VirtualCollection = VirtualCollection;
 
