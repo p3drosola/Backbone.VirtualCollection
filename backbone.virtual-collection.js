@@ -59,6 +59,9 @@
     if (options.close_with) {
       this.closeWith(options.close_with);
     }
+    
+    // call initialize function, a la backbone
+    this.initialize.apply(this, arguments);
   }
 
   /**
@@ -87,6 +90,9 @@
   };
 
   vc = VirtualCollection.prototype;
+  
+  // a no-op initialize function
+  vc.initialize = function(){};
 
   // mix in Underscore method as proxies
   _.each(iterators, function (method) {
