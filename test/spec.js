@@ -68,6 +68,36 @@ describe('Backbone.VirtualCollection', function () {
 
   });
 
+  describe('#initialize', function () {
+
+    it("should call the extended initialize function on instanciation", function () {
+      var collection, vc_with_init, vc_without_init, Library, VCWithInit, VCWithoutInit;
+
+      Library = Backbone.Collection.extend({
+        model: Backbone.Model
+      });
+      
+      VCWithInit = Backbone.VirtualCollection.extend({
+        init_called: false,
+        initialize: function(collection, options){
+            this.init_called = true;
+        }
+      });
+      
+      VCWithoutInit = Backbone.VirtualCollection.extend({
+        init_called: false
+      });
+
+      collection = new Library([{foo: 'bar'}, {foo: 'baz'}]);
+      vc_with_init = new VCWithInit(collection);
+      vc_without_init = new VCWithoutInit(collection);
+
+      assert(vc_with_init.init_called);
+      assert(!vc_without_init.init_called);
+    });
+
+  });
+
   describe('#each', function () {
 
     it('should iterate over the index in order', function () {
