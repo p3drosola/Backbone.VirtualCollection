@@ -3,8 +3,6 @@
 // Backbone.Collection ...
 // mind = blown
 
-// TODO: sort  & comparator
-
 var VirtualCollection = Backbone.Collection.extend({
 
   constructor: function (collection, options) {
@@ -94,6 +92,8 @@ var VirtualCollection = Backbone.Collection.extend({
     this.trigger('reset', this, options);
   },
 
+
+  // TODO: I'm not happy with the algo complexity of this one
   _indexAdd: function (model) {
     var i;
     if (this.get(model)) return;
