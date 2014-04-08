@@ -158,7 +158,7 @@ describe('Backbone.VirtualCollection', function () {
         filter: {ok: true}
       });
       collection.add({id: 4, ok: true, foo: 'abc'});
-      assert.deepEqual(vc.index, cids(collection, [3, 4, 1]));
+      assert.deepEqual(vc.pluck('id'), [3,4,1]);
     });
   });
 
@@ -175,7 +175,7 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {
         comparator: 'name'
       });
-      assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
+      assert.deepEqual(vc.pluck('id'), [2, 3, 1]);
     });
     it('should accept comparator function', function () {
       var vc, collection = new Backbone.Collection([
@@ -189,7 +189,7 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {
         comparator: function (item) { return item.get('name'); }
       });
-      assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
+      assert.deepEqual(vc.pluck('id'), [2, 3, 1]);
     });
     it('should accept a comparator function that compares two models', function () {
       var vc, collection = new Backbone.Collection([
@@ -204,7 +204,7 @@ describe('Backbone.VirtualCollection', function () {
         // sort by string DESC
         comparator: function (a, b) { return a.get('name') < b.get('name') ? 1 : -1; }
       });
-      assert.deepEqual(vc.index, cids(collection, [1, 3, 2]));
+      assert.deepEqual(vc.pluck('id'), [1, 3, 2]);
     });
     it('should keep the index sorted when adding items', function () {
       var vc, collection = new Backbone.Collection([
@@ -215,10 +215,10 @@ describe('Backbone.VirtualCollection', function () {
       });
 
       vc = new VirtualCollection(collection, { comparator: 'name' });
-      assert.deepEqual(vc.index, cids(collection, [3, 1]));
+      assert.deepEqual(vc.pluck('id'), [3, 1]);
 
       collection.add({id: 2, name: 'aaa'});
-      assert.deepEqual(vc.index, cids(collection, [2, 3, 1]));
+      assert.deepEqual(vc.pluck('id'), [2, 3, 1]);
     });
 
     it('should update the index when reset is triggered on the parent collection', function () {

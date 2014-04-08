@@ -48,6 +48,8 @@ var VirtualCollection = Backbone.Collection.extend({
       }
     }, this);
     this.length = this.models.length;
+
+    if (this.comparator) this.sort({silent: true});
   },
 
   _onAdd: function (model, collection, options) {
@@ -100,7 +102,7 @@ var VirtualCollection = Backbone.Collection.extend({
     } else {
       var orig_index = this.collection.indexOf(model);
       for (i = 0; i < this.length; i++) {
-        if (this.collection.indexOf(this.collection.get(this.index[i])) > orig_index) {
+        if (this.collection.indexOf(this.at(i)) > orig_index) {
           break;
         }
       }
