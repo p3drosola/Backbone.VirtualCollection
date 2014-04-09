@@ -110,8 +110,9 @@ Happy hacking!
 ```
 0.5.0
 
+  No longer attaches to Backbone.VirtualCollection
+
   VirtualCollection extends Backbone.Collection
-    instanceof Backbone.Collection && Backbone.VirtualCollection
 
   .models()-> .models[] array instead
 
