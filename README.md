@@ -114,15 +114,9 @@ Happy hacking!
     instanceof Backbone.Collection && Backbone.VirtualCollection
 
   .models()-> .models[] array instead
-  .buildFilterFromHash() -> buildFilterFromObject()
 
-  free (from backbone):
-    fast .get()
-    .where(), .findWhere()
-
-  faster _.onAdd
-    - append optimization
-
+  fast .get()
+  fast ._onAdd()
 
 0.4.15 Added virtual_collection.model (via @fcsonline)
 0.4.14 Added Backbone.extend (via @enov)
