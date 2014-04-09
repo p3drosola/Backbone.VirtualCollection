@@ -9,7 +9,12 @@ var VirtualCollection = Backbone.Collection.extend({
     options = options || {};
     this.collection = collection;
 
-    if (options.comparator) this.comparator = options.comparator;
+    if (options.comparator) {
+      this.comparator = options.comparator;
+    } else if (!this.comparator) {
+      this.comparator = collection.comparator;
+    }
+
     if (options.close_with) this.closeWith(options.close_with);
     if (!this.model) this.model = collection.model;
 
@@ -93,27 +98,15 @@ var VirtualCollection = Backbone.Collection.extend({
   },
 
 
-  // TODO: I'm not happy with the algo complexity of this one
   _indexAdd: function (model) {
-    var i;
     if (this.get(model)) return;
-    if (this.comparator || model === this.collection.last()) {
-      i = this.length; // custom sort, or append
-    } else {
-      var orig_index = this.collection.indexOf(model);
-      for (i = 0; i < this.length; i++) {
-        if (this.collection.indexOf(this.at(i)) > orig_index) {
-          break;
-        }
-      }
-    }
-
+    // uses a binsearch to find the right index
+    var i = this.sortedIndex(model, this.comparator, this);
     this.models.splice(i, 0, model);
     this._byId[model.cid] = model;
     if (model.id) this._byId[model.id] = model;
-    this.length = this.models.length;
 
-    if (this.comparator) this.sort({silent: true});
+    this.length = this.models.length;
   },
 
   _indexRemove: function (model) {
