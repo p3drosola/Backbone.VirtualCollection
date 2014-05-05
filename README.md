@@ -157,6 +157,7 @@ Happy hacking!
 - update changelog in README.md
 - update version number in component.json, bower.json
 - `git push && git push --tags`
+- npm publish
 
 ### License
 The MIT License (MIT)
