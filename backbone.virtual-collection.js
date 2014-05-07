@@ -37,6 +37,9 @@
    */
   function VirtualCollection(collection, options) {
     this.collection = collection;
+    if (typeof this.collection === 'function') {
+      this.collection = new this.collection;
+    }
     options = options || {};
     this.comparator = options.comparator;
     this.model = collection.model;
