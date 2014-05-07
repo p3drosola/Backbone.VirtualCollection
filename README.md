@@ -40,7 +40,7 @@ Be default, the virtual collection will have the same sorting order as the paren
 ```js
 var virtual_collection = new Backbone.VirtualCollection(tasks_collection, {
   filter: { user_id: 13 },
-  comparator: 'name'}
+  comparator: 'name'
 });
 // tasks in the virtual_collection will be sorted by name
 ```
