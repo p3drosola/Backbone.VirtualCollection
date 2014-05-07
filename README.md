@@ -5,13 +5,13 @@
 ![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
 
 
-Backbone.VirtualCollection allows you use display a subset of a backbone collection in a Backbone view that updates it real time. It works great with Marionette CollectionViews.
+Backbone.VirtualCollection allows you use display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
 
 ### Usage
 
 For example, let's say you have a task collection, and want to show a list of tasks that belong to a specific user.
 
-We can instantiate a virtual collection, that only contains tasks that belong to Rupert (who has user_id 13).
+We can instantiate a virtual collection that only contains tasks that belong to Rupert (who has user_id 13).
 The constructor takes two parameters, the first is the parent collection, the second is a options object. The `filter` option specifies a function that takes the model as argument. You can also just specify a hash of attributes to match.
 
 ```js
@@ -33,7 +33,7 @@ var view = new TaskListView({
 
 ```
 
-The marionette collection view will only display the tasks that belong to Rupert, and it will update automatically. In other words, when a task is created that belongs to Rupert it will appear, but not if it belongs to Bob.
+The Marionette collection view will only display the tasks that belong to Rupert, and it will update automatically. In other words, when a task is created that belongs to Rupert it will appear, but not if it belongs to Bob.
 
 #### Sorting
 Be default, the virtual collection will have the same sorting order as the parent collection. However, a comparator can be specified to change this. The comparator behaves like a Backbone comparator. In other words, you can specify a function or the name of an attribute to sort by.
@@ -52,9 +52,9 @@ virtual_collection.sort(); // triggers sort event
 ```
 
 #### Unbinding
-The virtual collection will keep listening to it's parent collection until you call `stopListening`.
+The virtual collection will keep listening to its parent collection until you call `stopListening`.
 
-You can use the helper function `virtual_collection.closeWith` to tell the collection to stopListening when a marionette view is closed.
+You can use the helper function `virtual_collection.closeWith` to tell the collection to stopListening when a Marionette view is closed.
 
 ```js
 var virtual_collection = new Backbone.VirtualCollection(collection, {filter: {foo: 'bar'}});
@@ -64,7 +64,7 @@ virtual_collection.closeWith(view);
 
 Using the helper will take care of unbinding the virtual collection's listeners when the view is closed.
 
-You also can pass a `close_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening events when the `close_with` event emitter emits a `close` event.
+You also can pass a `close_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening to events when the `close_with` event emitter emits a `close` event.
 
 ```js
 var virtual_collection = new Backbone.VirtualCollection(collection, {
@@ -75,7 +75,7 @@ var virtual_collection = new Backbone.VirtualCollection(collection, {
 
 #### Update filter
 
-It's very common that you'd want to update the filter being used, and have the collection view update itself. `updateFilter` takes the same paramters as the original `filter` property (a hash, or a function) and regenerates the virtual collection, without loosing your view bindings.
+It's very common that you'd want to update the filter being used and have the collection view update itself. `updateFilter` takes the same parameters as the original `filter` property (a hash, or a function) and regenerates the virtual collection without losing your view bindings.
 
 ```js
 
@@ -99,9 +99,9 @@ virtual_collection.updateFilter(function (model) {
 VirtualCollection does not store, or duplicate any data. We've used other solutions in the past, and duplicating data is just plain bad news.
 
 #### It's Fast
-VirtualCollection maintains an internal index of models that pass the filter. That way using the accesors, and iteraters (`map`, `each`, etc) is fast. It doesn't have to go through the whole parent collection and re-evaluate the all the filters.
+VirtualCollection maintains an internal index of models that pass the filter. That way, using the accessors and iterators (`map`, `each`, etc) is fast. It doesn't have to go through the whole parent collection and re-evaluate all the filters.
 
-> By the way, `VirtualCollection.buildFilterFromHash` is the function that turns a object into a filter function.You might find it usefull.
+> By the way, `VirtualCollection.buildFilterFromHash` is the function that turns a object into a filter function. You might find it useful.
 
 Happy hacking!
 
