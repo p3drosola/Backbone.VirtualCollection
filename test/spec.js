@@ -338,7 +338,8 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {});
       vc.add({id: 2});
       assert.equal(collection.length, 1);
-      vc.remove(collection.at(0));
+      model = vc.remove(collection.at(0));
+      assert(model.id == 2);
       assert.equal(collection.length, 0);
     });
   });
