@@ -161,17 +161,6 @@ var VirtualCollection = Backbone.Collection.extend({
   }
 });
 
-// mix in additional Underscore methods
-var slice = [].slice;
-_.each(['sortedIndex'], function(method) {
-  if (!_[method]) return;
-  VirtualCollection.prototype[method] = function() {
-    var args = slice.call(arguments);
-    args.unshift(this.models);
-    return _[method].apply(_, args);
-  };
-});
-
 // methods that alter data should proxy to the parent collection
 _.each(['add', 'remove', 'set', 'reset', 'push', 'pop', 'unshift', 'shift', 'slice', 'sync', 'fetch'], function (method_name) {
   VirtualCollection.prototype[method_name] = function () {
