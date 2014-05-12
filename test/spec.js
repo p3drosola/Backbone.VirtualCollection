@@ -24,7 +24,7 @@ describe('Backbone.VirtualCollection', function () {
       sinon.spy(collection, 'on');
       vc = new VirtualCollection(collection);
       calls = JSON.stringify(_.map(collection.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset' ]));
+      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset', 'sort' ]));
     });
 
     it('should build an index on instantiation', function () {
@@ -338,7 +338,8 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {});
       vc.add({id: 2});
       assert.equal(collection.length, 1);
-      vc.remove(collection.at(0));
+      model = vc.remove(collection.at(0));
+      assert(model.id == 2);
       assert.equal(collection.length, 0);
     });
   });
