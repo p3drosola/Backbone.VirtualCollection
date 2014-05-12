@@ -113,6 +113,8 @@ var VirtualCollection = Backbone.Collection.extend({
     var i = this.indexOf(model);
     if (i !== -1) {
       this.models.splice(i, 1);
+      delete this._byId[model.cid];
+      if (model.id) delete this._byId[model.id];
       this.length = this.models.length;
     }
     return i;
