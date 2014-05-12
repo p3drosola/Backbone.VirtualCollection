@@ -9,23 +9,19 @@ var VirtualCollection = Backbone.Collection.extend({
     options = options || {};
     this.collection = collection;
 
-    if (options.comparator) {
-      this.comparator = options.comparator;
-    } else if (!this.comparator) {
-      this.comparator = collection.comparator;
-    }
-
+    if (options.comparator) this.comparator = options.comparator;
     if (options.close_with) this.closeWith(options.close_with);
     if (!this.model) this.model = collection.model;
 
     this.accepts = VirtualCollection.buildFilter(options.filter);
     this._rebuildIndex();
-    this.initialize.apply(this, arguments);
-
     this.listenTo(this.collection, 'add', this._onAdd);
     this.listenTo(this.collection, 'remove', this._onRemove);
     this.listenTo(this.collection, 'change', this._onChange);
     this.listenTo(this.collection, 'reset',  this._onReset);
+    this.listenTo(this.collection, 'sort',  this._onSort);
+
+    this.initialize.apply(this, arguments);
   },
 
   // marionette specific
@@ -53,6 +49,20 @@ var VirtualCollection = Backbone.Collection.extend({
     this.length = this.models.length;
 
     if (this.comparator) this.sort({silent: true});
+  },
+
+  orderViaParent: function (options) {
+    this.models = this.collection.filter(function (model) {
+      return (this._byId[model.cid] !== undefined);
+    }, this);
+    if (!options.silent) {
+      this.trigger('sort', this, options);
+    }
+  },
+
+  _onSort: function (collection, options) {
+    if (this.comparator !== undefined) return;
+    this.orderViaParent(options);
   },
 
   _onAdd: function (model, collection, options) {
@@ -97,24 +107,38 @@ var VirtualCollection = Backbone.Collection.extend({
     this.trigger('reset', this, options);
   },
 
+  sortedIndex: function (model, value, context) {
+    var iterator = _.isFunction(value) ? value : function(target) {
+      return target.get(value);
+    };
+    return _.sortedIndex(this.models, model, iterator, context);
+  },
 
   _indexAdd: function (model) {
     if (this.get(model)) return;
     // uses a binsearch to find the right index
-    var i = this.sortedIndex(model, this.comparator, this);
+    if (this.comparator) {
+      var i = this.sortedIndex(model, this.comparator, this);
+    } else if (this.comparator === undefined) {
+      var i = this.sortedIndex(model, function (target) {
+        return this.collection.indexOf(target);
+      }, this);
+    } else {
+      var i = this.length;
+    }
     this.models.splice(i, 0, model);
     this._byId[model.cid] = model;
     if (model.id) this._byId[model.id] = model;
-
-    this.length = this.models.length;
+    this.length += 1;
   },
 
   _indexRemove: function (model) {
     var i = this.indexOf(model);
-    if (i !== -1) {
-      this.models.splice(i, 1);
-      this.length = this.models.length;
-    }
+    if (i === -1) return i;
+    this.models.splice(i, 1);
+    delete this._byId[model.cid];
+    if (model.id) delete this._byId[model.id];
+    this.length -= 1;
     return i;
   }
 
@@ -137,11 +161,10 @@ var VirtualCollection = Backbone.Collection.extend({
   }
 });
 
-
 // methods that alter data should proxy to the parent collection
 _.each(['add', 'remove', 'set', 'reset', 'push', 'pop', 'unshift', 'shift', 'slice', 'sync', 'fetch'], function (method_name) {
   VirtualCollection.prototype[method_name] = function () {
-    this.collection[method_name].apply(this.collection, _.toArray(arguments));
+    return this.collection[method_name].apply(this.collection, _.toArray(arguments));
   };
 });
 
