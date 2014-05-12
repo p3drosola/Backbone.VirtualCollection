@@ -3,9 +3,8 @@
 var assert = require("assert"),
     sinon = require('sinon'),
     _ = require("underscore"),
-    Backbone = require("backbone");
-
-eval(require('fs').readFileSync('backbone.virtual-collection.js', 'utf8'));
+    Backbone = require("backbone"),
+    VirtualCollection = require("../backbone.virtual-collection.js");
 
 function cids(collection, ids_array) {
   var cids_array = [];
