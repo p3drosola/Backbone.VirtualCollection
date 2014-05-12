@@ -9,7 +9,7 @@ var VirtualCollection = Backbone.Collection.extend({
     options = options || {};
     this.collection = collection;
 
-    if (options.comparator) this.comparator = options.comparator;
+    if (options.comparator !== undefined) this.comparator = options.comparator;
     if (options.close_with) this.closeWith(options.close_with);
     if (!this.model) this.model = collection.model;
 
@@ -55,9 +55,7 @@ var VirtualCollection = Backbone.Collection.extend({
     this.models = this.collection.filter(function (model) {
       return (this._byId[model.cid] !== undefined);
     }, this);
-    if (!options.silent) {
-      this.trigger('sort', this, options);
-    }
+    if (!options.silent) this.trigger('sort', this, options);
   },
 
   _onSort: function (collection, options) {

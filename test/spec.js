@@ -178,6 +178,21 @@ describe('Backbone.VirtualCollection', function () {
       });
       assert.deepEqual(vc.pluck('id'), [2, 3, 1]);
     });
+    it('should not order the virtual collection when the comparator is falsey', function () {
+      var vc, collection = new Backbone.Collection([
+        {id: 1, name: 'ccc'},
+        {id: 2, name: 'aaa'},
+        {id: 3, name: 'bbb'}
+      ], {
+        comparator: 'name'
+      });
+
+      vc = new VirtualCollection(collection, {
+        comparator: false
+      });
+      collection.add({id: 4, name: 'abc'});
+      assert.deepEqual(vc.pluck('id'), [2, 3, 1, 4]);
+    });
     it('should accept a comparator()', function () {
       var vc, collection = new Backbone.Collection([
         {id: 1, name: 'ccc'},
