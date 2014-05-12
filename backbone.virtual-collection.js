@@ -20,12 +20,12 @@ var VirtualCollection = Backbone.Collection.extend({
 
     this.accepts = VirtualCollection.buildFilter(options.filter);
     this._rebuildIndex();
-    this.initialize.apply(this, arguments);
-
     this.listenTo(this.collection, 'add', this._onAdd);
     this.listenTo(this.collection, 'remove', this._onRemove);
     this.listenTo(this.collection, 'change', this._onChange);
     this.listenTo(this.collection, 'reset',  this._onReset);
+
+    this.initialize.apply(this, arguments);
   },
 
   // marionette specific
@@ -137,11 +137,21 @@ var VirtualCollection = Backbone.Collection.extend({
   }
 });
 
+// mix in additional Underscore methods
+var slice = [].slice;
+_.each(['sortedIndex'], function(method) {
+  if (!_[method]) return;
+  VirtualCollection.prototype[method] = function() {
+    var args = slice.call(arguments);
+    args.unshift(this.models);
+    return _[method].apply(_, args);
+  };
+});
 
 // methods that alter data should proxy to the parent collection
 _.each(['add', 'remove', 'set', 'reset', 'push', 'pop', 'unshift', 'shift', 'slice', 'sync', 'fetch'], function (method_name) {
   VirtualCollection.prototype[method_name] = function () {
-    this.collection[method_name].apply(this.collection, _.toArray(arguments));
+    return this.collection[method_name].apply(this.collection, _.toArray(arguments));
   };
 });
 
