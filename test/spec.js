@@ -24,7 +24,7 @@ describe('Backbone.VirtualCollection', function () {
       sinon.spy(collection, 'on');
       vc = new VirtualCollection(collection);
       calls = JSON.stringify(_.map(collection.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset' ]));
+      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset', 'sort' ]));
     });
 
     it('should build an index on instanciation', function () {
