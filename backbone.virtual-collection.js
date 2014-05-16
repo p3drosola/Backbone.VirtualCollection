@@ -124,20 +124,27 @@
       var iterator = _.isFunction(value) ? value : function(target) {
         return target.get(value);
       };
-      return _.sortedIndex(this.models, model, iterator, context);
+
+      if (this.comparator && this.comparator.length == 1) {
+         return _.sortedIndex(this.models, model, iterator, context);
+       } else {
+         return sortedIndexTwo(this.models, model, iterator, context);
+       }
     },
 
     _indexAdd: function (model) {
       if (this.get(model)) return;
+      var i;
       // uses a binsearch to find the right index
       if (this.comparator) {
-        var i = this.sortedIndex(model, this.comparator, this);
+        i = this.sortedIndex(model, this.comparator, this);
       } else if (this.comparator === undefined) {
-        var i = this.sortedIndex(model, function (target) {
+        i = this.sortedIndex(model, function (target) {
+         //TODO: indexOf traverses the array every time the iterator is called
           return this.collection.indexOf(target);
         }, this);
       } else {
-        var i = this.length;
+        i = this.length;
       }
       this.models.splice(i, 0, model);
       this._byId[model.cid] = model;
@@ -180,6 +187,20 @@
       return this.collection[method_name].apply(this.collection, _.toArray(arguments));
     };
   });
+
+  /**
+
+  Equivalent to _.sortedIndex, but for comparators with two arguments
+
+  **/
+  function sortedIndexTwo (array, obj, iterator, context) {
+    var low = 0, high = array.length;
+    while (low < high) {
+      var mid = (low + high) >>> 1;
+      iterator.call(context, obj, array[mid]) > 0 ? low = mid + 1 : high = mid;
+    }
+    return low;
+  }
 
   _.extend(VirtualCollection.prototype, Backbone.Events);
 

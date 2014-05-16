@@ -579,6 +579,76 @@ describe('Backbone.VirtualCollection', function () {
       assert(!grandpa_vc.get.called);
       assert(!collection.get.called);
     });
+  });
+  describe('sorting', function () {
+    it('should ignore parent collection sort event if it has a comparator', function () {
+      var collection = new Backbone.Collection([
+        {type: 'a'},
+        {type: 'b'}
+      ]);
 
+      var vc = new VirtualCollection(collection, {
+        comparator: function (m) {
+          return m.get('type');
+        }
+      });
+
+      sinon.spy(vc, 'orderViaParent');
+      collection.trigger('sort');
+
+      assert(!vc.orderViaParent.called);
+    });
+
+    it('should should inherit new model order if it does not have a comparator', function () {
+      var collection = new (Backbone.Collection.extend({
+        comparator: 'type'
+      }))([
+        {type: 'a'},
+        {type: 'c'},
+        {type: 'b'}
+      ]);
+
+      var vc = new VirtualCollection(collection);
+
+      sinon.spy(vc, 'orderViaParent');
+      collection.sort();
+
+      assert(vc.orderViaParent.called);
+      assert.equal(vc.at(2).get('type'), 'c');
+    });
+    it('should add new models at the correct position if it has a comparator that accepts one model', function () {
+      var collection = new Backbone.Collection([
+        {type: 'a'},
+        {type: 'c'}
+      ]);
+
+      var vc = new VirtualCollection(collection, {
+        comparator: function (m) {
+          return m.get('type');
+        }
+      });
+
+      collection.add({type: 'b'});
+
+      assert.equal(vc.at(1).get('type'), 'b');
+    });
+
+    it('should add new models at the correct position if it has a comparator that accepts two models', function () {
+      var collection = new Backbone.Collection([
+        {type: 'a'},
+        {type: 'c'},
+        {type: 'd'},
+        {type: 'z'}
+      ]);
+
+      var vc = new VirtualCollection(collection, {
+        comparator: function (a, b) {
+          return a.get('type').charCodeAt(0) - b.get('type').charCodeAt(0);
+        }
+      });
+
+      collection.add({type: 'b'});
+      assert.equal(vc.at(1).get('type'), 'b');
+    });
   });
 });
