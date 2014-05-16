@@ -7,6 +7,27 @@
 
 Backbone.VirtualCollection allows you use display a subset of a backbone collection in a Backbone view that updates it real time. It works great with Marionette CollectionViews.
 
+### What's new in v0.5
+
+VirtualCollection 0.5 is a complete re-write of VirtualCollection that brings a lot of improvements.
+
+- Inherits from Backbone.Collection
+- More efficient data structures
+- More intelligent sort handling (special thanks to @disruptek)
+- Better performance for nested virtual collections
+- More extensive test coverage
+
+All that in half the lines of code!
+
+#### Upgrading from 0.4
+Every effort has been made to maintain compatibility with v0.4, and in most cases it'll be a drop-in replacement. However, there are a few changes that have been made.
+
+**virtual_collection.models()** is now virtual_collection.models, just like Backbone
+
+**Backbone.VirtualCollection** is now VirtualCollection. It's cleaner to use a global variable, instead of attaching onto Backbone. It works better in various js environments (Bower, AMD, CommonJS, etc).
+
+
+
 ### Usage
 
 For example, let's say you have a task collection, and want to show a list of tasks that belong to a specific user.
