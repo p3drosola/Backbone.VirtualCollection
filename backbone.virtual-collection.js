@@ -56,8 +56,11 @@
     this.listenTo(this.collection, 'change', this._onChange, this);
     this.listenTo(this.collection, 'reset',  this._onReset,  this);
 
-    if (options.close_with) {
+    if (options.close_with) { // Marionette 1.*
       this.closeWith(options.close_with);
+    }
+    if (options.destroy_with) { // Marionette 2.*
+      this.destroyWith(options.destroy_with);
     }
   }
 
@@ -237,8 +240,14 @@
    *
    * @param  {View} view (marionette view)
    */
-  vc.closeWith = function (view) {
+  vc.closeWith = function (view) { // Marionette 1.*
     view.on('close', function () {
+      this.stopListening();
+    }, this);
+  };
+
+  vc.destroyWith = function (view) { // Marionette 2.*
+    view.on('destroy', function () {
       this.stopListening();
     }, this);
   };
