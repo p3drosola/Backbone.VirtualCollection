@@ -52,7 +52,7 @@ describe('Backbone.VirtualCollection', function () {
       event_emitter.on.restore()
     });
 
-    it("should accept a destroy_with option and bind close event (Marionette 2.*)", function () {
+    it("should accept a destroy_with option and bind destroy event (Marionette 2.*)", function () {
       var vc, calls, collection, event_emitter;
       collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
       event_emitter = Backbone.Events;
