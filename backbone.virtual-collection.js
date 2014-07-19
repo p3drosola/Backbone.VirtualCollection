@@ -77,7 +77,7 @@ var VirtualCollection = Backbone.Collection.extend({
 
     if (this.accepts(model, options.index)) {
       if (already_here) {
-        this.trigger('change', model, this, options);
+        this.trigger('change', model, options);
       } else {
         this._indexAdd(model);
         this.trigger('add', model, this, options);
