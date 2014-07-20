@@ -38,7 +38,7 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(vc.models.length, 2);
     });
 
-    it('should accept a close_with option and bind to the `close` event', function () {
+    it('should accept a close_with option and bind to the `close` event (Marionette 1.*)', function () {
       var vc, calls, collection, event_emitter;
       collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
       event_emitter = Backbone.Events;
@@ -46,6 +46,17 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {close_with: event_emitter});
       calls = JSON.stringify(_.map(event_emitter.on.args, function (i) {return i[0]; }));
       assert.equal(calls, JSON.stringify([ 'close' ]));
+      event_emitter.on.restore()
+    });    
+    it("should accept a destroy_with option and bind destroy event (Marionette 2.*)", function () {
+      var vc, calls, collection, event_emitter;
+      collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
+      event_emitter = Backbone.Events;
+      sinon.spy(event_emitter, 'on');
+      vc = new VirtualCollection(collection, {destroy_with: event_emitter});
+      calls = JSON.stringify(_.map(event_emitter.on.args, function (i) {return i[0]; }));
+      assert.equal(calls, JSON.stringify([ 'destroy' ]));
+      event_emitter.on.restore()
     });
   });
 
@@ -252,24 +263,6 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(vc.length, collection.length);
     })
   });
-
-  describe('closeWith', function () {
-    it('should clear the virtual collection\'s listeners when the view is closed', function () {
-      var collection = new Backbone.Collection([
-        {id: 1, name: 'ccc'},
-        {id: 2, name: 'bbb'},
-        {id: 3, name: 'aaa'}
-      ]),
-      view = _.extend({}, Backbone.Events),
-      vc = new VirtualCollection(collection);
-
-      sinon.spy(vc, 'stopListening');
-      vc.closeWith(view);
-      view.trigger('close');
-      assert.equal(vc.stopListening.callCount, 1);
-    });
-  });
-
   describe('map', function () {
     it('should map the models in the virtual collection', function () {
       var collection = new Backbone.Collection([

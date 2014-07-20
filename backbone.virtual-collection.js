@@ -25,7 +25,8 @@
       this.collection = collection;
 
       if (options.comparator !== undefined) this.comparator = options.comparator;
-      if (options.close_with) this.closeWith(options.close_with);
+      if (options.close_with) this.bindLifecycle(options.close_with, 'close'); // Marionette 1.*
+      if (options.destroy_with) this.bindLifecycle(options.destroy_with, 'destroy'); // Marionette 2.*
       if (!this.model) this.model = collection.model;
 
       this.accepts = VirtualCollection.buildFilter(options.filter);
@@ -39,9 +40,9 @@
       this.initialize.apply(this, arguments);
     },
 
-    // marionette specific
-    closeWith: function (view) {
-      view.on('close', _.bind(this.stopListening, this));
+    // Marionette 1.*
+    bindLifecycle: function (view, method_name) {
+      view.on(method_name, _.bind(this.stopListening, this));
     },
 
     updateFilter: function (filter) {

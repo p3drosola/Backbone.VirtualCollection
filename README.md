@@ -26,8 +26,6 @@ Every effort has been made to maintain compatibility with v0.4, and in most case
 
 **Backbone.VirtualCollection** is now VirtualCollection. It's cleaner to use a global variable, instead of attaching onto Backbone. It works better in various js environments (Bower, AMD, CommonJS, etc).
 
-
-
 ### Usage
 
 For example, let's say you have a task collection, and want to show a list of tasks that belong to a specific user.
@@ -75,24 +73,25 @@ virtual_collection.sort(); // triggers sort event
 #### Unbinding
 The virtual collection will keep listening to its parent collection until you call `stopListening`.
 
-You can use the helper function `virtual_collection.closeWith` to tell the collection to stopListening when a Marionette view is closed.
+You can use the helper function `virtual_collection.destroyWith` to tell the collection to stopListening when a Marionette view is destroyed.
 
 ```js
 var virtual_collection = new Backbone.VirtualCollection(collection, {filter: {foo: 'bar'}});
 var view = new Marionette.CollectionView({collection: virtual_collection});
-virtual_collection.closeWith(view);
+virtual_collection.destroyWith(view);
 ```
 
 Using the helper will take care of unbinding the virtual collection's listeners when the view is closed.
 
-You also can pass a `close_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening to events when the `close_with` event emitter emits a `close` event.
+You also can pass a `destroy_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening to events when the `destroy_with` event emitter emits a `destroy` event.
 
 ```js
 var virtual_collection = new Backbone.VirtualCollection(collection, {
   filter: {foo: 'bar'},
-  close_with: view
+  destroy_with: view
 });
 ```
++**Note:**  Prior to Marionette 2.*, "destroy" was called "close".  For compatibility with older versions of Marionette, the old helper `virtual_collection.closeWith` and option `close_with` are still availble, handling the `close` event.
 
 #### Update filter
 
