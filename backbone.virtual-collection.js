@@ -125,7 +125,7 @@
         return target.get(value);
       };
 
-      if (this.comparator && this.comparator.length == 1) {
+      if (iterator.length == 1) {
          return _.sortedIndex(this.models, model, iterator, context);
        } else {
          return sortedIndexTwo(this.models, model, iterator, context);
