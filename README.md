@@ -5,7 +5,7 @@
 ![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
 
 
-Backbone.VirtualCollection allows you use display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
+Backbone.VirtualCollection allows you display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
 
 ### What's new in v0.5
 
@@ -71,7 +71,7 @@ virtual_collection.sort(); // triggers sort event
 ```
 
 #### Unbinding
-The virtual collection will keep listening to its parent collection until you call `stopListening`.
+The virtual collection will keep listening to it's parent collection until you call `stopListening`.
 
 You can use the helper function `virtual_collection.destroyWith` to tell the collection to stopListening when a Marionette view is destroyed.
 
@@ -121,23 +121,19 @@ VirtualCollection does not store, or duplicate any data. We've used other soluti
 #### It's Fast
 VirtualCollection maintains an internal index of models that pass the filter. That way, using the accessors and iterators (`map`, `each`, etc) is fast. It doesn't have to go through the whole parent collection and re-evaluate all the filters.
 
-> By the way, `VirtualCollection.buildFilterFromHash` is the function that turns a object into a filter function. You might find it useful.
-
 Happy hacking!
 
 
 ### Changelog
 ```
 0.5.0
-
-  No longer attaches to Backbone.VirtualCollection
-
-  VirtualCollection extends Backbone.Collection
-
-  .models()-> .models[] array instead
-
-  fast .get()
-  fast ._onAdd()
+  - No longer attaches to Backbone.VirtualCollection
+  - VirtualCollection extends Backbone.Collection
+  - .models() is now .models array instead
+  - faster .get()
+  - faster ._onAdd()
+  - faster nested collections
+  - smarter sorting (thanks @disruptek)
 
 0.4.15 Added virtual_collection.model (via @fcsonline)
 0.4.14 Added Backbone.extend (via @enov)
