@@ -4,8 +4,27 @@
 
 ![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
 
+Backbone.VirtualCollection allows you display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
 
-Backbone.VirtualCollection allows you use display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
+### What's new in v0.5
+
+VirtualCollection 0.5 is a complete re-write of VirtualCollection that brings a lot of improvements.
+
+- Inherits from Backbone.Collection
+- More efficient data structures
+- More intelligent sort handling (special thanks to @disruptek)
+- Better performance for nested virtual collections
+- More extensive test coverage
+
+All that in half the lines of code!
+
+#### Upgrading from 0.4
+Every effort has been made to maintain compatibility with v0.4, and in most cases it'll be a drop-in replacement. However, there are a few changes that have been made.
+
+**virtual_collection.models()** is now virtual_collection.models, just like Backbone
+
+**Backbone.VirtualCollection** is now VirtualCollection. It's cleaner to use a global variable, instead of attaching onto Backbone. It works better in various js environments (Bower, AMD, CommonJS, etc).
+
 
 ### Usage
 
@@ -54,24 +73,25 @@ virtual_collection.sort(); // triggers sort event
 #### Unbinding
 The virtual collection will keep listening to its parent collection until you call `stopListening`.
 
-You can use the helper function `virtual_collection.closeWith` to tell the collection to stopListening when a Marionette view is closed.
+You can use the helper function `virtual_collection.destroyWith` to tell the collection to stopListening when a Marionette view is destroyed.
 
 ```js
 var virtual_collection = new Backbone.VirtualCollection(collection, {filter: {foo: 'bar'}});
 var view = new Marionette.CollectionView({collection: virtual_collection});
-virtual_collection.closeWith(view);
+virtual_collection.destroyWith(view);
 ```
 
 Using the helper will take care of unbinding the virtual collection's listeners when the view is closed.
 
-You also can pass a `close_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening to events when the `close_with` event emitter emits a `close` event.
+You also can pass a `destroy_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening to events when the `destroy_with` event emitter emits a `destroy` event.
 
 ```js
 var virtual_collection = new Backbone.VirtualCollection(collection, {
   filter: {foo: 'bar'},
-  close_with: view
+  destroy_with: view
 });
 ```
++**Note:**  Prior to Marionette 2.*, "destroy" was called "close".  For compatibility with older versions of Marionette, the old helper `virtual_collection.closeWith` and option `close_with` are still availble, handling the `close` event.
 
 #### Update filter
 
@@ -101,13 +121,20 @@ VirtualCollection does not store, or duplicate any data. We've used other soluti
 #### It's Fast
 VirtualCollection maintains an internal index of models that pass the filter. That way, using the accessors and iterators (`map`, `each`, etc) is fast. It doesn't have to go through the whole parent collection and re-evaluate all the filters.
 
-> By the way, `VirtualCollection.buildFilterFromHash` is the function that turns a object into a filter function. You might find it useful.
-
 Happy hacking!
 
 
 ### Changelog
 ```
+0.5.0
+  - No longer attaches to Backbone.VirtualCollection
+  - VirtualCollection extends Backbone.Collection
+  - .models() is now .models array instead
+  - faster .get()
+  - faster ._onAdd()
+  - faster nested collections
+  - smarter sorting (thanks @disruptek)
+
 0.4.15 Added virtual_collection.model (via @fcsonline)
 0.4.14 Added Backbone.extend (via @enov)
 0.4.13 Optimized `_models` and `get` to access parent collections which are indexed
