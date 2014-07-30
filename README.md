@@ -2,7 +2,7 @@
 
 <a href="http://teambox.com"><img alt="Built at Teambox" src="http://i.imgur.com/hqNPlHe.png"/></a>
 
-![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
+![Build Status](https://travis-ci.org/p3drosola/Backbone.VirtualCollection.svg?branch=master)
 
 Backbone VirtualCollection allows you display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
 
