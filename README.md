@@ -6,6 +6,8 @@
 
 Backbone VirtualCollection allows you display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
 
+<img src="https://cloud.githubusercontent.com/assets/520550/3748311/ebb80894-17da-11e4-835b-ca733a889d0d.png">
+
 ### What's new in v0.5
 
 VirtualCollection 0.5 is a complete re-write of VirtualCollection that brings a lot of improvements.
