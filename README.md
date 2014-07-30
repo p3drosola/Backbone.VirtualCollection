@@ -1,10 +1,10 @@
-## Backbone.VirtualCollection
+## Backbone VirtualCollection
 
 <a href="http://teambox.com"><img alt="Built at Teambox" src="http://i.imgur.com/hqNPlHe.png"/></a>
 
 ![Build Status](https://api.travis-ci.org/p3drosola/Backbone.VirtualCollection.png)
 
-Backbone.VirtualCollection allows you display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
+Backbone VirtualCollection allows you display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
 
 ### What's new in v0.5
 
@@ -23,8 +23,6 @@ Every effort has been made to maintain compatibility with v0.4, and in most case
 
 **virtual_collection.models()** is now virtual_collection.models, just like Backbone
 
-**Backbone.VirtualCollection** is now VirtualCollection. It's cleaner to use a global variable, instead of attaching onto Backbone. It works better in various js environments (Bower, AMD, CommonJS, etc).
-
 
 ### Usage
 
@@ -34,13 +32,13 @@ We can instantiate a virtual collection that only contains tasks that belong to 
 The constructor takes two parameters, the first is the parent collection, the second is a options object. The `filter` option specifies a function that takes the model as argument. You can also just specify a hash of attributes to match.
 
 ```js
-var virtual_collection = new Backbone.VirtualCollection(tasks_collection, {
+var virtual_collection = new VirtualCollection(tasks_collection, {
   filter: function (task) {
     return task.get('user_id') == 13;
   }
 });
 // or using a hash of attributes to match
-virtual_collection = new Backbone.VirtualCollection(tasks_collection, {
+virtual_collection = new VirtualCollection(tasks_collection, {
   filter: {
     user_id: 13
   }
@@ -55,9 +53,11 @@ var view = new TaskListView({
 The Marionette collection view will only display the tasks that belong to Rupert, and it will update automatically. In other words, when a task is created that belongs to Rupert it will appear, but not if it belongs to Bob.
 
 #### Sorting
-Be default, the virtual collection will have the same sorting order as the parent collection. However, a comparator can be specified to change this. The comparator behaves like a Backbone comparator. In other words, you can specify a function or the name of an attribute to sort by.
+Be default, the virtual collection will have the same sorting order as the parent collection. However, a comparator can be specified to change this. The comparator behaves like a [Backbone comparator](http://backbonejs.org/#Collection-comparator). In other words, you can specify a function or the name of an attribute to sort by.
+
+
 ```js
-var virtual_collection = new Backbone.VirtualCollection(tasks_collection, {
+var virtual_collection = new VirtualCollection(tasks_collection, {
   filter: { user_id: 13 },
   comparator: 'name'
 });
@@ -76,12 +76,12 @@ The virtual collection will keep listening to its parent collection until you ca
 You can use the helper function `virtual_collection.destroyWith` to tell the collection to stopListening when a Marionette view is destroyed.
 
 ```js
-var virtual_collection = new Backbone.VirtualCollection(collection, {filter: {foo: 'bar'}});
+var virtual_collection = new VirtualCollection(collection, {filter: {foo: 'bar'}});
 var view = new Marionette.CollectionView({collection: virtual_collection});
 virtual_collection.destroyWith(view);
 ```
 
-Using the helper will take care of unbinding the virtual collection's listeners when the view is closed.
+Using the helper will take care of unbinding the virtual collection's listeners when the view is destroyed.
 
 You also can pass a `destroy_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening to events when the `destroy_with` event emitter emits a `destroy` event.
 
@@ -90,12 +90,13 @@ var virtual_collection = new Backbone.VirtualCollection(collection, {
   filter: {foo: 'bar'},
   destroy_with: view
 });
+
 ```
 +**Note:**  Prior to Marionette 2.*, "destroy" was called "close".  For compatibility with older versions of Marionette, the old helper `virtual_collection.closeWith` and option `close_with` are still availble, handling the `close` event.
 
 #### Update filter
 
-It's very common that you'd want to update the filter being used and have the collection view update itself. `updateFilter` takes the same parameters as the original `filter` property (a hash, or a function) and regenerates the virtual collection without losing your view bindings.
+It's very common that you'd want to update the filter being used and have the collection view update itself. `updateFilter` takes the same parameters as the original `filter` option (a hash, or a function) and regenerates the virtual collection without losing your view bindings.
 
 ```js
 
@@ -127,7 +128,6 @@ Happy hacking!
 ### Changelog
 ```
 0.5.0
-  - No longer attaches to Backbone.VirtualCollection
   - VirtualCollection extends Backbone.Collection
   - .models() is now .models array instead
   - faster .get()
