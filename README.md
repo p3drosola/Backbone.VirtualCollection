@@ -129,6 +129,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.5.1 Ignore change events with malformed arguments
 0.5.0
   - VirtualCollection extends Backbone.Collection
   - .models() is now .models array instead
