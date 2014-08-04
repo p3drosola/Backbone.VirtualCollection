@@ -97,6 +97,7 @@
     },
 
     _onChange: function (model, options) {
+      if (!model || !options) return; // ignore malformed arguments coming from custom events
       var already_here = this.get(model);
 
       if (this.accepts(model, options.index)) {
