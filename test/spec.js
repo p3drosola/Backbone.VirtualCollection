@@ -520,6 +520,16 @@ describe('Backbone.VirtualCollection', function () {
       assert(reset.called);
       assert(vc.length === 1);
     });
+    it('should ignore malformed change event arguments', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]);
+      
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      });
+      assert.doesNotThrow(function () {
+        collection.first().trigger('change');
+      });
+    });
   });
   describe('accepts & get', function () {
     it('should not call accepts() when iterating over the virtual collection', function () {
