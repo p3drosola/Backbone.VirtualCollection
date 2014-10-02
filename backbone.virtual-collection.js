@@ -1,7 +1,5 @@
 
-// internal data structure is compatible with
-// Backbone.Collection ...
-// mind = blown
+// Available under the MIT License (MIT)
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
