@@ -129,6 +129,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.5.2 Proxy change:attribute events (via @istrobes, @jvanaert)
 0.5.1 Ignore change events with malformed arguments
 0.5.0
   - VirtualCollection extends Backbone.Collection
@@ -172,9 +173,9 @@ Happy hacking!
 
 ### Contribution management process for project admins
 - discuss/edit/merge PR's
-- `npm version patch`
 - update changelog in README.md
 - update version number in component.json, bower.json
+- `npm version patch`
 - `git push && git push --tags`
 - npm publish
 
