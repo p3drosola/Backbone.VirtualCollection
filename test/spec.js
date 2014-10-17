@@ -663,5 +663,19 @@ describe('Backbone.VirtualCollection', function () {
       collection.add({type: 'b'});
       assert.equal(vc.at(1).get('type'), 'b');
     });
+
+    it('should not have duplicate model event handlers after rebuilding the index', function() {
+      var collection = new Backbone.Collection([{type: 'a', testProperty: false}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }), called = 0;
+      vc.on('change:testProperty', function () { called++ });
+      vc._rebuildIndex()
+      collection.at(0).set({testProperty: true});
+      assert(called === 1);
+      assert(vc.length === 1);
+
+    });
+
   });
 });

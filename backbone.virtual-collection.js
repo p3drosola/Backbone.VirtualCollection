@@ -52,6 +52,9 @@
     },
 
     _rebuildIndex: function () {
+      for(idx in this.models) {
+        this.models[idx].off('all', this._onModelEvent, this);
+      }
       this._reset();
       this.collection.each(function (model, i) {
         if (this.accepts(model, i)) {
