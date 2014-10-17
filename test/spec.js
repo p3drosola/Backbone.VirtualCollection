@@ -677,5 +677,27 @@ describe('Backbone.VirtualCollection', function () {
 
     });
 
+    it('should not trigger change events on models that are no longer in the virtual collection', function() {
+      var collection = new Backbone.Collection([{type: 'z', testProperty: false}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'z'}
+      }), called = 0;
+     
+      assert(vc.length === 1);
+      
+      model = collection.at(0);
+      // remove the one model from the vc by changing the filtered property
+      model.set({type:'b'})
+      // assert vc is empty
+      assert(vc.length === 0);
+
+      // change property on model that was previously in vc
+      vc.on('change', function () { called++ });
+      model.set({testProperty: true});
+      
+      // assert the changed evenet on vc isnt triggered
+      assert(called === 0);
+    });
+
   });
 });
