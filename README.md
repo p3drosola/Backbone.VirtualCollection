@@ -25,6 +25,10 @@ Every effort has been made to maintain compatibility with v0.4, and in most case
 
 **virtual_collection.models()** is now virtual_collection.models, just like Backbone
 
+### Installation
+```
+npm install backbone-virtual-collection
+```
 
 ### Usage
 
