@@ -433,6 +433,21 @@ describe('Backbone.VirtualCollection', function () {
       assert(!called);
       assert.equal(vc.length, 1);
     });
+    it('should not trigger an `add` event twice when two virtual collections share a parent and modify its models', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc1 = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }),
+      vc2 = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }),
+      called = 0;
+
+      vc1.on('add', function (model) { model.set('foo', 'bar'); });
+      vc2.on('add', function (model) { called++; });
+      collection.add({type: 'a'});
+      assert(called === 1);
+    });
     it('should trigger a `remove` event when a matching model is removed from the parent', function () {
       var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
       vc = new VirtualCollection(collection, {
