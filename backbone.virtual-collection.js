@@ -82,7 +82,8 @@
     },
 
     _onAdd: function (model, collection, options) {
-      if (this.accepts(model, options.index)) {
+      var already_here = this.get(model);
+      if (!already_here && this.accepts(model, options.index)) {
         this._indexAdd(model);
         model.on('all', this._onModelEvent, this);
         this.trigger('add', model, this, options);
