@@ -129,6 +129,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.5.3 Fix 'add' event is triggered twice under certain conditions (via @dremora)
 0.5.2 Proxy change:attribute events (via @istrobes, @jvanaert)
 0.5.1 Ignore change events with malformed arguments
 0.5.0
