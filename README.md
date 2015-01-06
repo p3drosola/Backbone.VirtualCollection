@@ -127,47 +127,8 @@ VirtualCollection maintains an internal index of models that pass the filter. Th
 Happy hacking!
 
 
-### Changelog
-```
-0.6.0 Use browserify
-0.5.3 Fix 'add' event is triggered twice under certain conditions (via @dremora)
-0.5.2 Proxy change:attribute events (via @istrobes, @jvanaert)
-0.5.1 Ignore change events with malformed arguments
-0.5.0
-  - VirtualCollection extends Backbone.Collection
-  - .models() is now .models array instead
-  - faster .get()
-  - faster ._onAdd()
-  - faster nested collections
-  - smarter sorting (thanks @disruptek)
+### [Changelog](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/Changelog)
 
-0.4.15 Added virtual_collection.model (via @fcsonline)
-0.4.14 Added Backbone.extend (via @enov)
-0.4.13 Optimized `_models` and `get` to access parent collections which are indexed
-0.4.12 Pass the correct index in options object on model removal
-0.4.11 Trigger `reset` in updateFilter (fixes issue with multilayer filtering)
-0.4.10 Added Bower support
-0.4.9  Added `where` and `findWhere`. Renamed internal filterFunction
-0.4.8  Add `add` and `remove` proxies. Add index argument to filter function.
-0.4.7  Add the updateFilter method (via @justinwinslow)
-0.4.6  Add toJSON method (via @gbedardsice)
-0.4.5  Add close_with option
-0.4.4  Add all collection Underscore iterator proxies
-0.4.3  Fix bug with onChange handler not proxying add and remove events correctly
-0.4.2  Improve importing with npm
-0.4.0  Make filter part of options hash. This version breaks backwards compatibility. You'll have to update your code.
-
-0.3.3  Fix sort comparator with two args. Add more iterator helper functions
-0.3.2  Fix reset event on parent collection
-0.3.1  Replace viewHelper with closeWith
-0.3.0  Fix unbinding of index listeners
-
-0.2.0  Use cid instead of ids
-
-0.1.1  Fixed issues with comparators specified as a function
-0.1.0  Added support for comparators & sorting, separate from the parent collection
-0.0.2  Fix buildFilterFromHash not detecting null values
-```
 
 ### Pull requests are welcome, naturally
 
@@ -175,10 +136,10 @@ Happy hacking!
 
 ### Contribution management process for project admins
 - discuss/edit/merge PR's
-- update changelog in README.md
 - `npm version patch`
 - `git push && git push --tags`
 - npm publish
+- update changelog
 
 ### License
 The MIT License (MIT)
