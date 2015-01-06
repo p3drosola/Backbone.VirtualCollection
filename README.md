@@ -110,8 +110,7 @@ VirtualCollection maintains an internal index of models that pass the filter. Th
 
 Happy hacking!
 
-#### [Changelog](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/Changelog)
-#### [License](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/License)
+#### [Changelog](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/Changelog) - [License](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/License)
 
 #### ఠ ͟ಠ Pull requests are welcome, naturally
 
