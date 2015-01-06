@@ -129,6 +129,7 @@ Happy hacking!
 
 ### Changelog
 ```
+0.6.0 Use browserify
 0.5.3 Fix 'add' event is triggered twice under certain conditions (via @dremora)
 0.5.2 Proxy change:attribute events (via @istrobes, @jvanaert)
 0.5.1 Ignore change events with malformed arguments
@@ -175,7 +176,6 @@ Happy hacking!
 ### Contribution management process for project admins
 - discuss/edit/merge PR's
 - update changelog in README.md
-- update version number in component.json, bower.json
 - `npm version patch`
 - `git push && git push --tags`
 - npm publish
