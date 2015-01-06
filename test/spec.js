@@ -47,7 +47,7 @@ describe('Backbone.VirtualCollection', function () {
       calls = JSON.stringify(_.map(event_emitter.on.args, function (i) {return i[0]; }));
       assert.equal(calls, JSON.stringify([ 'close' ]));
       event_emitter.on.restore()
-    });    
+    });
     it("should accept a destroy_with option and bind destroy event (Marionette 2.*)", function () {
       var vc, calls, collection, event_emitter;
       collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
@@ -547,7 +547,7 @@ describe('Backbone.VirtualCollection', function () {
     });
     it('should ignore malformed change event arguments', function () {
       var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]);
-      
+
       vc = new VirtualCollection(collection, {
         filter: {type: 'a'}
       });
@@ -697,9 +697,9 @@ describe('Backbone.VirtualCollection', function () {
       vc = new VirtualCollection(collection, {
         filter: {type: 'z'}
       }), called = 0;
-     
+
       assert(vc.length === 1);
-      
+
       model = collection.at(0);
       // remove the one model from the vc by changing the filtered property
       model.set({type:'b'})
@@ -709,7 +709,7 @@ describe('Backbone.VirtualCollection', function () {
       // change property on model that was previously in vc
       vc.on('change', function () { called++ });
       model.set({testProperty: true});
-      
+
       // assert the changed evenet on vc isnt triggered
       assert(called === 0);
     });

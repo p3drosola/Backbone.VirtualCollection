@@ -5,8 +5,7 @@
   "main": "backbone.virtual-collection.js",
   "keywords": [
     "backbone",
-    "marrionette",
-    "ender",
+    "marionette",
     "teambox"
   ],
   "homepage": "https://github.com/p3drosola/Backbone.VirtualCollection",
@@ -19,12 +18,27 @@
   },
   "dependencies": {
     "backbone": "*",
-    "underscore": "*",
-    "mocha": "*",
-    "sinon": "*"
+    "underscore": "*"
   },
-  "ender": "./backbone.virtual-collection.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha -R spec"
+    "test": "node_modules/.bin/mocha -R spec",
+    "build": "browserify backbone.virtual-collection.js --s VirtualCollection -o dist/backbone.virtual-collection.js",
+    "build-min": "browserify backbone.virtual-collection.js --s VirtualCollection | uglifyjs -c > dist/backbone.virtual-collection.min.js",
+    "build-all": "npm run build && npm run build-min"
+  },
+  "devDependencies": {
+    "browserify": "^8.0.3",
+    "browserify-shim": "^3.8.2",
+    "mocha": "*",
+    "sinon": "*",
+    "uglify-js": "^2.4.16",
+    "watchify": "^2.2.1"
+  },
+  "browserify": {
+    "transform": [ "browserify-shim" ]
+  },
+  "browserify-shim": {
+    "backbone": "global:Backbone",
+    "underscore": "global:_"
   }
 }
