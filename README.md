@@ -126,28 +126,10 @@ VirtualCollection maintains an internal index of models that pass the filter. Th
 
 Happy hacking!
 
-
-### [Changelog](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/Changelog)
-
+#### [Changelog](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/Changelog)
+#### [License](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/License)
 
 ### Pull requests are welcome, naturally
 
 ![](http://i.imgur.com/Ikzywtp.gif)
 
-### Contribution management process for project admins
-- discuss/edit/merge PR's
-- `npm version patch`
-- `git push && git push --tags`
-- npm publish
-- update changelog
-
-### License
-The MIT License (MIT)
-
-Copyright (c) 2013 Pedro  p3dro.sola@gmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
