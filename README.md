@@ -6,24 +6,9 @@
 
 Backbone VirtualCollection allows you display a subset of a Backbone collection in a Backbone view that updates in real time. It works great with Marionette CollectionViews.
 
+If you're thinking "why don't you just place the models you're interested in a new collection?" the answer is that the new collection won't update itself when new models are added to the original collection, so you're creating data inconsitency. That's why we need a VirtualCollection.
+
 <img src="https://cloud.githubusercontent.com/assets/520550/3748311/ebb80894-17da-11e4-835b-ca733a889d0d.png">
-
-### What's new in v0.5
-
-VirtualCollection 0.5 is a complete re-write of VirtualCollection that brings a lot of improvements.
-
-- Inherits from Backbone.Collection
-- More efficient data structures
-- More intelligent sort handling (special thanks to @disruptek)
-- Better performance for nested virtual collections
-- More extensive test coverage
-
-All that in half the lines of code!
-
-#### Upgrading from 0.4
-Every effort has been made to maintain compatibility with v0.4, and in most cases it'll be a drop-in replacement. However, there are a few changes that have been made.
-
-**virtual_collection.models()** is now virtual_collection.models, just like Backbone
 
 
 ### Usage
@@ -115,7 +100,6 @@ virtual_collection.updateFilter(function (model) {
 
 ```
 
-
 ### Philosophy
 
 #### No data duplication
@@ -129,7 +113,7 @@ Happy hacking!
 #### [Changelog](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/Changelog)
 #### [License](https://github.com/p3drosola/Backbone.VirtualCollection/wiki/License)
 
-### Pull requests are welcome, naturally
+#### ఠ ͟ಠ Pull requests are welcome, naturally
 
 ![](http://i.imgur.com/Ikzywtp.gif)
 
