@@ -11,9 +11,7 @@ If you're thinking "why don't you just place the models you're interested in a n
 <img src="https://cloud.githubusercontent.com/assets/520550/3748311/ebb80894-17da-11e4-835b-ca733a889d0d.png">
 
 ### Installation
-```
-npm install backbone-virtual-collection
-```
+`npm install backbone-virtual-collection` or use the files in `dist/`
 
 ### Usage
 
