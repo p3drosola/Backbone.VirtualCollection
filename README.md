@@ -64,17 +64,7 @@ virtual_collection.sort(); // triggers sort event
 #### Unbinding
 The virtual collection will keep listening to its parent collection until you call `stopListening`.
 
-You can use the helper function `virtual_collection.destroyWith` to tell the collection to stopListening when a Marionette view is destroyed.
-
-```js
-var virtual_collection = new VirtualCollection(collection, {filter: {foo: 'bar'}});
-var view = new Marionette.CollectionView({collection: virtual_collection});
-virtual_collection.destroyWith(view);
-```
-
-Using the helper will take care of unbinding the virtual collection's listeners when the view is destroyed.
-
-You also can pass a `destroy_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening to events when the `destroy_with` event emitter emits a `destroy` event.
+You can pass a `destroy_with` option when creating the virtual collection being that an event emitter. The virtual collection will stop listening to events when the `destroy_with` event emitter emits a `destroy` event.
 
 ```js
 var virtual_collection = new Backbone.VirtualCollection(collection, {
