@@ -12,6 +12,7 @@ If you're thinking "why don't you just place the models you're interested in a n
 
 ### Installation
 a) with npm `npm install backbone-virtual-collection` 
+
 b) or manually add `dist/backbone.virtual-collection.js` directly to your web app.
 
 ### Usage
