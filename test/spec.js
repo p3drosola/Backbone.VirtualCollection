@@ -501,12 +501,13 @@ describe('Backbone.VirtualCollection', function () {
       var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
       vc = new VirtualCollection(collection, {
         filter: {type: 'a'}
-      }), called = false;
+      }), changeSpy = sinon.spy();
 
-      vc.on('change', function () { called = true; });
+      vc.on('change', changeSpy);
       collection.at(0).set({foo: 'bar'});
 
-      assert(called);
+      assert(changeSpy.called);
+      assert(changeSpy.calledOnce);
       assert(vc.length === 1);
     });
     it('should trigger a `change:[attributeName]` event when a models attribute in the original collection is changed', function () {
