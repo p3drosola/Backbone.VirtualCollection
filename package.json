@@ -21,7 +21,7 @@
     "underscore": "*"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha -R spec",
+    "test": "node_modules/mocha/bin/mocha -R spec",
     "build": "browserify backbone.virtual-collection.js --s VirtualCollection -o dist/backbone.virtual-collection.js",
     "build-min": "browserify backbone.virtual-collection.js --s VirtualCollection | uglifyjs -c > dist/backbone.virtual-collection.min.js",
     "build-all": "npm run build && npm run build-min"
