@@ -35,6 +35,12 @@ VirtualCollection = Backbone.Collection.extend({
     view.on(method_name, _.bind(this.stopListening, this));
   },
 
+  // https://github.com/p3drosola/Backbone.VirtualCollection/issues/62
+  get: function(obj) {
+    if (obj == null) return void 0;
+    return this._byId[obj.cid ? obj.cid : obj.id || obj];
+  },
+
   updateFilter: function (filter) {
     this.accepts = VirtualCollection.buildFilter(filter);
     this._rebuildIndex();
