@@ -12,8 +12,8 @@ VirtualCollection = Backbone.Collection.extend({
   constructor: function (collection, options) {
     options = options || {};
     this.collection = collection;
-    this.name = options.name;
 
+    if (options.name !== undefined) this.name = options.name;
     if (options.comparator !== undefined) this.comparator = options.comparator;
     if (options.close_with) this.bindLifecycle(options.close_with, 'close'); // Marionette 1.*
     if (options.destroy_with) this.bindLifecycle(options.destroy_with, 'destroy'); // Marionette 2.*
