@@ -153,7 +153,9 @@ VirtualCollection = Backbone.Collection.extend({
     this.models.splice(i, 0, model);
     this._byId[model.cid] = model;
     if (model.id) this._byId[model.id] = model;
+    var filled = this.length === 0;
     this.length += 1;
+    if (filled) this.trigger('filled');
   },
 
   _indexRemove: function (model) {
@@ -164,6 +166,7 @@ VirtualCollection = Backbone.Collection.extend({
     delete this._byId[model.cid];
     if (model.id) delete this._byId[model.id];
     this.length -= 1;
+    if (this.length === 0) console.trigger('empty');
     return i;
   },
 
