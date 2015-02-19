@@ -11,6 +11,7 @@ VirtualCollection = Backbone.Collection.extend({
     options = options || {};
     this.collection = collection;
 
+    if (options.name !== undefined) this.name = options.name;
     if (options.comparator !== undefined) this.comparator = options.comparator;
     if (options.close_with) this.bindLifecycle(options.close_with, 'close'); // Marionette 1.*
     if (options.destroy_with) this.bindLifecycle(options.destroy_with, 'destroy'); // Marionette 2.*
@@ -25,6 +26,12 @@ VirtualCollection = Backbone.Collection.extend({
     this.listenTo(this.collection, 'sort',  this._onSort);
 
     this.initialize.apply(this, arguments);
+  },
+
+  // https://github.com/p3drosola/Backbone.VirtualCollection/issues/62
+  get: function(obj) {
+    if (obj == null) return void 0;
+    return this._byId[obj.cid ? obj.cid : obj.id || obj];
   },
 
   // Marionette 1.*
@@ -144,7 +151,9 @@ VirtualCollection = Backbone.Collection.extend({
     this.models.splice(i, 0, model);
     this._byId[model.cid] = model;
     if (model.id) this._byId[model.id] = model;
+    var filled = this.length === 0;
     this.length += 1;
+    if (filled) this.trigger('filled');
   },
 
   _indexRemove: function (model) {
@@ -155,6 +164,7 @@ VirtualCollection = Backbone.Collection.extend({
     delete this._byId[model.cid];
     if (model.id) delete this._byId[model.id];
     this.length -= 1;
+    if (this.length === 0) console.trigger('empty');
     return i;
   },
 
