@@ -23,6 +23,7 @@ VirtualCollection = Backbone.Collection.extend({
     this.listenTo(this.collection, 'change', this._onChange);
     this.listenTo(this.collection, 'reset',  this._onReset);
     this.listenTo(this.collection, 'sort',  this._onSort);
+    this.listenTo(this.collection, 'sync',  this._onSync);
 
     this.initialize.apply(this, arguments);
   },
@@ -68,6 +69,10 @@ VirtualCollection = Backbone.Collection.extend({
   _onSort: function (collection, options) {
     if (this.comparator !== undefined) return;
     this.orderViaParent(options);
+  },
+
+  _onSync: function (method, model, options) {
+    this.trigger('sync', method, model, options);
   },
 
   _onAdd: function (model, collection, options) {

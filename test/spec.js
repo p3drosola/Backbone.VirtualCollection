@@ -18,12 +18,12 @@ describe('Backbone.VirtualCollection', function () {
 
   describe('#constructor', function () {
 
-    it('should bind 4 listeners to its collection', function () {
+    it('should bind 6 listeners to its collection', function () {
       var vc, calls, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       sinon.spy(collection, 'on');
       vc = new VirtualCollection(collection);
       calls = JSON.stringify(_.map(collection.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset', 'sort' ]));
+      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset', 'sort', 'sync' ]));
     });
 
     it('should build an index on instantiation', function () {
@@ -348,6 +348,20 @@ describe('Backbone.VirtualCollection', function () {
       model = vc.remove(collection.at(0));
       assert(model.id == 2);
       assert.equal(collection.length, 0);
+    });
+  });
+
+  describe('sync', function () {
+    it('should proxy the sync event', function () {
+      var collection = new Backbone.Collection([])
+        , syncSpy = sinon.spy();
+
+      vc = new VirtualCollection(collection, {});
+      vc.on('sync', syncSpy);
+
+      collection.trigger('sync');
+
+      assert(syncSpy.called);
     });
   });
 
