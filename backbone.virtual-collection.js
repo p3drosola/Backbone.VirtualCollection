@@ -7,7 +7,7 @@
     define(['backbone', 'underscore'], factory);
   } else if (typeof exports === 'object') {
     // CommonJS
-    exports.VirtualCollection = factory(require('backbone'), require('underscore'));
+    module.exports = factory(require('backbone'), require('underscore'));
   } else {
     // Browser globals
     root.VirtualCollection = factory(root.Backbone, root._);
