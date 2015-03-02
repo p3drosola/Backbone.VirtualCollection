@@ -12,7 +12,7 @@ gulp.task('test', ['build'], function() {
 
 gulp.task('build', function() {
   return gulp
-    .src('backbone.virtual-collection.js')
+    .src('src/backbone.virtual-collection.js')
     .pipe(umd({
       dependencies: function () {
         return [{
@@ -29,17 +29,17 @@ gulp.task('build', function() {
         return 'VirtualCollection';
       }
     }))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('minify', function() {
   return gulp
-    .src('dist/backbone.virtual-collection.js')
+    .src('backbone.virtual-collection.js')
     .pipe(uglify())
     .pipe(rename(function (path) {
         path.extname = '.min' + path.extname;
     }))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('default', function() {

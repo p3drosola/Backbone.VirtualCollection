@@ -1,12 +1,3 @@
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['backbone', 'underscore'], factory);
-  } else if (typeof exports === 'object') {
-    module.exports = factory(require('backbone'), require('underscore'));
-  } else {
-    root.Backbone.virtual-collection = factory(root.Backbone, root._);
-  }
-}(this, function(Backbone, _) {
 
 // Available under the MIT License (MIT);
 
@@ -211,6 +202,3 @@ function sortedIndexTwo (array, obj, iterator, context) {
 }
 
 _.extend(VirtualCollection.prototype, Backbone.Events);
-
-return VirtualCollection;
-}));

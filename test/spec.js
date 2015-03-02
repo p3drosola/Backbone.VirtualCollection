@@ -1,10 +1,10 @@
 /*global it, describe, before, beforeEach*/
 
-var assert = require("assert"),
+var assert = require('assert'),
     sinon = require('sinon'),
-    _ = require("underscore"),
-    Backbone = require("backbone"),
-    VirtualCollection = require("../dist/backbone.virtual-collection.js");
+    _ = require('underscore'),
+    Backbone = require('backbone'),
+    VirtualCollection = require('../backbone.virtual-collection.js');
 
 function cids(collection, ids_array) {
   var cids_array = [];
@@ -48,7 +48,7 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(calls, JSON.stringify([ 'close' ]));
       event_emitter.on.restore()
     });
-    it("should accept a destroy_with option and bind destroy event (Marionette 2.*)", function () {
+    it('should accept a destroy_with option and bind destroy event (Marionette 2.*)', function () {
       var vc, calls, collection, event_emitter;
       collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
       event_emitter = Backbone.Events;
