@@ -1,11 +1,7 @@
 
-// Available under the MIT License (MIT)
+// Available under the MIT License (MIT);
 
-var VirtualCollection,
-    Backbone = require('backbone'),
-    _ = require('underscore');
-
-VirtualCollection = Backbone.Collection.extend({
+var VirtualCollection = Backbone.Collection.extend({
 
   constructor: function (collection, options) {
     options = options || {};
@@ -206,5 +202,3 @@ function sortedIndexTwo (array, obj, iterator, context) {
 }
 
 _.extend(VirtualCollection.prototype, Backbone.Events);
-
-module.exports = VirtualCollection;
