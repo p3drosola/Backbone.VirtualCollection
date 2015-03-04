@@ -18,12 +18,12 @@ describe('Backbone.VirtualCollection', function () {
 
   describe('#constructor', function () {
 
-    it('should bind 4 listeners to its collection', function () {
+    it('should bind 8 listeners to its collection', function () {
       var vc, calls, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       sinon.spy(collection, 'on');
       vc = new VirtualCollection(collection);
       calls = JSON.stringify(_.map(collection.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset', 'sort' ]));
+      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset', 'sort', 'sync', 'request', 'error' ]));
     });
 
     it('should build an index on instantiation', function () {
@@ -350,6 +350,56 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(collection.length, 0);
     });
   });
+
+  describe('proxy parent events', function () {
+    it('should proxy the sync event', function () {
+      var collection = new Backbone.Collection([])
+        , eventSpy = sinon.spy();
+
+      vc = new VirtualCollection(collection, {});
+      vc.on('sync', eventSpy);
+
+      collection.trigger('sync');
+
+      assert(eventSpy.called);
+    });
+
+    it('should proxy the request event', function () {
+      var collection = new Backbone.Collection([])
+        , eventSpy = sinon.spy();
+
+      vc = new VirtualCollection(collection, {});
+      vc.on('request', eventSpy);
+
+      collection.trigger('request');
+
+      assert(eventSpy.called);
+    });
+
+    it('should proxy the error event', function () {
+      var collection = new Backbone.Collection([])
+        , eventSpy = sinon.spy();
+
+      vc = new VirtualCollection(collection, {});
+      vc.on('error', eventSpy);
+
+      collection.trigger('error');
+
+      assert(eventSpy.called);
+    });
+
+    it('should proxy event arguments', function () {
+      var collection = new Backbone.Collection([])
+        , eventSpy = sinon.spy();
+
+      vc = new VirtualCollection(collection, {});
+      vc.on('error', eventSpy);
+
+      collection.trigger('error', 'foo', 'bar');
+
+      assert(eventSpy.calledWith('foo', 'bar'));
+    });
+   });
 
   describe('filter', function () {
     it('should receive the model and index as arguments', function () {
