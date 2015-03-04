@@ -1,11 +1,16 @@
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['backbone', 'underscore'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('backbone'), require('underscore'));
+  } else {
+    root.Backbone.virtual-collection = factory(root.Backbone, root._);
+  }
+}(this, function(Backbone, _) {
 
-// Available under the MIT License (MIT)
+// Available under the MIT License (MIT);
 
-var VirtualCollection,
-    Backbone = require('backbone'),
-    _ = require('underscore');
-
-VirtualCollection = Backbone.Collection.extend({
+var VirtualCollection = Backbone.Collection.extend({
 
   constructor: function (collection, options) {
     options = options || {};
@@ -207,4 +212,5 @@ function sortedIndexTwo (array, obj, iterator, context) {
 
 _.extend(VirtualCollection.prototype, Backbone.Events);
 
-module.exports = VirtualCollection;
+return VirtualCollection;
+}));

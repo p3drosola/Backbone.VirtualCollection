@@ -21,24 +21,18 @@
     "underscore": "*"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha -R spec",
-    "build": "browserify backbone.virtual-collection.js --s VirtualCollection -o dist/backbone.virtual-collection.js",
-    "build-min": "browserify backbone.virtual-collection.js --s VirtualCollection | uglifyjs -c > dist/backbone.virtual-collection.min.js",
-    "build-all": "npm run build && npm run build-min"
+    "test": "gulp test",
+    "build": "gulp build",
+    "build-min": "gulp minify",
+    "build-all": "gulp build && gulp minify"
   },
   "devDependencies": {
-    "browserify": "^8.0.3",
-    "browserify-shim": "^3.8.2",
+    "gulp": "^3.8.11",
+    "gulp-mocha": "^2.0.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.1.0",
+    "gulp-umd": "^0.1.3",
     "mocha": "*",
-    "sinon": "*",
-    "uglify-js": "^2.4.16",
-    "watchify": "^2.2.1"
-  },
-  "browserify": {
-    "transform": [ "browserify-shim" ]
-  },
-  "browserify-shim": {
-    "backbone": "global:Backbone",
-    "underscore": "global:_"
+    "sinon": "*"
   }
 }
