@@ -4,13 +4,13 @@
   } else if (typeof exports === 'object') {
     module.exports = factory(require('backbone'), require('underscore'));
   } else {
-    root.Backbone.VirtualCollection = factory(root.Backbone, root._);
+    root.VirtualCollection = factory(root.Backbone, root._);
   }
 }(this, function(Backbone, _) {
 
 // Available under the MIT License (MIT);
 
-var VirtualCollection = Backbone.Collection.extend({
+var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend({
 
   constructor: function (collection, options) {
     options = options || {};

@@ -1,7 +1,7 @@
 
 // Available under the MIT License (MIT);
 
-var VirtualCollection = Backbone.Collection.extend({
+var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend({
 
   constructor: function (collection, options) {
     options = options || {};
