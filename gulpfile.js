@@ -27,6 +27,9 @@ gulp.task('build', function() {
       },
       exports: function () {
         return 'VirtualCollection';
+      },
+      namespace: function () {
+        return 'VirtualCollection';
       }
     }))
     .pipe(gulp.dest('./'));
