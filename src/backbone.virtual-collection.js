@@ -38,7 +38,7 @@ var VirtualCollection = Backbone.Collection.extend({
   },
 
   _rebuildIndex: function () {
-    for(idx in this.models) {
+    for(var idx in this.models) {
       this.models[idx].off('all', this._onAllEvent, this);
     }
     this._reset();
