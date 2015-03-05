@@ -47,9 +47,7 @@ var VirtualCollection = Backbone.Collection.extend({
   },
 
   _rebuildIndex: function () {
-    for(var idx in this.models) {
-      this.models[idx].off('all', this._onAllEvent, this);
-    }
+    _.invoke(this.models, 'off', 'all', this._onAllEvent, this);
     this._reset();
     this.collection.each(function (model, i) {
       if (this.accepts(model, i)) {
@@ -188,7 +186,7 @@ var VirtualCollection = Backbone.Collection.extend({
       return options;
     } else if (options.constructor === Object) {
       return function (model) {
-        return !Boolean(_(Object.keys(options)).detect(function (key) {
+        return !Boolean(_(_.keys(options)).detect(function (key) {
           return model.get(key) !== options[key];
         }));
       };
