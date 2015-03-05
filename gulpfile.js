@@ -29,7 +29,7 @@ gulp.task('build', function() {
         return 'VirtualCollection';
       },
       namespace: function () {
-        return 'VirtualCollection';
+        return 'Backbone.VirtualCollection';
       }
     }))
     .pipe(gulp.dest('./'));

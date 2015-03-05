@@ -4,7 +4,7 @@
   } else if (typeof exports === 'object') {
     module.exports = factory(require('backbone'), require('underscore'));
   } else {
-    root.VirtualCollection = factory(root.Backbone, root._);
+    root.Backbone.VirtualCollection = factory(root.Backbone, root._);
   }
 }(this, function(Backbone, _) {
 
