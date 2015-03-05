@@ -4,13 +4,13 @@
   } else if (typeof exports === 'object') {
     module.exports = factory(require('backbone'), require('underscore'));
   } else {
-    root.Backbone.virtual-collection = factory(root.Backbone, root._);
+    root.VirtualCollection = factory(root.Backbone, root._);
   }
 }(this, function(Backbone, _) {
 
 // Available under the MIT License (MIT);
 
-var VirtualCollection = Backbone.Collection.extend({
+var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend({
 
   constructor: function (collection, options) {
     options = options || {};
@@ -47,9 +47,7 @@ var VirtualCollection = Backbone.Collection.extend({
   },
 
   _rebuildIndex: function () {
-    for(idx in this.models) {
-      this.models[idx].off('all', this._onAllEvent, this);
-    }
+    _.invoke(this.models, 'off', 'all', this._onAllEvent, this);
     this._reset();
     this.collection.each(function (model, i) {
       if (this.accepts(model, i)) {
@@ -188,7 +186,7 @@ var VirtualCollection = Backbone.Collection.extend({
       return options;
     } else if (options.constructor === Object) {
       return function (model) {
-        return !Boolean(_(Object.keys(options)).detect(function (key) {
+        return !Boolean(_(_.keys(options)).detect(function (key) {
           return model.get(key) !== options[key];
         }));
       };
