@@ -40,9 +40,10 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
 
   updateFilter: function (filter) {
     this.accepts = VirtualCollection.buildFilter(filter);
+    var previous_models = _.clone(this.models);
     this._rebuildIndex();
     this.trigger('filter', this, filter);
-    this.trigger('reset', this, filter);
+    this.trigger('reset', this, {previousModels: previous_models});
     return this;
   },
 
