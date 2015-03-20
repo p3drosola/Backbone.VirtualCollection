@@ -11,9 +11,9 @@ If you're thinking "why don't you just place the models you're interested in a n
 <img src="https://cloud.githubusercontent.com/assets/520550/3748311/ebb80894-17da-11e4-835b-ca733a889d0d.png">
 
 ### Installation
-a) with npm `npm install backbone-virtual-collection` 
+a) with npm `npm install backbone-virtual-collection`
 
-b) or manually add `dist/backbone.virtual-collection.js` directly to your web app.
+b) or manually add `backbone.virtual-collection.js` directly to your web app.
 
 ### Usage
 
@@ -73,7 +73,7 @@ var virtual_collection = new Backbone.VirtualCollection(collection, {
 });
 
 ```
-+**Note:**  Prior to Marionette 2.*, "destroy" was called "close".  For compatibility with older versions of Marionette, the old helper `virtual_collection.closeWith` and option `close_with` are still availble, handling the `close` event.
+**Note:**  Prior to Marionette 2.*, "destroy" was called "close".  For compatibility with older versions of Marionette, the old option `close_with` is still available, handling the `close` event.
 
 #### Update filter
 
@@ -109,4 +109,3 @@ Happy hacking!
 #### ఠ ͟ಠ Pull requests are welcome, naturally
 
 ![](http://i.imgur.com/Ikzywtp.gif)
-
