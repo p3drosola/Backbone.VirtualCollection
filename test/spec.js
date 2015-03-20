@@ -603,7 +603,7 @@ describe('Backbone.VirtualCollection', function () {
         filter: {type: 'a'}
       });
       assert.doesNotThrow(function () {
-        collection.first().trigger('change');
+        collection.first().trigger('foo');
       });
     });
   });
