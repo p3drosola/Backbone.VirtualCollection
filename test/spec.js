@@ -274,7 +274,18 @@ describe('Backbone.VirtualCollection', function () {
       assert.deepEqual(vc.map(function (i) {return i.get('name')}), ['a', 'b']);
     });
   });
-  describe('map', function () {
+  describe('#clone', function () {
+    it('should return an instance of the parent collection with the filtered models', function () {
+      var ACollection = Backbone.Collection.extend({foo: 'bar'});
+      var ac = new ACollection([{type: 1}, {type: 2}, {type: 1}, {type: 2}]);
+      assert.equal(ac.length, 4);
+      var vc = new VirtualCollection(ac, {filter: {type: 2}});
+      var vc_clone = vc.clone();
+      assert.equal(vc_clone.length, 2);
+      assert(vc_clone instanceof ACollection, 'clone instanciates the parent collection class');
+    });
+  })
+  describe('#map', function () {
     it('should map the models in the virtual collection', function () {
       var collection = new Backbone.Collection([
         {type: 'a', name: 'hodor'},
@@ -288,7 +299,7 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
-  describe('each', function () {
+  describe('#each', function () {
     it('should iterate over the models in the virtual collection', function () {
       var collection = new Backbone.Collection([
         {type: 'a', name: 'hodor'},
@@ -305,7 +316,7 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
-  describe('get', function () {
+  describe('#get', function () {
     it('should return the model if it belongs in the virtual collection', function () {
       var collection = new Backbone.Collection([
         {type: 'a', id: 1},
@@ -319,7 +330,7 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
-  describe('at', function () {
+  describe('#at', function () {
     it('should return the model at the specified index of the virtual collection', function () {
       var collection = new Backbone.Collection([
         {type: 'a', id: 1},
@@ -332,7 +343,7 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
-  describe('toJSON', function() {
+  describe('#toJSON', function() {
     it('should return a JSON representation of the models in the virtual collection', function() {
       var collection = new Backbone.Collection([
         {age: 23, name: 'John'},
@@ -412,7 +423,7 @@ describe('Backbone.VirtualCollection', function () {
     });
    });
 
-  describe('filter', function () {
+  describe('#filter', function () {
     it('should receive the model and index as arguments', function () {
       var i = 0,
       collection = new Backbone.Collection([{id: 1}, {id: 2}]);

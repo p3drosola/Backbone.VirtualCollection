@@ -164,6 +164,10 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     if (!_.contains(explicitlyHandledEvents, eventName)) {
       this.trigger.apply(this, arguments);
     }
+  },
+
+  clone: function () {
+    return new this.collection.constructor(this.models);
   }
 
 }, { // static props
