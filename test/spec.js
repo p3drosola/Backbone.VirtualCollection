@@ -262,6 +262,17 @@ describe('Backbone.VirtualCollection', function () {
 
       assert.equal(vc.length, collection.length);
     })
+    it('should respect the order of the parent collection if no comparator is specified', function () {
+
+      var collection = new (Backbone.Collection.extend({comparator: 'name'}));
+      collection.reset([{name:'b'}, {name:'z'}, {name:'a'}]);
+
+      assert.deepEqual(collection.map(function (i) {return i.get('name')}), ['a', 'b', 'z']);
+      var vc = new VirtualCollection(collection, {
+        filter: function (model) { return model.get('name') == 'a' || model.get('name') == 'b'}
+      });
+      assert.deepEqual(vc.map(function (i) {return i.get('name')}), ['a', 'b']);
+    });
   });
   describe('map', function () {
     it('should map the models in the virtual collection', function () {
