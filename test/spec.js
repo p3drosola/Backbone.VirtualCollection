@@ -764,6 +764,26 @@ describe('Backbone.VirtualCollection', function () {
       assert(vc.length === 1);
 
     });
+    it('should be able to get model by ID if id present', function (done) {
+      var collection = new Backbone.Collection([{type: 'b'}]),
+      model,
+      stub,
+      vc = new VirtualCollection(collection);
+
+      Backbone.$ = {ajax: function () {}};
+      stub = sinon.stub(Backbone.$, 'ajax').yieldsTo('success', {id: 1});
+
+      function onSuccess() {
+        assert(vc.get(1).id === 1);
+        stub.restore();
+        done();
+      }
+
+      model = new Backbone.Model({type: 'a'});
+      vc.add(model);
+      model.url = '/fake-endpoint';
+      model.save({type: 'c'}, {success: onSuccess});
+    });
 
     it('should not trigger change events on models that are no longer in the virtual collection', function() {
       var collection = new Backbone.Collection([{type: 'z', testProperty: false}, {type: 'b'}]),
