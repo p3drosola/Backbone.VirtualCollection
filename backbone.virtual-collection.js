@@ -103,12 +103,11 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     if (!model || !options) return; // ignore malformed arguments coming from custom events
     var already_here = this.get(model);
 
-    if (!this._byId[model.id] && model.id) {
-      this._byId[model.id] = model;
-    }
-
     if (this.accepts(model, options.index)) {
       if (already_here) {
+        if (!this._byId[model.id] && model.id) {
+          this._byId[model.id] = model;
+        }
         this.trigger('change', model, this, options);
       } else {
         this._indexAdd(model);
