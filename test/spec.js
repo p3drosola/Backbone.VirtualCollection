@@ -20,10 +20,8 @@ describe('Backbone.VirtualCollection', function () {
 
     it('should bind 8 listeners to its collection', function () {
       var vc, calls, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
-      sinon.spy(collection, 'on');
       vc = new VirtualCollection(collection);
-      calls = JSON.stringify(_.map(collection.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'add', 'remove', 'change', 'reset', 'sort', 'sync', 'request', 'error' ]));
+      assert.deepEqual(_.keys(collection._events), [ 'add', 'remove', 'change', 'reset', 'sort', 'sync', 'request', 'error' ]);
     });
 
     it('should build an index on instantiation', function () {
