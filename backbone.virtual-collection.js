@@ -19,7 +19,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     if (options.comparator !== undefined) this.comparator = options.comparator;
     if (options.close_with) this.bindLifecycle(options.close_with, 'close'); // Marionette 1.*
     if (options.destroy_with) this.bindLifecycle(options.destroy_with, 'destroy'); // Marionette 2.*
-    if (!this.model) this.model = collection.model;
+    if (collection.model) this.model = collection.model;
 
     this.accepts = VirtualCollection.buildFilter(options.filter);
     this._rebuildIndex();

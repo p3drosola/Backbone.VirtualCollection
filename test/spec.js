@@ -56,6 +56,15 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(calls, JSON.stringify([ 'destroy' ]));
       event_emitter.on.restore()
     });
+    it('should set the model from the collection', function () {
+      var vc, MyModel, MyCollection, my_model, my_collection;
+      MyModel = Backbone.Model.extend({foo: function () {return 'foo'; }});
+      MyCollection = Backbone.Collection.extend({model: MyModel});
+      my_collection = new MyCollection([{id: 1, foo: 'bar'}]);
+      vc = new VirtualCollection(my_collection);
+      my_model = new vc.model();
+      assert.equal(my_model.foo(), 'foo');
+    });
   });
 
   describe('#model', function () {
