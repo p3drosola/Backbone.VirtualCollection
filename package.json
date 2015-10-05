@@ -1,7 +1,7 @@
 {
   "name": "backbone-virtual-collection",
   "description": "Use Backbone.Marionette CollectionViews on a subset of a Backbone collection",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "license": "MIT",
   "main": "backbone.virtual-collection.js",
   "keywords": [
