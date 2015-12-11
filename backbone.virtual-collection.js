@@ -193,9 +193,9 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
       return options;
     } else if (options.constructor === Object) {
       return function (model) {
-        return !Boolean(_(_.keys(options)).detect(function (key) {
+        return !_.find(_.keys(options), function (key) {
           return model.get(key) !== options[key];
-        }));
+        });
       };
     }
   }
