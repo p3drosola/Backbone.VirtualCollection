@@ -474,6 +474,15 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(false, filter(new Backbone.Model({foo: 'bar', ginger: 'not null'})));
       assert.equal(true, filter(new Backbone.Model({foo: 'bar', ginger: undefined})));
     });
+    it('should build a single-attribute filter that matches a model to an array of values', function () {
+      var filter = VirtualCollection.buildFilter({foo: ['foo', 'bar']});
+      assert.equal(true, filter(new Backbone.Model({foo: 'bar'})));
+      assert.equal(true, filter(new Backbone.Model({foo: 'foo'})));
+    });
+    it('should build a single-attribute filter that rejects a model to an array of values', function () {
+      var filter = VirtualCollection.buildFilter({foo: ['foo', 'bar']});
+      assert.equal(false, filter(new Backbone.Model({foo: 'car'})));
+    });
   });
   describe('events', function () {
     it('should trigger a `reset` event when the parent collection is reset', function () {
