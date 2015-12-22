@@ -7,7 +7,9 @@ var umd = require('gulp-umd');
 gulp.task('test', ['build'], function() {
   return gulp
     .src('test/spec.js', {read: false})
-    .pipe(mocha());
+    .pipe(mocha({
+      globals: []
+    }));
 });
 
 gulp.task('build', function() {
