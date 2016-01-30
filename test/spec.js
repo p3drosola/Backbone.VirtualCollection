@@ -18,13 +18,13 @@ describe('Backbone.VirtualCollection', function () {
 
   describe('#constructor', function () {
 
-    it('should bind 8 listeners to its collection', function () {
+    it('listens to all events on the parent collection', function () {
       var vc, calls, collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       vc = new VirtualCollection(collection);
-      assert.deepEqual(_.keys(collection._events), [ 'add', 'remove', 'change', 'reset', 'sort', 'sync', 'request', 'error' ]);
+      assert.deepEqual(_.keys(collection._events), ['all']);
     });
 
-    it('should build an index on instantiation', function () {
+    it('builds an index on instantiation', function () {
       var vc, collection = new Backbone.Collection([
         {id: 1, foo: 'bar'},
         {id: 2, foo: 'baz'},
@@ -36,27 +36,21 @@ describe('Backbone.VirtualCollection', function () {
       assert.equal(vc.models.length, 2);
     });
 
-    it('should accept a close_with option and bind to the `close` event (Marionette 1.*)', function () {
-      var vc, calls, collection, event_emitter;
-      collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
-      event_emitter = Backbone.Events;
-      sinon.spy(event_emitter, 'on');
+    it('accepts a close_with option and bind to the `close` event (Marionette 1.*)', function () {
+      var vc, collection, event_emitter;
+      event_emitter = _.clone(Backbone.Events);
+      collection = new Backbone.Collection();
       vc = new VirtualCollection(collection, {close_with: event_emitter});
-      calls = JSON.stringify(_.map(event_emitter.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'close' ]));
-      event_emitter.on.restore()
+      assert.deepEqual(_.keys(event_emitter._events), ['close']);
     });
-    it('should accept a destroy_with option and bind destroy event (Marionette 2.*)', function () {
-      var vc, calls, collection, event_emitter;
-      collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
-      event_emitter = Backbone.Events;
-      sinon.spy(event_emitter, 'on');
+    it('accepts a destroy_with option and bind destroy event (Marionette 2.*)', function () {
+      var vc, collection, event_emitter;
+      event_emitter = _.clone(Backbone.Events);
+      collection = new Backbone.Collection();
       vc = new VirtualCollection(collection, {destroy_with: event_emitter});
-      calls = JSON.stringify(_.map(event_emitter.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'destroy' ]));
-      event_emitter.on.restore()
+      assert.deepEqual(_.keys(event_emitter._events), ['destroy']);
     });
-    it('should set the model from the collection', function () {
+    it('sets the model from the collection', function () {
       var vc, MyModel, MyCollection, my_model, my_collection;
       MyModel = Backbone.Model.extend({foo: function () {return 'foo'; }});
       MyCollection = Backbone.Collection.extend({model: MyModel});
@@ -370,7 +364,7 @@ describe('Backbone.VirtualCollection', function () {
 
   describe('add & remove', function () {
     it('should proxy up to the parent', function () {
-      var collection = new Backbone.Collection([]);
+      var collection = new Backbone.Collection();
       vc = new VirtualCollection(collection, {});
       vc.add({id: 2});
       assert.equal(collection.length, 1);
@@ -382,51 +376,51 @@ describe('Backbone.VirtualCollection', function () {
 
   describe('proxy parent events', function () {
     it('should proxy the sync event', function () {
-      var collection = new Backbone.Collection([])
+      var collection = new Backbone.Collection()
         , eventSpy = sinon.spy();
 
       vc = new VirtualCollection(collection, {});
       vc.on('sync', eventSpy);
 
-      collection.trigger('sync');
+      collection.trigger('sync', collection);
 
       assert(eventSpy.called);
     });
 
     it('should proxy the request event', function () {
-      var collection = new Backbone.Collection([])
+      var collection = new Backbone.Collection()
         , eventSpy = sinon.spy();
 
       vc = new VirtualCollection(collection, {});
       vc.on('request', eventSpy);
 
-      collection.trigger('request');
+      collection.trigger('request', collection);
 
       assert(eventSpy.called);
     });
 
     it('should proxy the error event', function () {
-      var collection = new Backbone.Collection([])
+      var collection = new Backbone.Collection()
         , eventSpy = sinon.spy();
 
       vc = new VirtualCollection(collection, {});
       vc.on('error', eventSpy);
 
-      collection.trigger('error');
+      collection.trigger('error', collection);
 
       assert(eventSpy.called);
     });
 
     it('should proxy event arguments', function () {
-      var collection = new Backbone.Collection([])
+      var collection = new Backbone.Collection()
         , eventSpy = sinon.spy();
 
       vc = new VirtualCollection(collection, {});
       vc.on('error', eventSpy);
 
-      collection.trigger('error', 'foo', 'bar');
+      collection.trigger('error', collection, 'foo', 'bar');
 
-      assert(eventSpy.calledWith('foo', 'bar'));
+      assert(eventSpy.calledWith(collection, 'foo', 'bar'));
     });
    });
 

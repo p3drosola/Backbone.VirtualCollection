@@ -8,25 +8,18 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     this.collection = collection;
 
     if (options.comparator !== undefined) this.comparator = options.comparator;
-    if (options.close_with) this.bindLifecycle(options.close_with, 'close'); // Marionette 1.*
-    if (options.destroy_with) this.bindLifecycle(options.destroy_with, 'destroy'); // Marionette 2.*
+    if (options.close_with) this.bindLifecycle(options.close_with, 'close'); // Marionette 1
+    if (options.destroy_with) this.bindLifecycle(options.destroy_with, 'destroy'); // Marionette 2
     if (collection.model) this.model = collection.model;
 
     this.accepts = VirtualCollection.buildFilter(options.filter);
+    this.listenTo(this.collection, 'all', this._handleParentEvent)
     this._rebuildIndex();
-    this.listenTo(this.collection, 'add', this._onAdd);
-    this.listenTo(this.collection, 'remove', this._onRemove);
-    this.listenTo(this.collection, 'change', this._onChange);
-    this.listenTo(this.collection, 'reset',  this._onReset);
-    this.listenTo(this.collection, 'sort',  this._onSort);
-    this._proxyParentEvents(['sync', 'request', 'error']);
-
     this.initialize.apply(this, arguments);
   },
 
-  // Marionette 1.*
   bindLifecycle: function (view, method_name) {
-    view.on(method_name, _.bind(this.stopListening, this));
+    this.listenTo(view, method_name, this.stopListening);
   },
 
   updateFilter: function (filter) {
@@ -38,11 +31,9 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   },
 
   _rebuildIndex: function () {
-    _.invoke(this.models, 'off', 'all', this._onAllEvent, this);
     this._reset();
     this.collection.each(function (model, i) {
       if (this.accepts(model, i)) {
-        model.on('all', this._onAllEvent, this);
         this.models.push(model);
         this._byId[model.cid] = model;
         if (model.id) this._byId[model.id] = model;
@@ -51,6 +42,30 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     this.length = this.models.length;
 
     if (this.comparator) this.sort({silent: true});
+  },
+
+  _handleParentEvent: function (event, target) {
+    var args_with_name = _.toArray(arguments);
+    var args = args_with_name.slice(1);
+    if (target == this.collection) {
+      switch (event) {
+        case 'reset':
+          return this._onReset.apply(this, args);
+        case 'sort':
+          return this._onSort.apply(this, args);
+      }
+      return this.trigger.apply(this, args_with_name);
+    } else if (target instanceof Backbone.Model) {
+      switch (event) {
+        case 'add':
+          return this._onAdd.apply(this, args);
+        case 'change':
+          return this._onChange.apply(this, args);
+        case 'remove':
+          return this._onRemove.apply(this, args);
+      }
+      return this.trigger.apply(this, args_with_name);
+    }
   },
 
   orderViaParent: function (options) {
@@ -65,17 +80,10 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     this.orderViaParent(options);
   },
 
-  _proxyParentEvents: function (events) {
-    _.each(events, function (eventName) {
-      this.listenTo(this.collection, eventName, _.partial(this.trigger, eventName));
-    }, this);
-  },
-
   _onAdd: function (model, collection, options) {
     var already_here = this.get(model);
     if (!already_here && this.accepts(model, options.index)) {
       this._indexAdd(model);
-      model.on('all', this._onAllEvent, this);
       this.trigger('add', model, this, options);
     }
   },
@@ -86,7 +94,6 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     var i = this._indexRemove(model)
     , options_clone = _.clone(options);
     options_clone.index = i;
-    model.off('all', this._onAllEvent, this);
     this.trigger('remove', model, this, options_clone);
   },
 
@@ -152,7 +159,6 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   },
 
   _indexRemove: function (model) {
-    model.off('all', this._onAllEvent, this);
     var i = this.indexOf(model);
     if (i === -1) return i;
     this.models.splice(i, 1);
@@ -160,13 +166,6 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     if (model.id) delete this._byId[model.id];
     this.length -= 1;
     return i;
-  },
-
-  _onAllEvent: function (eventName) {
-    var explicitlyHandledEvents = ['add', 'remove', 'change', 'reset', 'sort'];
-    if (!_.contains(explicitlyHandledEvents, eventName)) {
-      this.trigger.apply(this, arguments);
-    }
   },
 
   clone: function () {
