@@ -63,9 +63,8 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
         case 'sort':
           return this._onSort.apply(this, args);
       }
-      return this.trigger.apply(this, args_with_name); // proxy events
+      return this.trigger.apply(this, args_with_name);
     } else if (target instanceof Backbone.Model) {
-      // handle model event
       switch (event) {
         case 'add':
           return this._onAdd.apply(this, args);
