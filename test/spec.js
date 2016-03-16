@@ -35,24 +35,26 @@ describe('Backbone.VirtualCollection', function () {
     });
 
     it('should accept a close_with option and bind to the `close` event (Marionette 1.*)', function () {
-      var vc, calls, collection, event_emitter;
+      var vc, collection, event_emitter;
       collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
       event_emitter = Backbone.Events;
-      sinon.spy(event_emitter, 'on');
+      sinon.spy(VirtualCollection.prototype, 'stopListening');
       vc = new VirtualCollection(collection, {close_with: event_emitter});
-      calls = JSON.stringify(_.map(event_emitter.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'close' ]));
-      event_emitter.on.restore()
+
+      event_emitter.trigger('close');
+      assert.equal(vc.stopListening.callCount, 1);
+      VirtualCollection.prototype.stopListening.restore();
     });
     it('should accept a destroy_with option and bind destroy event (Marionette 2.*)', function () {
-      var vc, calls, collection, event_emitter;
+      var vc, collection, event_emitter;
       collection = new Backbone.Collection([{id: 1, foo: 'bar'}]);
       event_emitter = Backbone.Events;
-      sinon.spy(event_emitter, 'on');
+      sinon.spy(VirtualCollection.prototype, 'stopListening');
       vc = new VirtualCollection(collection, {destroy_with: event_emitter});
-      calls = JSON.stringify(_.map(event_emitter.on.args, function (i) {return i[0]; }));
-      assert.equal(calls, JSON.stringify([ 'destroy' ]));
-      event_emitter.on.restore()
+
+      event_emitter.trigger('destroy');
+      assert.equal(vc.stopListening.callCount, 1);
+      VirtualCollection.prototype.stopListening.restore();
     });
     it('should set the model from the collection', function () {
       var vc, MyModel, MyCollection, my_model, my_collection;

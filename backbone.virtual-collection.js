@@ -33,9 +33,8 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     this.initialize.apply(this, arguments);
   },
 
-  // Marionette 1.*
   bindLifecycle: function (view, method_name) {
-    view.on(method_name, _.bind(this.stopListening, this));
+    this.listenTo(view, method_name, this.stopListening);
   },
 
   updateFilter: function (filter) {
@@ -51,7 +50,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     this._reset();
     this.collection.each(function (model, i) {
       if (this.accepts(model, i)) {
-        model.on('all', this._onAllEvent, this);
+        this.listenTo(model, 'all', this._onAllEvent);
         this.models.push(model);
         this._byId[model.cid] = model;
         if (model.id) this._byId[model.id] = model;
@@ -84,7 +83,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     var already_here = this.get(model);
     if (!already_here && this.accepts(model, options.index)) {
       this._indexAdd(model);
-      model.on('all', this._onAllEvent, this);
+      this.listenTo(model, 'all', this._onAllEvent);
       this.trigger('add', model, this, options);
     }
   },
