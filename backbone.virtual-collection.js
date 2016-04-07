@@ -28,7 +28,6 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     this.listenTo(this.collection, 'change', this._onChange);
     this.listenTo(this.collection, 'reset',  this._onReset);
     this.listenTo(this.collection, 'sort',  this._onSort);
-    this.listenTo(this.collection, 'update',  this._onUpdate);
     this._proxyParentEvents(['sync', 'request', 'error']);
 
     this.initialize.apply(this, arguments);
@@ -78,10 +77,6 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     _.each(events, function (eventName) {
       this.listenTo(this.collection, eventName, _.partial(this.trigger, eventName));
     }, this);
-  },
-
-  _onUpdate: function (collection, options) {
-    this.trigger('update', this, options);
   },
 
   _onAdd: function (model, collection, options) {
