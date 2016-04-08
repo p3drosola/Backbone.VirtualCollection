@@ -18,6 +18,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     this.listenTo(this.collection, 'remove', this._onRemove);
     this.listenTo(this.collection, 'change', this._onChange);
     this.listenTo(this.collection, 'reset',  this._onReset);
+    this.listenTo(this.collection, 'filter',  this._onFilter);
     this.listenTo(this.collection, 'sort',  this._onSort);
     this.listenTo(this.collection, 'update',  this._onUpdate);
     this._proxyParentEvents(['sync', 'request', 'error']);
@@ -121,6 +122,11 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   _onReset: function (collection, options) {
     this._rebuildIndex();
     this.trigger('reset', this, options);
+  },
+
+  _onFilter: function (collection, options) {
+    this._rebuildIndex();
+    this.trigger('filter', this, options);
   },
 
   sortedIndex: function (model, value, context) {

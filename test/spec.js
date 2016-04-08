@@ -16,10 +16,10 @@ describe('Backbone.VirtualCollection', function () {
 
   describe('#constructor', function () {
 
-    it('should bind 8 listeners to its collection', function () {
+    it('should bind 10 listeners to its collection', function () {
       var collection = new Backbone.Collection([{foo: 'bar'}, {foo: 'baz'}]);
       var vc = new VirtualCollection(collection);
-      assert.deepEqual(_.keys(collection._events), [ 'add', 'remove', 'change', 'reset', 'sort', 'update', 'sync', 'request', 'error' ]);
+      assert.deepEqual(_.keys(collection._events), [ 'add', 'remove', 'change', 'reset', 'filter', 'sort', 'update', 'sync', 'request', 'error' ]);
     });
 
     it('should build an index on instantiation', function () {
