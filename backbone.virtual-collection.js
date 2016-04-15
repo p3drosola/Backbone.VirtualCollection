@@ -213,9 +213,13 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
 
 // methods that alter data should proxy to the parent collection
 _.each(['add', 'remove', 'set', 'reset', 'push', 'pop', 'unshift', 'shift', 'slice', 'sync', 'fetch', 'url'], function (method_name) {
-  VirtualCollection.prototype[method_name] = function () {
-    return this.collection[method_name].apply(this.collection, _.toArray(arguments));
-  };
+    VirtualCollection.prototype[method_name] = function () {
+      if (_.isFunction(this.collection[method_name])){
+        return this.collection[method_name].apply(this.collection, _.toArray(arguments));
+      } else {
+        return this.collection[method_name];
+      }
+    };
 });
 
 /**
