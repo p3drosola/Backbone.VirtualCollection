@@ -440,6 +440,23 @@ describe('Backbone.VirtualCollection', function () {
     });
   });
 
+  describe('url', function() {
+    it('should _.result to a string when parent collection url property is a string', function() {
+      var collection = new Backbone.Collection([]);
+      collection.url = "/fake-endpoint";
+
+      var vc = new VirtualCollection(collection, {});
+      assert.equal(true, _.isString(_.result(vc, 'url')));
+    });
+    it('should _.result to a string when parent collection url property is a function', function() {
+      var collection = new Backbone.Collection([]);
+      collection.url = function() { return "/fake-endpoint"; };
+
+      var vc = new VirtualCollection(collection, {});
+      assert.equal(true, _.isString(_.result(vc, 'url')));
+    });
+  });
+
   describe('buildFilter', function () {
 
     it('should build a single-attribute filter that matches a model', function () {
