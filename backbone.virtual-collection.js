@@ -215,7 +215,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
 _.each(['add', 'remove', 'set', 'reset', 'push', 'pop', 'unshift', 'shift', 'slice', 'sync', 'fetch', 'url'], function (method_name) {
     VirtualCollection.prototype[method_name] = function () {
       if (_.isFunction(this.collection[method_name])){
-        return this.collection[method_name].apply(this.collection, _.toArray(arguments));
+        return this.collection[method_name].apply(this.collection, arguments);
       } else {
         return this.collection[method_name];
       }
