@@ -50,14 +50,14 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   _rebuildIndex: function () {
     _.invoke(this.models, 'off', 'all', this._onAllEvent, this);
     this._reset();
-    this.collection.each(function (model, i) {
+    this.collection.each(_.bind(function (model, i) {
       if (this.accepts(model, i)) {
         this.listenTo(model, 'all', this._onAllEvent);
         this.models.push(model);
         this._byId[model.cid] = model;
         if (model.id) this._byId[model.id] = model;
       }
-    }, this);
+    }, this));
     this.length = this.models.length;
 
     if (this.comparator) this.sort({silent: true});
@@ -76,9 +76,9 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   },
 
   _proxyParentEvents: function (events) {
-    _.each(events, function (eventName) {
+    _.each(events, _.bind(function (eventName) {
       this.listenTo(this.collection, eventName, _.partial(this.trigger, eventName));
-    }, this);
+    }, this));
   },
 
   _onUpdate: function (collection, options) {
