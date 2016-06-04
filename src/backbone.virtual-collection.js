@@ -11,6 +11,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     if (options.close_with) this.bindLifecycle(options.close_with, 'close'); // Marionette 1.*
     if (options.destroy_with) this.bindLifecycle(options.destroy_with, 'destroy'); // Marionette 2.*
     if (collection.model) this.model = collection.model;
+    this._clearCache();    
 
     this.accepts = VirtualCollection.buildFilter(options.filter);
     this._rebuildIndex();
@@ -71,23 +72,32 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
       this.listenTo(this.collection, eventName, _.partial(this.trigger, eventName));
     }, this));
   },
-
-  _onUpdate: function (collection, options) {
-    this.trigger('update', this, options);
+  
+  _clearCache: function(){
+    this._changeCache = {
+      added: [],
+      removed: [],
+      merged: []
+    };
   },
 
-  _onAdd: function (model, collection, options) {
-    var already_here = this.get(model);
-    if (!already_here && this.accepts(model, options.index)) {
-      this._indexAdd(model);
-      this.listenTo(model, 'all', this._onAllEvent);
-      this.trigger('add', model, this, options);
-    }
+  _onUpdate: function (collection, options) {
+    var newOptions = _.extend({}, options, {changes: this._changeCache});    
+    this.trigger('update', this, newOptions);
+    this._clearCache();
+  },
+
+  _onAdd: function (model, collection, options) {    
+    if (this.get(model) || !this.accepts(model, options.index)) return;
+    this._changeCache.added.push(model);
+    this._indexAdd(model);
+    this.listenTo(model, 'all', this._onAllEvent);
+    this.trigger('add', model, this, options);  
   },
 
   _onRemove: function (model, collection, options) {
     if (!this.get(model)) return;
-
+    this._changeCache.removed.push(model);
     var i = this._indexRemove(model)
     , options_clone = _.clone(options);
     options_clone.index = i;

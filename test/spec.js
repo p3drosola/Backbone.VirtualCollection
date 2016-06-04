@@ -589,6 +589,20 @@ describe('Backbone.VirtualCollection', function () {
       assert(called);
       assert(vc.length === 2);
     });
+    it('should trigger an `update` event when parent collection is updated passing its own changes object', function () {
+      var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'a'}
+      }),
+      called = false;
+
+      vc.on('update', function (collection, options) {      
+        called = options.changes.removed.length == 1 && options.changes.added.length == 2;
+      });
+      collection.set([{type: 'a'}, {type: 'a'}, {type: 'b'}, {type: 'c'}]);
+      
+      assert(called);
+    });
     it('should trigger a `change` event when a model in the virtual collection is changed', function () {
       var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
       vc = new VirtualCollection(collection, {
