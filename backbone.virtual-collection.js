@@ -20,7 +20,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     if (options.close_with) this.bindLifecycle(options.close_with, 'close'); // Marionette 1.*
     if (options.destroy_with) this.bindLifecycle(options.destroy_with, 'destroy'); // Marionette 2.*
     if (collection.model) this.model = collection.model;
-    this._clearCache();    
+    this._clearChangesCache();    
 
     this.accepts = VirtualCollection.buildFilter(options.filter);
     this._rebuildIndex();
@@ -82,7 +82,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     }, this));
   },
   
-  _clearCache: function(){
+  _clearChangesCache: function(){
     this._changeCache = {
       added: [],
       removed: [],
@@ -93,7 +93,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   _onUpdate: function (collection, options) {
     var newOptions = _.extend({}, options, {changes: this._changeCache});    
     this.trigger('update', this, newOptions);
-    this._clearCache();
+    this._clearChangesCache();
   },
 
   _onAdd: function (model, collection, options) {    
