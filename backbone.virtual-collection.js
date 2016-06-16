@@ -97,7 +97,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   },
 
   _onAdd: function (model, collection, options) {    
-    if (this.get(model) || !this.accepts(model, options.index)) return;
+    if (this.has(model) || !this.accepts(model, options.index)) return;
     this._changeCache.added.push(model);
     this._indexAdd(model);
     this.listenTo(model, 'all', this._onAllEvent);
@@ -105,7 +105,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   },
 
   _onRemove: function (model, collection, options) {
-    if (!this.get(model)) return;
+    if (!this.has(model)) return;
     this._changeCache.removed.push(model);
     var i = this._indexRemove(model)
     , options_clone = _.clone(options);
@@ -116,10 +116,9 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
 
   _onChange: function (model, options) {
     if (!model || !options) return; // ignore malformed arguments coming from custom events
-    var already_here = this.get(model);
 
     if (this.accepts(model, options.index)) {
-      if (already_here) {
+      if (this.has(model)) {
         if (!this._byId[model.id] && model.id) {
           this._byId[model.id] = model;
         }
@@ -129,7 +128,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
         this.trigger('add', model, this, options);
       }
     } else {
-      if (already_here) {
+      if (this.has(model)) {
         var i = this._indexRemove(model)
         , options_clone = _.clone(options);
         options_clone.index = i;
@@ -161,7 +160,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   },
 
   _indexAdd: function (model) {
-    if (this.get(model)) return;
+    if (this.has(model)) return;
     var i;
     // uses a binsearch to find the right index
     if (this.comparator) {
