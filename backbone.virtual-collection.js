@@ -126,6 +126,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
         this.trigger('change', model, this, options);
       } else {
         this._indexAdd(model);
+        this.listenTo(model, 'all', this._onAllEvent);
         this.trigger('add', model, this, options);
       }
     } else {
