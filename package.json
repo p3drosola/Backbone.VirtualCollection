@@ -17,10 +17,6 @@
     "type": "git",
     "url": "https://github.com/p3drosola/Backbone.VirtualCollection.git"
   },
-  "dependencies": {
-    "backbone": "*",
-    "underscore": "*"
-  },
   "scripts": {
     "test": "gulp test",
     "build": "gulp build",
@@ -28,6 +24,8 @@
     "build-all": "gulp build && gulp minify"
   },
   "devDependencies": {
+    "backbone": "*",
+    "underscore": "*",
     "gulp": "^3.8.11",
     "gulp-mocha": "^2.0.0",
     "gulp-rename": "^1.2.0",
@@ -35,5 +33,8 @@
     "gulp-umd": "^0.1.3",
     "mocha": "*",
     "sinon": "*"
+  },
+  "peerDependencies": {
+    "backbone": "*"
   }
 }
