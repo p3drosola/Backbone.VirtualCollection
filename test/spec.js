@@ -626,6 +626,18 @@ describe('Backbone.VirtualCollection', function () {
       assert(called);
       assert(vc.length === 1);
     });
+    it('should trigger a `change:[attributeName]` event when a models attribute, in the original collection but added to the virtual one after, is changed', function () {
+      var collection = new Backbone.Collection([{type: 'a', testProperty: false}, {type: 'b'}]),
+      vc = new VirtualCollection(collection, {
+        filter: {type: 'c'}
+      }), called = false;
+      vc.on('change:testProperty', function () { called = true; });
+      assert(vc.length === 0);
+      collection.at(0).set({type: 'c'});
+      assert(vc.length === 1);
+      collection.at(0).set({testProperty: true});
+      assert(called);
+    });
     it('should trigger a `filter` event when updateFilter() is called', function () {
       var collection = new Backbone.Collection([{type: 'a'}, {type: 'b'}]),
       filter = sinon.stub(),
