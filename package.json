@@ -22,7 +22,7 @@
     "underscore": "*"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "mocha"
   },
   "devDependencies": {
     "mocha": "~2.5.3",
