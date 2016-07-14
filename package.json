@@ -26,6 +26,8 @@
   },
   "devDependencies": {
     "mocha": "~2.5.3",
-    "sinon": "~1.17.4"
+    "sinon": "~1.17.4",
+    "backbone": "*",
+    "underscore": "*"
   }
 }
