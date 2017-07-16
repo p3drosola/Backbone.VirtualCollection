@@ -192,7 +192,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
 
   _onAllEvent: function (eventName) {
     var explicitlyHandledEvents = ['add', 'remove', 'change', 'reset', 'sort'];
-    if (!_.contains(explicitlyHandledEvents, eventName)) {
+    if (!_.includes(explicitlyHandledEvents, eventName)) {
       this.trigger.apply(this, arguments);
     }
   },
