@@ -65,9 +65,9 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
   },
 
   orderViaParent: function (options) {
-    this.models = this.collection.filter(function (model) {
+    this.models = this.collection.filter(_.bind(function (model) {
       return (this._byId[model.cid] !== undefined);
-    }, this);
+    }, this));
     if (!options.silent) this.trigger('sort', this, options);
   },
 
@@ -153,7 +153,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     };
 
     if (iterator.length == 1) {
-       return _.sortedIndex(this.models, model, iterator, context);
+       return _.sortedIndex(this.models, model, _.bind(iterator, context));
      } else {
        return sortedIndexTwo(this.models, model, iterator, context);
      }
