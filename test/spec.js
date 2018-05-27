@@ -674,6 +674,46 @@ describe('Backbone.VirtualCollection', function () {
         collection.first().trigger('foo');
       });
     });
+    it('should trigger a `sort` event when a comparator is set on the virtual collection and a model matching the filter is added to the base collection', function () {
+      var collection = new Backbone.Collection([{ type: 'a', sort: 'a' }, { type: 'b', sort: 'b' }]);
+      var sort = sinon.stub();
+      var vc = new VirtualCollection(collection, {
+          filter: {type: 'a'},
+          comparator: 'sort'
+      });
+
+      vc.on('sort', sort);
+      collection.add({ type: 'a', sort:'c' });
+
+      assert(sort.called);
+    });
+    it('should trigger a `sort` event when a comparator is set on the virtual collection and a model in the base collection is updated to match the filter', function () {
+      var modelToUpdate = new Backbone.Model({ type: 'b', sort: 'b' });
+      var collection = new Backbone.Collection([{ type: 'a', sort: 'a' }, modelToUpdate]);
+      var sort = sinon.stub();
+      var vc = new VirtualCollection(collection, {
+          filter: { type: 'a' },
+          comparator: 'sort'
+      });
+
+      vc.on('sort', sort);
+      modelToUpdate.set('type', 'a');
+
+      assert(sort.called);
+    });
+    it('should not trigger a `sort` event when a comparator is set on the virtual collection and a model not matching the filter is added to the base collection', function () {
+      var collection = new Backbone.Collection([{ type: 'a', sort: 'a' }, { type: 'b', sort: 'b' }]);
+      var sort = sinon.stub();
+      var vc = new VirtualCollection(collection, {
+          filter: { type: 'a' },
+          comparator: 'sort'
+      });
+
+      vc.on('sort', sort);
+      collection.add({ type: 'b', sort: 'c' });
+
+      assert(!sort.called);
+    });
   });
   describe('accepts & get', function () {
     it('should not call accepts() when iterating over the virtual collection', function () {
