@@ -102,6 +102,9 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
     this._indexAdd(model);
     this.listenTo(model, 'all', this._onAllEvent);
     this.trigger('add', model, this, options);  
+    if (this.comparator !== undefined) {
+      this.trigger('sort', this, options);
+    }
   },
 
   _onRemove: function (model, collection, options) {
