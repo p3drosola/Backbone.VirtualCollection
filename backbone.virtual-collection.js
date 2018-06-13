@@ -136,6 +136,7 @@ var VirtualCollection = Backbone.VirtualCollection = Backbone.Collection.extend(
         , options_clone = _.clone(options);
         options_clone.index = i;
         this.trigger('remove', model, this, options_clone);
+        this.trigger('update', this, { changes: { removed: [model] } });
       }
     }
   },
